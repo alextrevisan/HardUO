@@ -38,8 +38,8 @@ MyCustomHighlighter::MyCustomHighlighter(QObject *parent) :
     rule.format = functionFormat;
     highlightingRules.append(rule);
 
-    commentStartExpression = QRegExp("--\\[\\[");
-    commentEndExpression = QRegExp("\\]\\]\\--");
+    commentStartExpression = QRegExp("-{2}\\[{2}");
+    commentEndExpression = QRegExp("-{2}\\]{2}");
 
     singleLineCommentFormat.setForeground(Qt::gray);
     rule.pattern = QRegExp("--[^\n]*");
