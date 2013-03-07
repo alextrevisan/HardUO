@@ -10,4 +10,10 @@
 # Compiled Static libraries
 *.lai
 *.la
-*.a
+
+# Qt user files
+*.user
+*.Debug
+*.Release
+ui_*.h
+Makefile
