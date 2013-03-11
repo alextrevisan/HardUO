@@ -15,7 +15,9 @@ public:
     int CharPosY;
     int CharPosZ;
     int CharDir;
-    int CharStatus;
+    std::string CharStatus;
+    int CharID;
+    int CharType;
     int CharGhost;
     int BackpackID;
     /// Status Bar
@@ -51,7 +53,8 @@ public:
     int NextCPosY;
     int ContPosX;
     int ContPosY;
-    int ContSize;
+    int ContSizeX;
+    int ContSizeY;
     int ContKind;
     QString ContName;
     int ContID;
@@ -61,7 +64,7 @@ public:
     int CliNr;
     int CliCnt;
     QString CliLang;
-    int CliVer;
+    QString CliVer;
     bool CliLogged;
     int CliLeft;
     int CliTop;
@@ -70,7 +73,19 @@ public:
     QString CliTitle;
 
     /// Last Action
+    int LObjectID;
+    int LObjectType;
+    int LTargetID;
+    int LTargetKind;
+    int LTargetTile;
+    int LTargetX;
+    int LTargetY;
+    int LTargetZ;
+    int LLiftedID;
+    int LLiftedKind;
     int LLiftedType;
+    int LSkill;
+    int LSpell;
 
     /// Skills
     float Alchemy;

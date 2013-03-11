@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <windows.h>
 #include <QTextBlock>
+#include <QDir>
 
 QMap<std::string,std::string> ScriptRunner::mGlobalVar;
 
@@ -119,6 +120,7 @@ void ScriptRunner::run()
                 .def("Wait", &ScriptRunner::Wait)
                 .def("WaitKey", &ScriptRunner::WaitKey)
                 .def("PauseHook", &ScriptRunner::PauseHook)
+                .def("getinstalldir", &ScriptRunner::getinstalldir)
                 .def("setGlobal", &ScriptRunner::setGlobal)
                 .def("getGlobal", &ScriptRunner::getGlobal)
         ];
@@ -130,8 +132,17 @@ void ScriptRunner::run()
         luaL_dostring(L, "function wait(a) ScriptRunner:Wait(a) end");
         luaL_dostring(L, "function WaitKey(a) ScriptRunner:WaitKey(a) end");
         luaL_dostring(L, "function PauseHook() ScriptRunner:PauseHook() end");
+        luaL_dostring(L, "function getinstalldir() return ScriptRunner:getinstalldir() end");
         luaL_dostring(L, "function setGlobal(a,b) ScriptRunner:setGlobal(a,b) end");
         luaL_dostring(L, "function getGlobal(a) return ScriptRunner:getGlobal(a) end");
+
+        module(L)
+        [
+            class_<ItemProperty>("Property")
+                .def(constructor<>())
+                .def_readonly("name", &ItemProperty::itemname)
+                .def_readonly("info", &ItemProperty::iteminfo)
+        ];
 
         module(L)
         [
@@ -149,12 +160,22 @@ void ScriptRunner::run()
                 .def_readonly("color", &Item::color)
         ];
 
+
+
         module(L)
         [
-            class_<Property>("Property")
+            class_<JournalRef>("JournalRef")
                 .def(constructor<>())
-                .def_readonly("name", &Property::name)
-                .def_readonly("info", &Property::info)
+                .def_readonly("ref", &JournalRef::ref)
+                .def_readonly("count", &JournalRef::count)
+        ];
+
+        module(L)
+        [
+            class_<Journal>("Journal")
+                .def(constructor<>())
+                .def_readonly("line", &Journal::line)
+                .def_readonly("color", &Journal::color)
         ];
 
         module(L)
@@ -171,24 +192,78 @@ void ScriptRunner::run()
         [
             class_<UO>("UO")
                 .def(constructor<>())
-                .def("Ar", &UO::Ar)
                 .def("BackpackID", &UO::BackpackID)
                 .def("CharName", &UO::CharName)
                 .def("Hits", &UO::Hits)
                 .def("MaxHits", &UO::MaxHits)
                 .def("Mana", &UO::Mana)
                 .def("MaxMana", &UO::MaxMana)
-                .def("Stam", &UO::Stam)
+                .def("Stamina", &UO::Stamina)
                 .def("MaxStam", &UO::MaxStam)
                 .def("Gold", &UO::Gold)
                 .def("Sex", &UO::Sex)
                 .def("CharPosX", &UO::CharPosX)
                 .def("CharPosY", &UO::CharPosY)
                 .def("CharPosZ", &UO::CharPosZ)
+                .def("CharDir", &UO::CharDir)
+                .def("CharStatus", &UO::CharStatus)
+                .def("CharID", &UO::CharID)
+                .def("CharType", &UO::CharType)
+                .def("Str", &UO::Str)
+                .def("Dex", &UO::Dex)
+                .def("Int", &UO::Int)
                 .def("MaxWeight", &UO::MaxWeight)
                 .def("Weight", &UO::Weight)
+                .def("MaxStats", &UO::MaxStats)
+                .def("Luck", &UO::Luck)
+                .def("MinDmg", &UO::MinDmg)
+                .def("MaxDmg", &UO::MaxDmg)
+                .def("Followers", &UO::Followers)
+                .def("MaxFol", &UO::MaxFol)
+                .def("Ar", &UO::Ar)
+                .def("Fr", &UO::Fr)
+                .def("Cr", &UO::Cr)
+                .def("Pr", &UO::Pr)
+                .def("Er", &UO::Er)
+                .def("Tp", &UO::Tp)
+                .def("NextCPosX", (void(UO::*)(int)) &UO::NextCPosX)
+                .def("NextCPosX", (int(UO::*)()) &UO::NextCPosX)
+                .def("NextCPosY", (void(UO::*)(int)) &UO::NextCPosY)
+                .def("NextCPosY", (int(UO::*)()) &UO::NextCPosY)
+                .def("ContSizeX", &UO::ContSizeX)
+                .def("ContSizeY", &UO::ContSizeY)
+                .def("ContPosX", (void(UO::*)(int)) &UO::ContPosX)
+                .def("ContPosX", (int(UO::*)()) &UO::ContPosX)
+                .def("ContPosY", (void(UO::*)(int)) &UO::ContPosY)
+                .def("ContPosY", (int(UO::*)()) &UO::ContPosY)
+                .def("ContKind", &UO::ContKind)
+                .def("ContID", &UO::ContID)
+                .def("ContType", &UO::ContType)
+                .def("ContName", &UO::ContName)
+                .def("LObjectID", (void(UO::*)(int)) &UO::LObjectID)
+                .def("LObjectID", (int(UO::*)()) &UO::LObjectID)
+                .def("LObjectType", (void(UO::*)(int)) &UO::LObjectType)
+                .def("LObjectType", (int(UO::*)()) &UO::LObjectType)
+                .def("LTargetX", &UO::LTargetX)
+                .def("LTargetY", &UO::LTargetY)
+                .def("LTargetZ", &UO::LTargetZ)
+                .def("setLTargetX", &UO::setLTargetX)
+                .def("setLTargetY", &UO::setLTargetY)
+                .def("setLTargetZ", &UO::setLTargetZ)
+                .def("LTargetKind", &UO::LTargetKind)
+                .def("LTargetTile", &UO::LTargetTile)
+                .def("LLiftedID", &UO::LLiftedID)
+                .def("LLiftedType", &UO::LLiftedType)
+                .def("LLiftedKind", &UO::LLiftedKind)
+                .def("LSkill", (void(UO::*)(int)) &UO::LSkill)
+                .def("LSkill", (int(UO::*)()) &UO::LSkill)
+                .def("LSpell", (void(UO::*)(int)) &UO::LSpell)
+                .def("LSpell", (int(UO::*)()) &UO::LSpell)
                 .def("EventMacro", &UO::EventMacro)
                 .def("GetSkill", &UO::GetSkill)
+                .def("TargCurs", &UO::TargCurs)
+                .def("setTargCurs", &UO::setTargCurs)
+                .def("CursKind", &UO::CursKind)
                 .def("useLastSkill", &UO::useLastSkill)
                 .def("useAnatomy", &UO::useAnatomy)
                 .def("useAnimalLore", &UO::useAnimalLore)
@@ -220,13 +295,17 @@ void ScriptRunner::run()
                 .def("OpenDoor", &UO::OpenDoor)
                 .def("WaitTarget", &UO::WaitTarget)
                 .def("LastTarget", &UO::LastTarget)
-                .def("TargCurs", &UO::TargCurs)
-                .def("setTargCurs", &UO::setTargCurs)
+
                 .def("TargetSelf", &UO::TargetSelf)
                 .def("getLastTargetID", &UO::getLastTargetID)
                 .def("setLastTargetID", &UO::setLastTargetID)                
                 .def("ClearJournal", &UO::ClearJournal)
-                .def("ScanJournal", &UO::ScanJournal)
+
+                .def("ScanJournal", (void(UO::*)()) &UO::ScanJournal)
+                .def("ScanJournal", (JournalRef(UO::*)(int)) &UO::ScanJournal)
+
+                .def("GetJournal", &UO::GetJournal)
+
                 .def("FindJournal", &UO::FindJournal)
                 .def("LastJournalIndex", &UO::LastJournalIndex)
                 .def("SetJournalIndex", &UO::SetJournalIndex)
@@ -234,15 +313,6 @@ void ScriptRunner::run()
                 .def("GetItem", &UO::GetItem)
                 .def("FindItem", &UO::FindItem)
                 .def("Property", &UO::GetProperty)
-                .def("setLObjectID", &UO::setLObjectID)
-                .def("LTargetX", &UO::LTargetX)
-                .def("LTargetY", &UO::LTargetY)
-                .def("LTargetZ", &UO::LTargetZ)
-                .def("setLTargetX", &UO::setLTargetX)
-                .def("setLTargetY", &UO::setLTargetY)
-                .def("setLTargetZ", &UO::setLTargetZ)
-                .def("LTargetKind", &UO::LTargetKind)
-                .def("LLiftedType", &UO::LLiftedType)
                 .def("setContPos", &UO::setContPos)
                 .def("setLTargetKind", &UO::setLTargetKind)
                 .def("CliDrag", &UO::CliDrag)
@@ -257,11 +327,15 @@ void ScriptRunner::run()
         ];
 
         luabind::globals(L)["UOInstance"] = mUO;
-        luaL_dofile(L, "macros/internal/loader.lua");
-
+        int error = luaL_dofile(L, "macros/internal/loader.lua");
+        if ( error!=0 )
+        {
+            Print(lua_tostring(L, -1));
+            lua_pop(L, 1); // remove error message
+        }
         //int s = luaL_dostring(L, lines.toStdString().data());
 
-
+        //QFuture<void> f = QtConcurrent::run(this,&ScriptRunner::ReadLuaVariables);
         //lua_sethook(L, &PauseHook), LUA_MASKLINE, 0);
         int s = luaL_dostring(L, "debug.sethook(PauseHook,\"Sln\")");
         s = luaL_dostring(L, mDoc->toPlainText().toStdString().data());
@@ -287,4 +361,26 @@ void ScriptRunner::run()
 void ScriptRunner::SetUO(UO *uo)
 {
     mUO = uo;
+}
+
+void ScriptRunner::ReadLuaVariables()
+{
+    while(true)
+    {
+        lua_getglobal(L, " UO.NextCPosX");
+        if (lua_isnumber(L, -1)) {
+            qDebug()<<"UO.NextCPosX="<<(int)lua_tonumber(L, -1);
+        }
+        lua_getglobal(L, "UO.NextCPosY");
+        if (lua_isnumber(L, -1))
+        {
+            qDebug()<<"UO.NextCPosY="<<(int)lua_tonumber(L, -1);
+        }
+        Sleep(100);
+    }
+}
+
+std::string ScriptRunner::getinstalldir()
+{
+    return QDir::currentPath().toStdString()+"/";
 }

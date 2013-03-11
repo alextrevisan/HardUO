@@ -53,13 +53,37 @@ public:
     int lock;
 };
 
-class Property
+class JournalRef
 {
 public:
-    Property()
+    JournalRef():
+        ref(0),
+        count(0)
     {}
-    std::string name;
-    std::string info;
+    int ref;
+    int count;
+};
+
+class Journal
+{
+public:
+    Journal():
+        line(""),
+        color(0)
+    {}
+    std::string line;
+    int color;
+};
+
+class ItemProperty
+{
+public:
+    ItemProperty():
+        itemname(""),
+        iteminfo("")
+    {}
+    std::string itemname;
+    std::string iteminfo;
 };
 
 class UO
@@ -73,22 +97,94 @@ public:
     int GetCliNr(){ return mCliNr;}
 
     /// Dados do personagem
-    int Ar();
+
     int BackpackID();
     std::string CharName();
     int Hits();
     int MaxHits();
     int Mana();
     int MaxMana();
-    int Stam();
+    int Stamina();
     int MaxStam();
-    int Gold();
     int Sex();
     int CharPosX();
     int CharPosY();
     int CharPosZ();
+    int CharDir();
+    std::string CharStatus();
+    int CharID();
+    int CharType();
+    int Str();
+    int Dex();
+    int Int();
     int Weight();
     int MaxWeight();
+    int MaxStats();
+    int Luck();
+    int MinDmg();
+    int MaxDmg();
+    int Gold();
+    int Followers();
+    int MaxFol();
+    int Ar();
+    int Fr();
+    int Cr();
+    int Pr();
+    int Er();
+    int Tp();
+
+    /// Container
+    void NextCPosX(int x);
+    int NextCPosX();
+    void NextCPosY(int y);
+    int NextCPosY();
+    int ContSizeX();
+    int ContSizeY();
+    int ContPosX();
+    void ContPosX(int x);
+    int ContPosY();
+    void ContPosY(int y);
+    int ContKind();
+    int ContID();
+    int ContType();
+    std::string ContName();
+
+    /// Client Info
+    int CliNr();
+    int CliCnt();
+    std::string CliLang();
+    std::string CliVer();
+    bool CliLogged();
+    int CliLeft();
+    int CliTop();
+    int CliXRes();
+    int CliYRes();
+    std::string CliTitle();
+
+    /// Last Action
+    void LObjectID(int id);
+    int LObjectID();
+    void LObjectType(int type);
+    int LObjectType();
+    int getLastTargetID();
+    void setLastTargetID(int ID);
+    int LTargetX();
+    int LTargetY();
+    int LTargetZ();
+    void setLTargetX(int x);
+    void setLTargetY(int y);
+    void setLTargetZ(int z);
+    int LTargetKind();
+    int LTargetTile();
+    void setLTargetKind(int kind);
+    int LLiftedID();
+    int LLiftedType();
+    int LLiftedKind();
+    int LSkill();
+    void LSkill(int skill);
+    int LSpell();
+    void LSpell(int spell);
+
 
     /// Skills
     Skill GetSkill(std::string skill);
@@ -132,36 +228,18 @@ public:
     void TargetSelf();
     bool Move(int x, int y, int tileError, int timeOut);
 
-
-    /// Client Info
-    int CliCnt();
-    int CliNr();
     void ClearJournal();
 
     int LastJournalIndex(luabind::object obj);
-    /// Sistema
-    int getLastTargetID();
-    void setLastTargetID(int ID);
-
-
-    int LLiftedType();
-    int LTargetX();
-    int LTargetY();
-    int LTargetZ();
-
-    void setLTargetX(int x);
-    void setLTargetY(int y);
-    void setLTargetZ(int z);
 
     void setContPos(int x, int y);
 
-    int LTargetKind();
-    void setLTargetKind(int kind);
 
-    bool TargCurs();
-    void setTargCurs(bool tc);
 
-    void setLObjectID(int ID);
+    int TargCurs();
+    void setTargCurs(int tc);
+
+    int CursKind();
 
     void CliDrag(int id);
     void Drag(int id, int amount);
@@ -175,12 +253,14 @@ public:
     void Click(int x, int y, bool left, bool down, bool up, bool mc);
 
     void ScanJournal();
+    JournalRef ScanJournal(int oldRef);
+    Journal GetJournal(int index);
     bool FindJournal(luabind::object obj);
     void SetJournalIndex(int index, const std::string& value);
 
     int ScanItems(bool visibleOnly);
     Item GetItem(int index);
-    Property GetProperty(int id);
+    ItemProperty GetProperty(int id);
     luabind::object FindItem(luabind::object const& table);
 
 private:

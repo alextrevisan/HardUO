@@ -1,5 +1,6 @@
 #include "uo.h"
 #include "UOdll.h"
+#include <QDebug>
 
 UO::UO()
 {
@@ -29,14 +30,6 @@ void UO::SetCliNr(int cliNr)
 }
 
 /// Dados do personagem
-int UO::Ar()
-{
-    SetTop(hnd, 0);
-    PushStrVal(hnd, "Get");
-    PushStrVal(hnd, "AR");
-    Execute(hnd);
-    return GetInteger(hnd, 1);
-}
 int UO::BackpackID()
 {
     SetTop(hnd, 0);
@@ -85,7 +78,7 @@ int UO::MaxMana()
     Execute(hnd);
     return GetInteger(hnd, 1);
 }
-int UO::Stam()
+int UO::Stamina()
 {
     SetTop(hnd, 0);
     PushStrVal(hnd, "Get");
@@ -101,14 +94,7 @@ int UO::MaxStam()
     Execute(hnd);
     return GetInteger(hnd, 1);
 }
-int UO::Gold()
-{
-    SetTop(hnd, 0);
-    PushStrVal(hnd, "Get");
-    PushStrVal(hnd, "Gold");
-    Execute(hnd);
-    return GetInteger(hnd, 1);
-}
+
 int UO::Sex()
 {
     SetTop(hnd, 0);
@@ -145,6 +131,69 @@ int UO::CharPosZ()
     return GetInteger(hnd, 1);
 }
 
+int UO::CharDir()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "CharDir");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+std::string UO::CharStatus()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "CharStatus");
+    Execute(hnd);
+    return GetString(hnd, 1);
+}
+
+int UO::CharID()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "CharID");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::CharType()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "CharType");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::Str()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "Str");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::Dex()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "Dex");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::Int()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "Int");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
 int UO::Weight()
 {
     SetTop(hnd, 0);
@@ -163,6 +212,490 @@ int UO::MaxWeight()
     return GetInteger(hnd, 1);
 }
 
+int UO::MaxStats()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "MaxStats");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::Luck()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "Luck");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::MinDmg()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "MinDmg");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::MaxDmg()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "MaxDmg");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+int UO::Gold()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "Gold");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::Followers()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "Followers");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::MaxFol()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "MaxFol");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+int UO::Ar()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "AR");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::Fr()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "FR");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::Cr()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "CR");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::Pr()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "PR");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::Er()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "ER");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::Tp()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "TP");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+void UO::NextCPosX(int x)
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Set");
+    PushStrVal(hnd, "NextCPosX");
+    PushInteger(hnd, x);
+    Execute(hnd);
+}
+
+int UO::NextCPosX()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "NextCPosX");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+void UO::NextCPosY(int y)
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Set");
+    PushStrVal(hnd, "NextCPosY");
+    PushInteger(hnd, y);
+    Execute(hnd);
+}
+
+int UO::NextCPosY()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "NextCPosY");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::ContSizeX()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "ContSizeX");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::ContSizeY()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "ContSizeY");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::ContPosX()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "ContPosX");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+void UO::ContPosX(int x)
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Set");
+    PushStrVal(hnd, "ContPosX");
+    PushInteger(hnd, x);
+    Execute(hnd);
+}
+
+int UO::ContPosY()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "ContPosY");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+void UO::ContPosY(int y)
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Set");
+    PushStrVal(hnd, "ContPosY");
+    PushInteger(hnd, y);
+    Execute(hnd);
+}
+
+int UO::ContKind()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "ContKind");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::ContID()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "ContID");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::ContType()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "ContType");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+std::string UO::ContName()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "ContName");
+    Execute(hnd);
+    return GetString(hnd, 1);
+}
+
+int UO::CliNr()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "CliNr");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::CliCnt()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "CliCnt");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+std::string UO::CliLang()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "CliLang");
+    Execute(hnd);
+    return GetString(hnd, 1);
+}
+
+std::string UO::CliVer()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "CliVer");
+    Execute(hnd);
+    return GetString(hnd, 1);
+}
+
+bool UO::CliLogged()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "CliLogged");
+    Execute(hnd);
+    return GetBoolean(hnd, 1);
+}
+
+int UO::CliLeft()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "CliLeft");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::CliTop()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "CliTop");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::CliXRes()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "CliXRes");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::CliYRes()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "CliYRes");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+std::string UO::CliTitle()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "CliTitle");
+    Execute(hnd);
+    return GetString(hnd, 1);
+}
+
+/// Last Action
+void UO::LObjectID(int id)
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Set");
+    PushStrVal(hnd, "LObjectID");
+    PushInteger(hnd, id);
+    Execute(hnd);
+}
+
+int UO::LObjectID()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "LObjectID");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+void UO::LObjectType(int type)
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Set");
+    PushStrVal(hnd, "LObjectType");
+    PushInteger(hnd, type);
+    Execute(hnd);
+}
+
+int UO::LObjectType()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "LObjectType");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::LTargetX()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "LTargetX");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::LTargetY()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "LTargetY");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+int UO::LTargetZ()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "LTargetZ");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+void UO::setLTargetX(int x)
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Set");
+    PushStrVal(hnd, "LTargetX");
+    PushInteger(hnd, x);
+    Execute(hnd);
+}
+
+void UO::setLTargetY(int y)
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Set");
+    PushStrVal(hnd, "LTargetY");
+    PushInteger(hnd, y);
+    Execute(hnd);
+}
+
+void UO::setLTargetZ(int z)
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Set");
+    PushStrVal(hnd, "LTargetZ");
+    PushInteger(hnd, z);
+    Execute(hnd);
+}
+
+int UO::LLiftedID()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "LLiftedID");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::LLiftedType()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "LLiftedType");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::LLiftedKind()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "LLiftedKind");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::LSkill()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "LSkill");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+void UO::LSkill(int skill)
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Set");
+    PushStrVal(hnd, "LSkill");
+    PushInteger(hnd, skill);
+    Execute(hnd);
+}
+
+int UO::LSpell()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "LSpell");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+void UO::LSpell(int spell)
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Set");
+    PushStrVal(hnd, "LSpell");
+    PushInteger(hnd, spell);
+    Execute(hnd);
+}
+
 /// Skills
 Skill UO::GetSkill(std::string skill)
 {
@@ -172,10 +705,10 @@ Skill UO::GetSkill(std::string skill)
     PushStrVal(hnd, (char*)skill.data());
     Execute(hnd);
     Skill s;
-    s.norm = GetInteger(hnd, 0);
-    s.real = GetInteger(hnd, 1);
-    s.cap = GetInteger(hnd, 2);
-    s.lock = GetInteger(hnd, 3);
+    s.norm = GetInteger(hnd, 1);
+    s.real = GetInteger(hnd, 2);
+    s.cap = GetInteger(hnd, 3);
+    s.lock = GetInteger(hnd, 4);
     return s;
 }
 void UO::useLastSkill()
@@ -512,67 +1045,7 @@ int UO::getLastTargetID()
     Execute(hnd);
     return GetInteger(hnd, 1);
 }
-int UO::LLiftedType()
-{
-    SetTop(hnd, 0);
-    PushStrVal(hnd, "Get");
-    PushStrVal(hnd, "LLiftedType");
-    Execute(hnd);
-    return GetInteger(hnd, 1);
-}
 
-int UO::LTargetX()
-{
-    SetTop(hnd, 0);
-    PushStrVal(hnd, "Get");
-    PushStrVal(hnd, "LTargetX");
-    Execute(hnd);
-    return GetInteger(hnd, 1);
-}
-
-int UO::LTargetY()
-{
-    SetTop(hnd, 0);
-    PushStrVal(hnd, "Get");
-    PushStrVal(hnd, "LTargetY");
-    Execute(hnd);
-    return GetInteger(hnd, 1);
-}
-int UO::LTargetZ()
-{
-    SetTop(hnd, 0);
-    PushStrVal(hnd, "Get");
-    PushStrVal(hnd, "LTargetZ");
-    Execute(hnd);
-    return GetInteger(hnd, 1);
-}
-
-void UO::setLTargetX(int x)
-{
-    SetTop(hnd, 0);
-    PushStrVal(hnd, "Set");
-    PushStrVal(hnd, "LTargetX");
-    PushInteger(hnd, x);
-    Execute(hnd);
-}
-
-void UO::setLTargetY(int y)
-{
-    SetTop(hnd, 0);
-    PushStrVal(hnd, "Set");
-    PushStrVal(hnd, "LTargetY");
-    PushInteger(hnd, y);
-    Execute(hnd);
-}
-
-void UO::setLTargetZ(int z)
-{
-    SetTop(hnd, 0);
-    PushStrVal(hnd, "Set");
-    PushStrVal(hnd, "LTargetZ");
-    PushInteger(hnd, z);
-    Execute(hnd);
-}
 
 void UO::setContPos(int x, int y)
 {
@@ -597,22 +1070,31 @@ void UO::setLTargetKind(int kind)
     Execute(hnd);
 }
 
-bool UO::TargCurs()
+int UO::TargCurs()
 {
     SetTop(hnd, 0);
     PushStrVal(hnd, "Get");
     PushStrVal(hnd, "TargCurs");
     Execute(hnd);
-    return GetBoolean(hnd, 1);
+    return GetInteger(hnd, 1);
 }
 
-void UO::setTargCurs(bool tc)
+void UO::setTargCurs(int tc)
 {
     SetTop(hnd, 0);
     PushStrVal(hnd, "Set");
     PushStrVal(hnd, "TargCurs");
-    PushBoolean(hnd, tc);
+    PushBoolean(hnd, tc==0?false:true);
     Execute(hnd);
+}
+
+int UO::CursKind()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "CursKind");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
 }
 
 int UO::LTargetKind()
@@ -620,6 +1102,15 @@ int UO::LTargetKind()
     SetTop(hnd, 0);
     PushStrVal(hnd, "Get");
     PushStrVal(hnd, "LTargetKind");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+
+int UO::LTargetTile()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "LTargetTile");
     Execute(hnd);
     return GetInteger(hnd, 1);
 }
@@ -633,14 +1124,6 @@ void UO::setLastTargetID(int ID)
     Execute(hnd);
 }
 
-void UO::setLObjectID(int ID)
-{
-    SetTop(hnd, 0);
-    PushStrVal(hnd, "Set");
-    PushStrVal(hnd, "LObjectID");
-    PushInteger(hnd, ID);
-    Execute(hnd);
-}
 void UO::CliDrag(int id)
 {
     SetTop(hnd, 0);
@@ -731,23 +1214,6 @@ void UO::Click(int x, int y, bool left, bool down, bool up, bool mc)
     Execute(hnd);
 }
 
-int UO::CliCnt()
-{
-    SetTop(hnd, 0);
-    PushStrVal(hnd, "Get");
-    PushStrVal(hnd, "CliCnt");
-    Execute(hnd);
-    return GetInteger(hnd, 1);
-}
-
-int UO::CliNr()
-{
-    SetTop(hnd, 0);
-    PushStrVal(hnd, "Get");
-    PushStrVal(hnd, "CliNr");
-    Execute(hnd);
-    return GetInteger(hnd, 1);
-}
 void UO::ClearJournal()
 {
     mJournalList.clear();
@@ -812,6 +1278,32 @@ void UO::ScanJournal()
         Execute(hnd);
         mJournalList.append(GetString(hnd, 1));
     }
+}
+
+JournalRef UO::ScanJournal(int oldRef)
+{
+    JournalRef ref;
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Call");
+    PushStrVal(hnd, "ScanJournal");
+    PushInteger(hnd, oldRef);
+    Execute(hnd);
+    ref.ref = GetInteger(hnd, 1);
+    ref.count = GetInteger(hnd, 2);
+    return ref;
+}
+
+Journal UO::GetJournal(int index)
+{
+    Journal j;
+    SetTop(hnd, 0);
+    PushStrRef(hnd, "Call");
+    PushStrVal(hnd, "GetJournal");
+    PushInteger(hnd, index);
+    Execute(hnd);
+    j.line = GetString(hnd, 1);
+    j.color = GetInteger(hnd, 2);
+    return j;
 }
 bool UO::FindJournal(luabind::object obj)
 {
@@ -895,16 +1387,18 @@ Item UO::GetItem(int index)
     return i;
 }
 
-Property UO::GetProperty(int id)
+ItemProperty UO::GetProperty(int id)
 {
     SetTop(hnd, 0);
     PushStrVal(hnd, "Call");
     PushStrVal(hnd, "Property");
     PushInteger(hnd, id);
     Execute(hnd);
-    Property prop;
-    prop.name = GetString(hnd,1);
-    prop.info = GetString(hnd,2);
+    ItemProperty prop;
+    prop.itemname = GetString(hnd,1);
+    qDebug()<<prop.itemname.data();
+    prop.iteminfo = GetString(hnd,2);
+    qDebug()<<prop.iteminfo.data();
 }
 luabind::object UO::FindItem(luabind::object const& table)
 {
@@ -1047,4 +1541,6 @@ luabind::object UO::FindItem(luabind::object const& table)
     }
     return returnTable;
 }
+
+
 

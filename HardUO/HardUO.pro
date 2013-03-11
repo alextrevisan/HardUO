@@ -54,3 +54,5 @@ OTHER_FILES += \
     icone.rc
 
 RC_FILE = icone.rc
+
+#QMAKE_CXXFLAGS += -std=c++0x

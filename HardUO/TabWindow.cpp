@@ -46,7 +46,7 @@ TabWindow::TabWindow(QString &script)
     logText = new QTextEdit();
     mLayout->addWidget(logText);
     logText->setMaximumSize(16777215,150);
-    logText->setReadOnly(true);
+    logText->setReadOnly(false);
     script.replace("\t","    ");
     completingTextEdit->document()->setPlainText(script);
 }
@@ -163,56 +163,81 @@ void TabWindow::UpdateView()
     UOTreeView::GetInstance().CharPosX = UOUpadeView->CharPosX();
     UOTreeView::GetInstance().CharPosY = UOUpadeView->CharPosY();
     UOTreeView::GetInstance().CharPosZ = UOUpadeView->CharPosZ();
-    //UOTreeView::GetInstance().CharDir =
-    //UOTreeView::GetInstance().CharStatus =
-    //UOTreeView::GetInstance().CharID =
+    UOTreeView::GetInstance().CharDir = UOUpadeView->CharDir();
+    UOTreeView::GetInstance().CharStatus = UOUpadeView->CharStatus();
+    UOTreeView::GetInstance().CharID = UOUpadeView->CharID();
+    UOTreeView::GetInstance().CharType = UOUpadeView->CharType();
     //UOTreeView::GetInstance().CharGhost =
     UOTreeView::GetInstance().BackpackID = UOUpadeView->BackpackID();
     /// Status Bar
     mCharName = UOUpadeView->CharName().data();
     UOTreeView::GetInstance().CharName = mCharName;
     UOTreeView::GetInstance().Sex = UOUpadeView->Sex();
-    //UOTreeView::GetInstance().Str = UOUpadeView->Str();
-    //UOTreeView::GetInstance().Dex = UOUpadeView->Dex();
-    //UOTreeView::GetInstance().Int = UOUpadeView->Int();
+    UOTreeView::GetInstance().Str = UOUpadeView->Str();
+    UOTreeView::GetInstance().Dex = UOUpadeView->Dex();
+    UOTreeView::GetInstance().Int = UOUpadeView->Int();
     UOTreeView::GetInstance().Hits = UOUpadeView->Hits();
     UOTreeView::GetInstance().MaxHits = UOUpadeView->MaxHits();
-    UOTreeView::GetInstance().Stamina = UOUpadeView->Stam();
+    UOTreeView::GetInstance().Stamina = UOUpadeView->Stamina();
     UOTreeView::GetInstance().MaxStam = UOUpadeView->MaxStam();
 
     UOTreeView::GetInstance().Mana = UOUpadeView->Mana();
     UOTreeView::GetInstance().MaxMana = UOUpadeView->MaxMana();
-    //UOTreeView::GetInstance().MaxSats = UOUpadeView->MaxStats();
-    //UOTreeView::GetInstance().Luck = UOUpadeView->Luck();
+    UOTreeView::GetInstance().MaxStats = UOUpadeView->MaxStats();
+    UOTreeView::GetInstance().Luck = UOUpadeView->Luck();
     UOTreeView::GetInstance().Weight = UOUpadeView->Weight();
     UOTreeView::GetInstance().MaxWeight = UOUpadeView->MaxWeight();
-    //UOTreeView::GetInstance().MinDmg = UOUpadeView->MinDmg();
-    //UOTreeView::GetInstance().MaxDmg = UOUpadeView->MaxDmg();
+    UOTreeView::GetInstance().MinDmg = UOUpadeView->MinDmg();
+    UOTreeView::GetInstance().MaxDmg = UOUpadeView->MaxDmg();
     UOTreeView::GetInstance().Gold = UOUpadeView->Gold();
-    //UOTreeView::GetInstance().Followers = UOUpadeView->Followers();
-    //UOTreeView::GetInstance().MaxFol = UOUpadeView->MaxFol();
+    UOTreeView::GetInstance().Followers = UOUpadeView->Followers();
+    UOTreeView::GetInstance().MaxFol = UOUpadeView->MaxFol();
     UOTreeView::GetInstance().Ar = UOUpadeView->Ar();
-    //UOTreeView::GetInstance().Fr = UOUpadeView->Fr();
-    //UOTreeView::GetInstance().Cr = UOUpadeView->Cr();
-    //UOTreeView::GetInstance().Pr = UOUpadeView->Pr();
-    //UOTreeView::GetInstance().Er = UOUpadeView->Er();
-    //UOTreeView::GetInstance().Tp = UOUpadeView->Tp();
+    UOTreeView::GetInstance().Fr = UOUpadeView->Fr();
+    UOTreeView::GetInstance().Cr = UOUpadeView->Cr();
+    UOTreeView::GetInstance().Pr = UOUpadeView->Pr();
+    UOTreeView::GetInstance().Er = UOUpadeView->Er();
+    UOTreeView::GetInstance().Tp = UOUpadeView->Tp();
+
+    /// Container Info
+    UOTreeView::GetInstance().NextCPosX = UOUpadeView->NextCPosX();
+    UOTreeView::GetInstance().NextCPosY = UOUpadeView->NextCPosY();
+    UOTreeView::GetInstance().ContPosX = UOUpadeView->ContPosX();
+    UOTreeView::GetInstance().ContPosY = UOUpadeView->ContPosY();
+    UOTreeView::GetInstance().ContSizeX = UOUpadeView->ContSizeX();
+    UOTreeView::GetInstance().ContSizeY = UOUpadeView->ContSizeY();
+    UOTreeView::GetInstance().ContKind = UOUpadeView->ContKind();
+    UOTreeView::GetInstance().ContName = UOUpadeView->ContName().data();
+    UOTreeView::GetInstance().ContID = UOUpadeView->ContID();
+    UOTreeView::GetInstance().ContType = UOUpadeView->ContType();
 
     /// Client Info
     mCliNr = UOUpadeView->CliNr();
     UOTreeView::GetInstance().CliNr = mCliNr;
     UOTreeView::GetInstance().CliCnt = UOUpadeView->CliCnt();
-    //UOTreeView::GetInstance().CliLang = UOUpadeView->CliLang();
-    //UOTreeView::GetInstance().CliVer = UOUpadeView->CliVer();
-    //UOTreeView::GetInstance().CliLogged = UOUpadeView->CliLogged();
-    //UOTreeView::GetInstance().CliLeft = UOUpadeView->CliLeft();
-    //UOTreeView::GetInstance().CliTop = UOUpadeView->CliTop();
-    //UOTreeView::GetInstance().CliXRes = UOUpadeView->CliXRes();
-    //UOTreeView::GetInstance().CliYRes = UOUpadeView->CliYRes();
-    //UOTreeView::GetInstance().CliTitle = UOUpadeView->CliTitle();
+    UOTreeView::GetInstance().CliLang = UOUpadeView->CliLang().data();
+    UOTreeView::GetInstance().CliVer = UOUpadeView->CliVer().data();
+    UOTreeView::GetInstance().CliLogged = UOUpadeView->CliLogged();
+    UOTreeView::GetInstance().CliLeft = UOUpadeView->CliLeft();
+    UOTreeView::GetInstance().CliTop = UOUpadeView->CliTop();
+    UOTreeView::GetInstance().CliXRes = UOUpadeView->CliXRes();
+    UOTreeView::GetInstance().CliYRes = UOUpadeView->CliYRes();
+    UOTreeView::GetInstance().CliTitle = UOUpadeView->CliTitle().data();
 
     /// Last Action
+    UOTreeView::GetInstance().LObjectID = UOUpadeView->LObjectID();
+    UOTreeView::GetInstance().LObjectType = UOUpadeView->LObjectType();
+    UOTreeView::GetInstance().LTargetID = UOUpadeView->getLastTargetID();
+    UOTreeView::GetInstance().LTargetKind = UOUpadeView->LTargetKind();
+    UOTreeView::GetInstance().LTargetTile = UOUpadeView->LTargetTile();
+    UOTreeView::GetInstance().LTargetX = UOUpadeView->LTargetX();
+    UOTreeView::GetInstance().LTargetY = UOUpadeView->LTargetY();
+    UOTreeView::GetInstance().LTargetZ = UOUpadeView->LTargetZ();
+    UOTreeView::GetInstance().LLiftedID = UOUpadeView->LLiftedID();
+    UOTreeView::GetInstance().LLiftedKind = UOUpadeView->LLiftedKind();
     UOTreeView::GetInstance().LLiftedType = UOUpadeView->LLiftedType();
+    UOTreeView::GetInstance().LSkill = UOUpadeView->LSkill();
+    UOTreeView::GetInstance().LSpell = UOUpadeView->LSpell();
 
 
 

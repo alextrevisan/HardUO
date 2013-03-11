@@ -25,24 +25,28 @@ UOTreeView::UOTreeView()
         mViewMap["CharDir"]->setEditable( false );
         item->appendRow( mViewMap["CharDir"] );
 
-        mViewMap["CharStatus"] = new QStandardItem( QString("CharStatus: %0").arg(0) );
-        mViewMap["CharStatus"]->setEditable( false );
-        item->appendRow( mViewMap["CharStatus"] );
-
         mViewMap["CharID"] = new QStandardItem( QString("CharID: %0").arg(0) );
         mViewMap["CharID"]->setEditable( false );
         item->appendRow( mViewMap["CharID"] );
 
-        mViewMap["CharGhost"] = new QStandardItem( QString("CharGhost: %0").arg(0) );
+        mViewMap["CharType"] = new QStandardItem( QString("CharType: %0").arg(0) );
+        mViewMap["CharType"]->setEditable( false );
+        item->appendRow( mViewMap["CharType"] );
+
+        mViewMap["CharStatus"] = new QStandardItem( QString("CharStatus: %0").arg(0) );
+        mViewMap["CharStatus"]->setEditable( false );
+        item->appendRow( mViewMap["CharStatus"] );        
+
+        /*mViewMap["CharGhost"] = new QStandardItem( QString("CharGhost: %0").arg(0) );
         mViewMap["CharGhost"]->setEditable( false );
-        item->appendRow( mViewMap["CharGhost"] );
+        item->appendRow( mViewMap["CharGhost"] );*/
 
         mViewMap["BackpackID"] = new QStandardItem( QString("BackpackID: %0").arg(0) );
         mViewMap["BackpackID"]->setEditable( false );
         item->appendRow( mViewMap["BackpackID"] );
     mModel->setItem(0, 0, item);
-    /** Status Bar **/
-    item = new QStandardItem( QString("Status Bar") );
+    /** Status Info **/
+    item = new QStandardItem( QString("Status Info") );
     item->setEditable(false);
 
         mViewMap["CharName"] = new QStandardItem( QString("CharName: %0").arg(0) );
@@ -117,13 +121,13 @@ UOTreeView::UOTreeView()
         mViewMap["Gold"]->setEditable( false );
         item->appendRow( mViewMap["Gold"] );
 
-        mViewMap["Followers"] = new QStandardItem( QString("Followers: %0").arg(0) );
-        mViewMap["Followers"]->setEditable( false );
-        item->appendRow( mViewMap["Followers"] );
-
         mViewMap["MaxFol"] = new QStandardItem( QString("MaxFol: %0").arg(0) );
         mViewMap["MaxFol"]->setEditable( false );
         item->appendRow( mViewMap["MaxFol"] );
+
+        mViewMap["Followers"] = new QStandardItem( QString("Followers: %0").arg(0) );
+        mViewMap["Followers"]->setEditable( false );
+        item->appendRow( mViewMap["Followers"] );
 
         mViewMap["Ar"] = new QStandardItem( QString("Ar: %0").arg(0) );
         mViewMap["Ar"]->setEditable( false );
@@ -153,25 +157,13 @@ UOTreeView::UOTreeView()
     item = new QStandardItem( QString("Container Info") );
     item->setEditable(false);
 
-        mViewMap["NextCPosX"] = new QStandardItem( QString("NextCPosX: %0").arg(0) );
-        mViewMap["NextCPosX"]->setEditable( false );
-        item->appendRow( mViewMap["NextCPosX"] );
+        mViewMap["ContID"] = new QStandardItem( QString("ContID: %0").arg(0) );
+        mViewMap["ContID"]->setEditable( false );
+        item->appendRow( mViewMap["ContID"] );
 
-        mViewMap["NextCPosY"] = new QStandardItem( QString("NextCPosY: %0").arg(0) );
-        mViewMap["NextCPosY"]->setEditable( false );
-        item->appendRow( mViewMap["NextCPosY"] );
-
-        mViewMap["ContPosX"] = new QStandardItem( QString("ContPosX: %0").arg(0) );
-        mViewMap["ContPosX"]->setEditable( false );
-        item->appendRow( mViewMap["ContPosX"] );
-
-        mViewMap["ContPosY"] = new QStandardItem( QString("ContPosY: %0").arg(0) );
-        mViewMap["ContPosY"]->setEditable( false );
-        item->appendRow( mViewMap["ContPosY"] );
-
-        mViewMap["ContSize"] = new QStandardItem( QString("ContSize: %0").arg(0) );
-        mViewMap["ContSize"]->setEditable( false );
-        item->appendRow( mViewMap["ContSize"] );
+        mViewMap["ContType"] = new QStandardItem( QString("ContType: %0").arg(0) );
+        mViewMap["ContType"]->setEditable( false );
+        item->appendRow( mViewMap["ContType"] );
 
         mViewMap["ContKind"] = new QStandardItem( QString("ContKind: %0").arg(0) );
         mViewMap["ContKind"]->setEditable( false );
@@ -181,16 +173,33 @@ UOTreeView::UOTreeView()
         mViewMap["ContName"]->setEditable( false );
         item->appendRow( mViewMap["ContName"] );
 
-        mViewMap["ContID"] = new QStandardItem( QString("ContID: %0").arg(0) );
-        mViewMap["ContID"]->setEditable( false );
-        item->appendRow( mViewMap["ContID"] );
+        mViewMap["ContPosX"] = new QStandardItem( QString("ContPosX: %0").arg(0) );
+        mViewMap["ContPosX"]->setEditable( false );
+        item->appendRow( mViewMap["ContPosX"] );
 
-        mViewMap["ContType"] = new QStandardItem( QString("ContType: %0").arg(0) );
-        mViewMap["ContType"]->setEditable( false );
-        item->appendRow( mViewMap["ContType"] );
+        mViewMap["ContPosY"] = new QStandardItem( QString("ContPosY: %0").arg(0) );
+        mViewMap["ContPosY"]->setEditable( false );
+        item->appendRow( mViewMap["ContPosY"] );
+
+        mViewMap["ContSizeX"] = new QStandardItem( QString("ContSizeX: %0").arg(0) );
+        mViewMap["ContSizeX"]->setEditable( false );
+        item->appendRow( mViewMap["ContSizeX"] );
+
+        mViewMap["ContSizeY"] = new QStandardItem( QString("ContSizeY: %0").arg(0) );
+        mViewMap["ContSizeY"]->setEditable( false );
+        item->appendRow( mViewMap["ContSizeY"] );
+
+        mViewMap["NextCPosX"] = new QStandardItem( QString("NextCPosX: %0").arg(0) );
+        mViewMap["NextCPosX"]->setEditable( false );
+        item->appendRow( mViewMap["NextCPosX"] );
+
+        mViewMap["NextCPosY"] = new QStandardItem( QString("NextCPosY: %0").arg(0) );
+        mViewMap["NextCPosY"]->setEditable( false );
+        item->appendRow( mViewMap["NextCPosY"] );
+
     mModel->setItem(2, 0, item);
     /** Client Info **/
-    item = new QStandardItem( QString("Container Info") );
+    item = new QStandardItem( QString("Client Info") );
     item->setEditable(false);
 
     mViewMap["CliNr"] = new QStandardItem( QString("CliNr: %0").arg(0) );
@@ -235,13 +244,63 @@ UOTreeView::UOTreeView()
 
     mModel->setItem(3, 0, item);
 
-    /** Last Target **/
-    item = new QStandardItem( QString("Last Target") );
+    /** Last Action **/
+    item = new QStandardItem( QString("Last Action") );
     item->setEditable(false);
+
+    mViewMap["LObjectID"] = new QStandardItem( QString("LObjectID: %0").arg(0) );
+    mViewMap["LObjectID"]->setEditable( false );
+    item->appendRow( mViewMap["LObjectID"] );
+
+    mViewMap["LObjectType"] = new QStandardItem( QString("LObjectType: %0").arg(0) );
+    mViewMap["LObjectType"]->setEditable( false );
+    item->appendRow( mViewMap["LObjectType"] );
+
+    mViewMap["LTargetID"] = new QStandardItem( QString("LTargetID: %0").arg(0) );
+    mViewMap["LTargetID"]->setEditable( false );
+    item->appendRow( mViewMap["LTargetID"] );
+
+    mViewMap["LTargetKind"] = new QStandardItem( QString("LTargetKind: %0").arg(0) );
+    mViewMap["LTargetKind"]->setEditable( false );
+    item->appendRow( mViewMap["LTargetKind"] );
+
+    mViewMap["LTargetTile"] = new QStandardItem( QString("LTargetTile: %0").arg(0) );
+    mViewMap["LTargetTile"]->setEditable( false );
+    item->appendRow( mViewMap["LTargetTile"] );
+
+    mViewMap["LTargetX"] = new QStandardItem( QString("LTargetX: %0").arg(0) );
+    mViewMap["LTargetX"]->setEditable( false );
+    item->appendRow( mViewMap["LTargetX"] );
+
+    mViewMap["LTargetY"] = new QStandardItem( QString("LTargetY: %0").arg(0) );
+    mViewMap["LTargetY"]->setEditable( false );
+    item->appendRow( mViewMap["LTargetY"] );
+
+    mViewMap["LTargetZ"] = new QStandardItem( QString("LTargetZ: %0").arg(0) );
+    mViewMap["LTargetZ"]->setEditable( false );
+    item->appendRow( mViewMap["LTargetZ"] );
+
+    mViewMap["LLiftedID"] = new QStandardItem( QString("LLiftedID: %0").arg(0) );
+    mViewMap["LLiftedID"]->setEditable( false );
+    item->appendRow( mViewMap["LLiftedID"] );
+
+    mViewMap["LLiftedKind"] = new QStandardItem( QString("LLiftedKind: %0").arg(0) );
+    mViewMap["LLiftedKind"]->setEditable( false );
+    item->appendRow( mViewMap["LLiftedKind"] );
 
     mViewMap["LLiftedType"] = new QStandardItem( QString("LLiftedType: %0").arg(0) );
     mViewMap["LLiftedType"]->setEditable( false );
     item->appendRow( mViewMap["LLiftedType"] );
+
+
+    mViewMap["LSkill"] = new QStandardItem( QString("LSkill: %0").arg(0) );
+    mViewMap["LSkill"]->setEditable( false );
+    item->appendRow( mViewMap["LSkill"] );
+
+
+    mViewMap["LSpell"] = new QStandardItem( QString("LSpell: %0").arg(0) );
+    mViewMap["LSpell"]->setEditable( false );
+    item->appendRow( mViewMap["LSpell"] );
 
     mModel->setItem(4, 0, item);
 
@@ -421,12 +480,14 @@ void UOTreeView::UpdateView()
     mViewMap["CharPosY"]->setText(QString("CharPosY: %0").arg(CharPosY));
     mViewMap["CharPosZ"]->setText(QString("CharPosZ: %0").arg(CharPosZ));
     mViewMap["CharDir"]->setText(QString("CharDir: %0").arg(CharDir));
-    mViewMap["CharStatus"]->setText(QString("CharStatus: %0").arg(CharStatus));
-    mViewMap["CharGhost"]->setText(QString("CharGhost: %0").arg(CharGhost));
+    mViewMap["CharStatus"]->setText(QString("CharStatus: %0").arg(CharStatus.data()));
+    mViewMap["CharID"]->setText(QString("CharID: %0").arg(CharID));
+    mViewMap["CharType"]->setText(QString("CharType: %0").arg(CharType));
+    //mViewMap["CharGhost"]->setText(QString("CharGhost: %0").arg(CharGhost));
     mViewMap["BackpackID"]->setText(QString("BackpackID: %0").arg(BackpackID));
 
     mViewMap["CharName"]->setText(QString("CharName: %0").arg(CharName));
-    mViewMap["Sex"]->setText(QString("Sex: %0").arg(Sex?"Mulher":"Isso que é Macho!"));
+    mViewMap["Sex"]->setText(QString("Sex: %0").arg(Sex));
     mViewMap["Str"]->setText(QString("Str: %0").arg(Str));
     mViewMap["Dex"]->setText(QString("Dex: %0").arg(Dex));
     mViewMap["Int"]->setText(QString("Int: %0").arg(Int));
@@ -452,18 +513,41 @@ void UOTreeView::UpdateView()
     mViewMap["Er"]->setText(QString("Er: %0").arg(Er));
     mViewMap["Tp"]->setText(QString("Tp: %0").arg(Tp));
 
+    mViewMap["ContID"]->setText(QString("ContID: %0").arg(ContID));
+    mViewMap["ContType"]->setText(QString("ContType: %0").arg(ContType));
+    mViewMap["ContKind"]->setText(QString("ContKind: %0").arg(ContKind));
+    mViewMap["ContName"]->setText(QString("ContName: %0").arg(ContName));
+    mViewMap["ContPosX"]->setText(QString("ContPosX: %0").arg(ContPosX));
+    mViewMap["ContPosY"]->setText(QString("ContPosY: %0").arg(ContPosY));
+    mViewMap["ContSizeX"]->setText(QString("ContSizeX: %0").arg(ContSizeX));
+    mViewMap["ContSizeY"]->setText(QString("ContSizeY: %0").arg(ContSizeY));
+    mViewMap["NextCPosX"]->setText(QString("NextCPosX: %0").arg(NextCPosX));
+    mViewMap["NextCPosY"]->setText(QString("NextCPosY: %0").arg(NextCPosY));
+
     mViewMap["CliNr"]->setText(QString("CliNr: %0").arg(CliNr));
     mViewMap["CliCnt"]->setText(QString("CliCnt: %0").arg(CliCnt));
     mViewMap["CliLang"]->setText(QString("CliLang: %0").arg(CliLang));
     mViewMap["CliVer"]->setText(QString("CliVer: %0").arg(CliVer));
-    mViewMap["CliLogged"]->setText(QString("CliLogged: %0").arg(CliLogged));
+    mViewMap["CliLogged"]->setText(QString("CliLogged: %0").arg(CliLogged?"true":"false"));
     mViewMap["CliLeft"]->setText(QString("CliLeft: %0").arg(CliLeft));
     mViewMap["CliTop"]->setText(QString("CliTop: %0").arg(CliTop));
     mViewMap["CliXRes"]->setText(QString("CliXRes: %0").arg(CliXRes));
     mViewMap["CliYRes"]->setText(QString("CliYRes: %0").arg(CliYRes));
     mViewMap["CliTitle"]->setText(QString("CliTitle: %0").arg(CliTitle));
 
+    mViewMap["LObjectID"]->setText(QString("LObjectID: %0").arg(LObjectID));
+    mViewMap["LObjectType"]->setText(QString("LObjectType: %0").arg(LObjectType));
+    mViewMap["LTargetID"]->setText(QString("LTargetID: %0").arg(LTargetID));
+    mViewMap["LTargetKind"]->setText(QString("LTargetKind: %0").arg(LTargetKind));
+    mViewMap["LTargetTile"]->setText(QString("LTargetTile: %0").arg(LTargetTile));
+    mViewMap["LTargetX"]->setText(QString("LTargetX: %0").arg(LTargetX));
+    mViewMap["LTargetY"]->setText(QString("LTargetY: %0").arg(LTargetY));
+    mViewMap["LTargetZ"]->setText(QString("LTargetZ: %0").arg(LTargetZ));
+    mViewMap["LLiftedID"]->setText(QString("LLiftedID: %0").arg(LLiftedID));
+    mViewMap["LLiftedKind"]->setText(QString("LLiftedKind: %0").arg(LLiftedKind));
     mViewMap["LLiftedType"]->setText(QString("LLiftedType: %0").arg(LLiftedType));
+    mViewMap["LSkill"]->setText(QString("LSkill: %0").arg(LSkill));
+    mViewMap["LSpell"]->setText(QString("LSpell: %0").arg(LSpell));
 
 
     mViewMap["Alchemy"]->setText(QString("Alchemy: %0").arg(Alchemy/10));

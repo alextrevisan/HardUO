@@ -38,13 +38,15 @@ public:
         return mGlobalVar[name];
     }
     void SetUO(UO* uo);
+    void ReadLuaVariables();
+    std::string getinstalldir();
 protected:
      void run();
      //int pause();
 private:
-     QString mScript;
      int mLine;
      QTextDocument* mDoc;
+     QString mScript;
      QTextEdit* mLog;
      void Print(const std::string& print);
      void Wait(int ms);
