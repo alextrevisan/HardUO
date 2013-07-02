@@ -86,6 +86,7 @@ void ScriptRunner::KeyPressed(byte *keysDepressed, DWORD keyPressed)
 
 void ScriptRunner::WaitKey(unsigned long keyCode)
 {
+    mKeyPressed = 0;
     mMutexKey.lock();
     while(mKeyPressed!=keyCode)
     {
@@ -136,7 +137,7 @@ void ScriptRunner::run()
         luaL_dostring(L, "function getinstalldir() return ScriptRunner:getinstalldir() end");
         luaL_dostring(L, "function setGlobal(a,b) ScriptRunner:setGlobal(a,b) end");
         luaL_dostring(L, "function getGlobal(a) return ScriptRunner:getGlobal(a) end");
-        luaL_dostring(L, "function stop() ScriptRunner:stop() end");
+        luaL_dostring(L, "function stop() error(\"Script stopped.\",666) end");
 
         /*module(L)
         [
@@ -363,9 +364,8 @@ void ScriptRunner::run()
 
 void ScriptRunner::stop()
 {
-    if(isRunning())
-        terminate();
-    emit Stopped();
+    //luaL_dostring(L,"error(\"Scrit stopped\")");
+
 }
 void ScriptRunner::SetUO(UO *uo)
 {

@@ -439,7 +439,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
             QMessageBox::StandardButton ret;
             ret = QMessageBox::warning(this, tr("HardUO"),
                       tr("Tem certeza que deseja sair?\n"
-                         "Todos os documentos nÃ£o salvos serÃ£o perdidos."),
+                         "Todos os documentos não salvos serão perdidos."),
                       QMessageBox::Ok | QMessageBox::Cancel);
             if (ret == QMessageBox::Ok)
                 event->accept();
