@@ -42,6 +42,7 @@ public:
     std::string getinstalldir();
 protected:
      void run();
+     void stop();
      //int pause();
 private:
      int mLine;

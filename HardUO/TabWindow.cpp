@@ -14,7 +14,7 @@ TabWindow::TabWindow(QWidget *parent)
     mRunner = NULL;
     mLayout = new QVBoxLayout();
     setLayout(mLayout);
-    completingTextEdit = new CodeArea();
+    completingTextEdit = new CodeArea(this);
     mLayout->addWidget(completingTextEdit);
 
     logText = new QTextEdit();
@@ -119,6 +119,7 @@ void TabWindow::Stop()
             OnPause(0);
             mStatus = 0; //Stop
         }
+    mStatus = 0;
 }
 
 void TabWindow::Pause()
@@ -150,7 +151,7 @@ void TabWindow::OnStart()
 
 void TabWindow::OnStop()
 {
-    mStatus = 0;
+    Stop();
 }
 
 void TabWindow::UpdateView()
@@ -242,68 +243,68 @@ void TabWindow::UpdateView()
 
 
     //Miscellaneous Skills
-    UOTreeView::GetInstance().Alchemy = UOUpadeView->GetSkill("Alch").real;
-    UOTreeView::GetInstance().Blacksmithy = UOUpadeView->GetSkill("Blac").real;
-    UOTreeView::GetInstance().Bowcraft = UOUpadeView->GetSkill("Bowc").real;
-    UOTreeView::GetInstance().Bushido = UOUpadeView->GetSkill("Bush").real;
-    UOTreeView::GetInstance().Carpentry = UOUpadeView->GetSkill("Carp").real;
-    UOTreeView::GetInstance().Chivalry = UOUpadeView->GetSkill("Chiv").real;
-    UOTreeView::GetInstance().Cooking = UOUpadeView->GetSkill("Cook").real;
-    UOTreeView::GetInstance().Fishing = UOUpadeView->GetSkill("Fish").real;
-    UOTreeView::GetInstance().Focus = UOUpadeView->GetSkill("Focu").real;
-    UOTreeView::GetInstance().Healing = UOUpadeView->GetSkill("Heal").real;
-    UOTreeView::GetInstance().Herding = UOUpadeView->GetSkill("Herd").real;
-    UOTreeView::GetInstance().Lockpicking = UOUpadeView->GetSkill("Lock").real;
-    UOTreeView::GetInstance().Lumberjacking = UOUpadeView->GetSkill("Lumb").real;
-    UOTreeView::GetInstance().Magery = UOUpadeView->GetSkill("Mage").real;
-    UOTreeView::GetInstance().Meditation = UOUpadeView->GetSkill("Medi").real;
-    UOTreeView::GetInstance().Mining = UOUpadeView->GetSkill("Mini").real;
-    UOTreeView::GetInstance().Musicianship = UOUpadeView->GetSkill("Musi").real;
-    UOTreeView::GetInstance().Necromancy = UOUpadeView->GetSkill("Necr").real;
-    UOTreeView::GetInstance().Ninjitsu = UOUpadeView->GetSkill("Ninj").real;
-    UOTreeView::GetInstance().RemoveTrap = UOUpadeView->GetSkill("Remo").real;
-    UOTreeView::GetInstance().ResistingSpells = UOUpadeView->GetSkill("Resi").real;
-    UOTreeView::GetInstance().Snooping = UOUpadeView->GetSkill("Snoo").real;
-    UOTreeView::GetInstance().Stealing = UOUpadeView->GetSkill("Stea").real;
-    UOTreeView::GetInstance().Stealth = UOUpadeView->GetSkill("Stlt").real;
-    UOTreeView::GetInstance().Tailoring = UOUpadeView->GetSkill("Tail").real;
-    UOTreeView::GetInstance().Tinkering = UOUpadeView->GetSkill("Tink").real;
-    UOTreeView::GetInstance().Veterinary = UOUpadeView->GetSkill("Vete").real;
+    UOTreeView::GetInstance().Alchemy = UOUpadeView->GetSkill("Alch");
+    UOTreeView::GetInstance().Blacksmithy = UOUpadeView->GetSkill("Blac");
+    UOTreeView::GetInstance().Bowcraft = UOUpadeView->GetSkill("Bowc");
+    UOTreeView::GetInstance().Bushido = UOUpadeView->GetSkill("Bush");
+    UOTreeView::GetInstance().Carpentry = UOUpadeView->GetSkill("Carp");
+    UOTreeView::GetInstance().Chivalry = UOUpadeView->GetSkill("Chiv");
+    UOTreeView::GetInstance().Cooking = UOUpadeView->GetSkill("Cook");
+    UOTreeView::GetInstance().Fishing = UOUpadeView->GetSkill("Fish");
+    UOTreeView::GetInstance().Focus = UOUpadeView->GetSkill("Focu");
+    UOTreeView::GetInstance().Healing = UOUpadeView->GetSkill("Heal");
+    UOTreeView::GetInstance().Herding = UOUpadeView->GetSkill("Herd");
+    UOTreeView::GetInstance().Lockpicking = UOUpadeView->GetSkill("Lock");
+    UOTreeView::GetInstance().Lumberjacking = UOUpadeView->GetSkill("Lumb");
+    UOTreeView::GetInstance().Magery = UOUpadeView->GetSkill("Mage");
+    UOTreeView::GetInstance().Meditation = UOUpadeView->GetSkill("Medi");
+    UOTreeView::GetInstance().Mining = UOUpadeView->GetSkill("Mini");
+    UOTreeView::GetInstance().Musicianship = UOUpadeView->GetSkill("Musi");
+    UOTreeView::GetInstance().Necromancy = UOUpadeView->GetSkill("Necr");
+    UOTreeView::GetInstance().Ninjitsu = UOUpadeView->GetSkill("Ninj");
+    UOTreeView::GetInstance().RemoveTrap = UOUpadeView->GetSkill("Remo");
+    UOTreeView::GetInstance().ResistingSpells = UOUpadeView->GetSkill("Resi");
+    UOTreeView::GetInstance().Snooping = UOUpadeView->GetSkill("Snoo");
+    UOTreeView::GetInstance().Stealing = UOUpadeView->GetSkill("Stea");
+    UOTreeView::GetInstance().Stealth = UOUpadeView->GetSkill("Stlt");
+    UOTreeView::GetInstance().Tailoring = UOUpadeView->GetSkill("Tail");
+    UOTreeView::GetInstance().Tinkering = UOUpadeView->GetSkill("Tink");
+    UOTreeView::GetInstance().Veterinary = UOUpadeView->GetSkill("Vete");
 
 
 
     //Combat Skills
-    UOTreeView::GetInstance().Archery = UOUpadeView->GetSkill("Arch").real;
-    UOTreeView::GetInstance().Fencing = UOUpadeView->GetSkill("Fenc").real;
-    UOTreeView::GetInstance().MaceFighting = UOUpadeView->GetSkill("Mace").real;
-    UOTreeView::GetInstance().Parrying = UOUpadeView->GetSkill("Parr").real;
-    UOTreeView::GetInstance().Swordsmanship = UOUpadeView->GetSkill("Swor").real;
-    UOTreeView::GetInstance().Tactics = UOUpadeView->GetSkill("Tact").real;
-    UOTreeView::GetInstance().Wrestling = UOUpadeView->GetSkill("Wres").real;
+    UOTreeView::GetInstance().Archery = UOUpadeView->GetSkill("Arch");
+    UOTreeView::GetInstance().Fencing = UOUpadeView->GetSkill("Fenc");
+    UOTreeView::GetInstance().MaceFighting = UOUpadeView->GetSkill("Mace");
+    UOTreeView::GetInstance().Parrying = UOUpadeView->GetSkill("Parr");
+    UOTreeView::GetInstance().Swordsmanship = UOUpadeView->GetSkill("Swor");
+    UOTreeView::GetInstance().Tactics = UOUpadeView->GetSkill("Tact");
+    UOTreeView::GetInstance().Wrestling = UOUpadeView->GetSkill("Wres");
 
     //Actions
-    UOTreeView::GetInstance().AnimalTaming = UOUpadeView->GetSkill("Anim").real;
-    UOTreeView::GetInstance().Begging = UOUpadeView->GetSkill("Begg").real;
-    UOTreeView::GetInstance().Camping = UOUpadeView->GetSkill("Camp").real;
-    UOTreeView::GetInstance().DetectingHidden = UOUpadeView->GetSkill("Det").real;
-    UOTreeView::GetInstance().Discordance = UOUpadeView->GetSkill("Disc").real;
-    UOTreeView::GetInstance().Hiding = UOUpadeView->GetSkill("Hidi").real;
-    UOTreeView::GetInstance().Inscription = UOUpadeView->GetSkill("Insc").real;
-    UOTreeView::GetInstance().Peacemaking = UOUpadeView->GetSkill("Peac").real;
-    UOTreeView::GetInstance().Poisoning = UOUpadeView->GetSkill("Pois").real;
-    UOTreeView::GetInstance().Provocation = UOUpadeView->GetSkill("Prov").real;
-    UOTreeView::GetInstance().SpiritSpeak = UOUpadeView->GetSkill("Spir").real;
-    UOTreeView::GetInstance().Tracking = UOUpadeView->GetSkill("Trac").real;
+    UOTreeView::GetInstance().AnimalTaming = UOUpadeView->GetSkill("Anim");
+    UOTreeView::GetInstance().Begging = UOUpadeView->GetSkill("Begg");
+    UOTreeView::GetInstance().Camping = UOUpadeView->GetSkill("Camp");
+    UOTreeView::GetInstance().DetectingHidden = UOUpadeView->GetSkill("Det");
+    UOTreeView::GetInstance().Discordance = UOUpadeView->GetSkill("Disc");
+    UOTreeView::GetInstance().Hiding = UOUpadeView->GetSkill("Hidi");
+    UOTreeView::GetInstance().Inscription = UOUpadeView->GetSkill("Insc");
+    UOTreeView::GetInstance().Peacemaking = UOUpadeView->GetSkill("Peac");
+    UOTreeView::GetInstance().Poisoning = UOUpadeView->GetSkill("Pois");
+    UOTreeView::GetInstance().Provocation = UOUpadeView->GetSkill("Prov");
+    UOTreeView::GetInstance().SpiritSpeak = UOUpadeView->GetSkill("Spir");
+    UOTreeView::GetInstance().Tracking = UOUpadeView->GetSkill("Trac");
 
 
     //Lore & Knowledge
-    UOTreeView::GetInstance().Anatomy = UOUpadeView->GetSkill("Anat").real;
-    UOTreeView::GetInstance().AnimalLore = UOUpadeView->GetSkill("Anil").real;
-    UOTreeView::GetInstance().ArmsLore = UOUpadeView->GetSkill("Arms").real;
-    UOTreeView::GetInstance().EvaluatingIntelligence = UOUpadeView->GetSkill("Eval").real;
-    UOTreeView::GetInstance().ForensicEvaluation = UOUpadeView->GetSkill("Fore").real;
-    UOTreeView::GetInstance().ItemIdentification = UOUpadeView->GetSkill("Item").real;
-    UOTreeView::GetInstance().TasteIdentification = UOUpadeView->GetSkill("Tast").real;
+    UOTreeView::GetInstance().Anatomy = UOUpadeView->GetSkill("Anat");
+    UOTreeView::GetInstance().AnimalLore = UOUpadeView->GetSkill("Anil");
+    UOTreeView::GetInstance().ArmsLore = UOUpadeView->GetSkill("Arms");
+    UOTreeView::GetInstance().EvaluatingIntelligence = UOUpadeView->GetSkill("Eval");
+    UOTreeView::GetInstance().ForensicEvaluation = UOUpadeView->GetSkill("Fore");
+    UOTreeView::GetInstance().ItemIdentification = UOUpadeView->GetSkill("Item");
+    UOTreeView::GetInstance().TasteIdentification = UOUpadeView->GetSkill("Tast");
 
 
 

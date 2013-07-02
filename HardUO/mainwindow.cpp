@@ -13,6 +13,7 @@
 #include <QStringListModel>
 #include <QUrl>
 #include <QSettings>
+#include <QMimeData>
 
 #include <windows.h>
 #include "CodeArea.h"
@@ -25,7 +26,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
   ,mTabNum(1)
 {
-
     ui->setupUi(this);
 
     wordList << "print()"
@@ -55,7 +55,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mTabWidget->setTabsClosable(true);
     mTabWidget->setMovable(true);
 
-    TabWindow* tmp = new TabWindow();
+    TabWindow* tmp = new TabWindow(this);
 
     mTabWidget->addTab(tmp,"new "+QString::number(mTabNum++));
     mTabWindows.append(tmp);
@@ -439,7 +439,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
             QMessageBox::StandardButton ret;
             ret = QMessageBox::warning(this, tr("HardUO"),
                       tr("Tem certeza que deseja sair?\n"
-                         "Todos os documentos não salvos serão perdidos."),
+                         "Todos os documentos nÃ£o salvos serÃ£o perdidos."),
                       QMessageBox::Ok | QMessageBox::Cancel);
             if (ret == QMessageBox::Ok)
                 event->accept();

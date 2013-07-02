@@ -697,19 +697,37 @@ void UO::LSpell(int spell)
 }
 
 /// Skills
-Skill UO::GetSkill(std::string skill)
+luabind::object UO::GetSkill(luabind::object skill)
+{
+    luabind::object returnTable = luabind::newtable( mLuaState );
+    returnTable["norm"] = 0;
+    returnTable["real"] = 0;
+    returnTable["cap"] = 0;
+    returnTable["lock"] = 0;
+    if(luabind::type(skill)==LUA_TSTRING)
+    {
+        SetTop(hnd, 0);
+        PushStrVal(hnd, "Call");
+        PushStrVal(hnd, "GetSkill");
+        PushStrVal(hnd, (char*)luabind::object_cast<std::string>(skill).data());
+        Execute(hnd);
+
+        returnTable["norm"] = GetInteger(hnd, 1);
+        returnTable["real"] = GetInteger(hnd, 2);
+        returnTable["cap"] = GetInteger(hnd, 3);
+        returnTable["lock"] = GetInteger(hnd, 4);
+    }
+    return returnTable;
+}
+
+int UO::GetSkill(std::string skill)
 {
     SetTop(hnd, 0);
     PushStrVal(hnd, "Call");
     PushStrVal(hnd, "GetSkill");
     PushStrVal(hnd, (char*)skill.data());
     Execute(hnd);
-    Skill s;
-    s.norm = GetInteger(hnd, 1);
-    s.real = GetInteger(hnd, 2);
-    s.cap = GetInteger(hnd, 3);
-    s.lock = GetInteger(hnd, 4);
-    return s;
+    return GetInteger(hnd, 2); //real
 }
 void UO::useLastSkill()
 {
@@ -1362,47 +1380,50 @@ int UO::ScanItems(bool visibleOnly)
     mItemCount = GetInteger(hnd, 1);
     return mItemCount;
 }
-Item UO::GetItem(int index)
+luabind::object UO::GetItem(int index)
 {
-    Item i;
+    luabind::object returnTable = luabind::newtable( mLuaState );
     if(index>mItemCount || index < 0)
     {
-        return i;
+        return returnTable;
     }
     SetTop(hnd, 0);
     PushStrVal(hnd, "Call");
     PushStrVal(hnd, "GetItem");
     PushInteger(hnd, index);
     Execute(hnd);
-    i.id = GetInteger(hnd, 1);
-    i.type = GetInteger(hnd, 2);
-    i.kind = GetInteger(hnd, 3);
-    i.contId = GetInteger(hnd, 4);
-    i.x = GetInteger(hnd, 5);
-    i.y = GetInteger(hnd, 6);
-    i.z = GetInteger(hnd, 7);
-    i.stack = GetInteger(hnd, 8);
-    i.rep = GetInteger(hnd, 9);
-    i.color = GetInteger(hnd,10);
-    return i;
+
+    returnTable["id"] = GetInteger(hnd, 1);
+    returnTable["type"] = GetInteger(hnd, 2);
+    returnTable["kind"] = GetInteger(hnd, 3);
+    returnTable["contId"] = GetInteger(hnd, 4);
+    returnTable["x"] = GetInteger(hnd, 5);
+    returnTable["y"] = GetInteger(hnd, 6);
+    returnTable["z"] = GetInteger(hnd, 7);
+    returnTable["stack"] = GetInteger(hnd, 8);
+    returnTable["rep"] = GetInteger(hnd, 9);
+    returnTable["color"] = GetInteger(hnd,10);
+    return returnTable;
 }
 
-ItemProperty UO::GetProperty(int id)
+luabind::object UO::GetProperty(int id)
 {
     SetTop(hnd, 0);
     PushStrVal(hnd, "Call");
     PushStrVal(hnd, "Property");
     PushInteger(hnd, id);
     Execute(hnd);
-    ItemProperty prop;
-    prop.itemname = GetString(hnd,1);
-    qDebug()<<prop.itemname.data();
-    prop.iteminfo = GetString(hnd,2);
-    qDebug()<<prop.iteminfo.data();
+
+    luabind::object returnTable = luabind::newtable( mLuaState );
+    std::string name = GetString(hnd,1);
+    std::string info = GetString(hnd,2);
+    returnTable["name"] = name;
+    returnTable["info"] = info;
+    return returnTable;
 }
 luabind::object UO::FindItem(luabind::object const& table)
 {
-    QList<Item*> removeList;
+    QList<luabind::object> removeList;
     QList<int> typeFilter;
     QList<int> idFilter;
     QList<int> contIDFilter;
@@ -1471,24 +1492,24 @@ luabind::object UO::FindItem(luabind::object const& table)
         /** outros **/
     }
     /** Segundo passo - Coletar os itens **/
-    QList<Item*> itemList;
+    QList<luabind::object> itemList;
     ScanItems(true);
 
     for(int x = 0; x<mItemCount;++x)
     {
-        Item *item = new Item;
-        *item = GetItem(x);
+        //Item *item = new Item;
+        luabind::object item = GetItem(x);
         itemList.append(item);
     }
 
     /** Terceiro passo - Verificar quais itens serao removidos da lista de itens coletados **/
-    foreach(Item* i, itemList)
+    foreach(luabind::object i, itemList)
     {
         /** remove os itens que nao estao na lista de ID **/
         bool sameID = false;
         foreach(int id, idFilter)
         {
-            if(i->id==id)
+            if(luabind::object_cast<int>(i["id"])==id)
             {
                 sameID = true;
                 break;
@@ -1502,7 +1523,7 @@ luabind::object UO::FindItem(luabind::object const& table)
         bool sameType = false;
         foreach(int type, typeFilter)
         {
-            if(i->type==type)
+            if(luabind::object_cast<int>(i["type"])==type)
             {
                 sameType = true;
                 break;
@@ -1516,7 +1537,7 @@ luabind::object UO::FindItem(luabind::object const& table)
         bool sameContID = false;
         foreach(int contID, contIDFilter)
         {
-            if(i->contId==contID)
+            if(luabind::object_cast<int>(i["contId"])==contID)
             {
                 sameContID = true;
                 break;
@@ -1529,7 +1550,7 @@ luabind::object UO::FindItem(luabind::object const& table)
     }
 
     /** Quarto passo - Remover os itens que nao passaram do filtro **/
-    foreach(Item* i, removeList)
+    foreach(luabind::object i, removeList)
     {
         itemList.removeOne(i);
     }

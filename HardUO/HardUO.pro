@@ -9,7 +9,6 @@ QT       += core gui
 TARGET = HardUO
 TEMPLATE = app
 
-
 SOURCES += main.cpp\
         mainwindow.cpp \
     CodeArea.cpp \
@@ -44,10 +43,10 @@ RESOURCES += \
     resource.qrc
 
 INCLUDEPATH += ../Dependencies/Lua_5_2/include \
-               ../Dependencies/luabind \
-               ../Dependencies/boost_1_52
+               ../Dependencies/luabind/include \
+               ../Dependencies/boost_1_53_0
 
-LIBS += ../Dependencies/LuaBind/lib/libluabind.a \
+LIBS += ../Dependencies/luabind/libluabind.a \
         ../Dependencies/Lua_5_2/lib/liblua52.a
 
 OTHER_FILES += \
@@ -55,4 +54,4 @@ OTHER_FILES += \
 
 RC_FILE = icone.rc
 
-#QMAKE_CXXFLAGS += -std=c++0x
+#QMAKE_CXXFLAGS += -std=c++11

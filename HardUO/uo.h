@@ -17,42 +17,6 @@ extern "C"
 #include <QList>
 #include <QString>
 
-class Item
-{
-public:
-    Item()
-        :id(0)
-        ,type(0)
-        ,kind(0)
-        ,contId(0)
-        ,x(0)
-        ,y(0)
-        ,z(0)
-        ,stack(0)
-        ,rep(0)
-        ,color(0)
-    {}
-    int id;
-    int type;
-    int kind;
-    int contId;
-    int x;
-    int y;
-    int z;
-    int stack;
-    int rep;
-    int color;
-};
-class Skill
-{
-public:
-    Skill(){}
-    int norm;
-    int real;
-    int cap;
-    int lock;
-};
-
 class JournalRef
 {
 public:
@@ -75,13 +39,14 @@ public:
     int color;
 };
 
-class ItemProperty
+struct ItemProperty
 {
 public:
-    ItemProperty():
-        itemname(""),
-        iteminfo("")
-    {}
+    ItemProperty()
+    {
+        itemname.reserve(128);
+        iteminfo.reserve(128);
+    }
     std::string itemname;
     std::string iteminfo;
 };
@@ -187,7 +152,8 @@ public:
 
 
     /// Skills
-    Skill GetSkill(std::string skill);
+    luabind::object GetSkill(luabind::object skill);
+    int GetSkill(std::string skill);
     void useLastSkill();
     void useAnatomy();
     void useAnimalLore();
@@ -259,8 +225,8 @@ public:
     void SetJournalIndex(int index, const std::string& value);
 
     int ScanItems(bool visibleOnly);
-    Item GetItem(int index);
-    ItemProperty GetProperty(int id);
+    luabind::object GetItem(int index);
+    luabind::object GetProperty(int id);
     luabind::object FindItem(luabind::object const& table);
 
 private:

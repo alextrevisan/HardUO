@@ -9,7 +9,7 @@ class CodeArea : public QPlainTextEdit
 {
     Q_OBJECT
 public:
-    CodeArea();
+    CodeArea(QWidget *parent = 0);
     void setCompleter(QCompleter *mCompleter);
     QCompleter *completer() const;
     void lineNumberAreaPaintEvent (QPaintEvent *event);

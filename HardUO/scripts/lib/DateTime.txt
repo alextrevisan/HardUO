@@ -1,0 +1,506 @@
+--[[ 
+;------------------------------------ 
+; Script Name: DateTime.txt
+; Author: Stuby085
+; Version: 1.0
+; Client Tested with: 5.0.9.1 (Patch 46)
+; EUO version tested with: OpenEUO 0.9s
+; Shard OSI / FS: FS
+; Revision Date: October 5, 2010
+; Public Release: October 4, 2010
+; Purpose: Provides basic wrapper around
+;   the gettime() and getdate() functions
+;   provided with Open EasyUO.  Also provides
+;   a running second and millisecond counters,
+;   similar to the EasyUO's #scnt and #scnt2
+;   variables.
+; Dependancies:  Class.txt
+; Copyright: 2010 Stuby085
+;------------------------------------
+]]
+
+--[[
+This class is a wrapper of the getdate() and gettime() functions for the purpose of readability.  Also, I miss the #scnt and #scnt2 variables from previous version of EasyUO.  I, as well as others, used them extensively.  This class brings back their functionality via RunningMilliseconds and RunningSeconds.
+
+
+[color=blue]Blue[/color] text denotes a function or property.
+[color=red]Red[/color] text denotes a required parameter for a function.
+[color=orange]Orange[/color] text denotes an option parameter for a function.
+
+
+[size=15][color=blue][b]Create[/b][/color]()[/size]
+	Creates an instance of the DateTime class.
+
+
+The following are all indexes that return numbers and should be self explanatory.
+
+[size=15][color=blue][b]Day[/b][/color][/size]
+[size=15][color=blue][b]Hour[/b][/color][/size]
+[size=15][color=blue][b]Millisecond[/b][/color][/size]
+[size=15][color=blue][b]Minute[/b][/color][/size]
+[size=15][color=blue][b]Month[/b][/color][/size]
+[size=15][color=blue][b]Second[/b][/color][/size]
+[size=15][color=blue][b]Year[/b][/color][/size]
+
+[size=15][color=blue][b]DayOfWeek[/b][/color][/size]
+	Returns a number representing the day of the week.  Values are 0 through 6, where 0 is Monday and 6 is Sunday.
+
+[size=15][color=blue][b]Print[/b][/color]()[/size]
+	Prints a the current time in the format of DayOfWeek, Month Day, Year Hour:Minute:Second.Millisecond Meridiem.
+
+[size=15][color=blue][b]RunningMilliseconds[/b][/color][/size]
+	Returns a number representing the total number of milliseconds that have elapsed since the DateTime object was initialized.
+
+[size=15][color=blue][b]RunningSeconds[/b][/color][/size]
+	Just like RunningMilliseconds, except for seconds.  Returns a number representing the total number of seconds that have elapsed since the DateTIme object was initialized.
+
+[size=15][color=blue][b]ToString[/b][/color]()[/size]
+	Returns a string representation of the date and time.  The string is in the format of DayOfWeek, Month Day, Year Hour:Minute:Second.Millisecond Meridiem.  DayOfWeek and Month are spelled out.  Hour is 12 hour format, hence the need for the Meridiem.
+
+[size=15][color=blue][b]TotalMilliseconds[/b][/color][/size]
+	Returns a number representing the current time in milliseconds.
+
+[size=15][color=blue][b]TotalSeconds[/b][/color][/size]
+	Returns a number representing the current time in seconds.
+
+
+The following indexes and functions are available through the inherency of the Class object.
+
+[size=15][color=blue][b]ClassName[/b][/color][/size]
+	The name, a string, of the represented concept, usually a noun.
+
+
+[size=15][color=blue][b]BaseClass[/b][/color][/size]
+	The base class/table of the executing instance.
+
+
+[size=15][color=blue][b]GetIndexValue[/b][/color]([color=red]indexName[/color])[/size]
+	Retrieves the value of an index without invoking MetaDataRetrieval event, providing one is specified.
+
+
+[size=15][color=blue][b]SetIndexValue[/b][/color]([color=red]indexName[/color], [color=red]newValue[/color])[/size]
+	Sets an index to the provided value without invoking MetaDataChange events.
+
+
+[size=15][color=blue][b]PrintMetaData[/b][/color]()[/size]
+	Prints a list of all metadata, including that of base classes, for the instance of the class.
+
+
+[size=15][color=blue][b]MetaDataRetrievalEvents[/b][/color][/size]
+	A table of functions called when a metadata object is read from the instance of the class.  If an event is declared for the specified index, then the event fires instead of directly retrieving the index's value.
+
+	Functions are provided the same parameters passed into the Lua's __index function; That is, a table and a string.  The table is the table whoseindex is being searched.  The string is the name of the key trying to be located.  Functions are expected to provide a single return argument, i.e. the value of the index.  To obtain indexes without going through events, use GetIndexValue.
+
+
+[size=15][color=blue][b]MetaDataChangeEvents[/b][/color][/size]
+	A table of functions called with a metadata's value is about to change.  If an event is declared for the index, then instead of changing the index's value, the event function is fired.
+
+	Functions are provided the same parameters passed into the Lua's __newindex function.  They are a table, a string, and an object.  The table is the table that owns the index.  The string is the name of the index being changed.  Finally, the object is the new value of the index.  Functions are expected to handle setting the index to the new value themselves.  In order to keep structural integrity of the events, don't use rawset.  Instead, call SetIndexValue.  Function return values are ignored.
+
+
+
+Instances of the class have all the same indexes and functions listed above.  The main purpose for creating instances instead of using the static DateTime features, is because isntances do not stay current.  Instead, they are a timestamps of when they were created.
+
+
+This class relies on my [url=http://www.easyuo.com/forum/viewtopic.php?t=44638]Class[/url] object.
+]]
+
+-- Don't load the class more than once.
+if DateTime ~= nil then
+  return
+end
+
+-- Import the Class.txt if it has not yet been imported.
+dofile("Class.txt")
+
+--[[ 
+------------------------------------ 
+; Method Name: updateDateInformationFunction
+; Author: Stuby085
+; Version: 1.0
+; Client Tested with: 5.0.9.1 (Patch 46)
+; EUO version tested with: OpenEUO 0.9s
+; Shard OSI / FS: FS
+; Revision Date: October 4, 2010
+; Public Release: October 4, 2010
+; Purpose: Updates the year, month, day, and 
+;   dayOfWeek variables for an instance of 
+;   the DateTime class.
+; Parameters:
+;   @instance  The class for which data metadata is updated.
+; Return Values:
+; Copyright: 2010 Stuby085
+------------------------------------
+]]
+local updateDateInformationFunction =
+  function(instance)
+    local year, month, day, dayOfWeek = getdate()
+    
+    local baseInstance = instance.InternalProxy
+    
+    baseInstance.Year = year
+    baseInstance.Month = month
+    baseInstance.Day = day
+    baseInstance.DayOfWeek = dayOfWeek
+    
+  end   
+  
+  
+--[[ 
+------------------------------------ 
+; Method Name: updateTimeInformationFunction
+; Author: Stuby085
+; Version: 1.0
+; Client Tested with: 5.0.9.1 (Patch 46)
+; EUO version tested with: OpenEUO 0.9s
+; Shard OSI / FS: FS
+; Revision Date: October 4, 2010
+; Public Release: October 4, 2010
+; Purpose: Updates the hour, minute, second, 
+;   and millisecond variables for an instance
+;   of the DateTime class.
+; Parameters:
+;   @instance  The class for which data metadata is updated.
+; Return Values:
+; Copyright: 2010 Stuby085
+------------------------------------
+]]
+local updateTimeInformationFunction =
+  function(instance)
+    local hour, minute, second, milliSecond = gettime()
+    
+    local baseInstance = instance.InternalProxy
+    
+    baseInstance.Hour = hour
+    baseInstance.Minute = minute
+    baseInstance.Second = second
+    baseInstance.Millisecond = milliSecond
+    
+  end
+
+
+--[[ 
+------------------------------------ 
+; Method Name: calculateTotalSeconds
+; Author: Stuby085
+; Version: 1.0
+; Client Tested with: 5.0.9.1 (Patch 46)
+; EUO version tested with: OpenEUO 0.9s
+; Shard OSI / FS: FS
+; Revision Date: October 4, 2010
+; Public Release: October 4, 2010
+; Purpose: Provided the values of a
+;   date, calculated the total number
+;   of seconds.
+; Parameters:
+;   @year The year value of the date.
+;   @month The month value of the date.
+;   @day The day value of the date.
+;   @hour The hour value of the date.
+;   @minute The minute value of the date.
+;   @second The second value of the date.
+; Return Values:
+;   number The total number of seconds.
+; Copyright: 2010 Stuby085
+------------------------------------
+]]
+local calculateTotalSeconds = function(year, month, day, hour, minute, second)
+    year = year or 0
+    month = month or 0
+    day = day or 0
+    hour = hour or 0
+    minute = minute or 0
+    second = second or 0
+
+    local secondsInAnHour = 3600 -- 60sec * 60min
+    local secondsInADay = 86400 -- 60sec * 60min * 24hr
+    local secondsInAMonth = 2628000 -- 60sec * 60min * 24hr * 30.41666666666667 days
+    local secondsInAYear = 31536000 -- 60sec * 60min * 24hr * 356days
+
+    local totalSeconds = second + (minute * 60) + (hour * secondsInAnHour) + (day + secondsInADay) + (month * secondsInAMonth) + (year * secondsInAYear)
+    return totalSeconds
+end
+
+
+--[[ 
+------------------------------------ 
+; Method Name: calculateTotalMilliseconds
+; Author: Stuby085
+; Version: 1.0
+; Client Tested with: 5.0.9.1 (Patch 46)
+; EUO version tested with: OpenEUO 0.9s
+; Shard OSI / FS: FS
+; Revision Date: October 4, 2010
+; Public Release: October 4, 2010
+; Purpose: Provided the values of a
+;   date, calculated the total number
+;   of milliseconds.
+; Parameters:
+;   @year The year value of the date.
+;   @month The month value of the date.
+;   @day The day value of the date.
+;   @hour The hour value of the date.
+;   @minute The minute value of the date.
+;   @second The second value of the date.
+;   @millisecond The millisecond value of the date.
+; Return Values:
+;   number The total number of milliseconds.
+; Copyright: 2010 Stuby085
+------------------------------------
+]]
+local calculateTotalMilliseconds = function(month, day, hour, minute, second, millisecond)
+  local totalSeconds = calculateTotalSeconds(month, day, hour, minute, second)
+  local totalMilliseconds = millisecond + (totalSeconds * 1000)
+  return totalMilliseconds  
+end
+
+  
+--[[ 
+------------------------------------ 
+; Method Name: updateTimeSinceInitialization
+; Author: Stuby085
+; Version: 1.0
+; Client Tested with: 5.0.9.1 (Patch 46)
+; EUO version tested with: OpenEUO 0.9s
+; Shard OSI / FS: FS
+; Revision Date: October 4, 2010
+; Public Release: October 4, 2010
+; Purpose: Updates the number of seconds and
+;   milliseconds since the DateTime class
+;   was initiated.
+; Parameters:
+; Return Values:
+; Copyright: 2010 Stuby085
+------------------------------------
+]]
+local updateTimeSinceInitialization =
+  function()
+
+    local hour, minute, second, millisecond = gettime()
+    local year, month, day = getdate()
+
+    local totalSeconds = calculateTotalSeconds(year, month, day, hour, minute, second)
+    local totalMilliseconds = millisecond + (totalSeconds * 1000)
+
+    local startingMilliseconds = DateTime.StartingMilliseconds
+    if startingMilliseconds == nil then
+      DateTime.StartingMilliseconds = totalMilliseconds
+      startingMilliseconds = totalMilliseconds
+    end
+    
+    local startingSeconds = DateTime.StartingSeconds
+    if startingSeconds == nil then
+      DateTime.StartingSeconds = totalSeconds
+      startingSeconds = totalSeconds
+    end    
+
+    DateTime.SetIndexValue("TotalSeconds", totalSeconds)
+    DateTime.SetIndexValue("TotalMilliseconds", totalMilliseconds)
+    DateTime.SetIndexValue("RunningSeconds", totalSeconds - startingSeconds)
+    DateTime.SetIndexValue("RunningMilliseconds", totalMilliseconds - startingMilliseconds)
+  end  
+
+
+
+
+--[[ 
+  Create the DateTime object, inheriting the Class object.
+]]
+DateTime = Class.Create("DateTime")
+
+
+--[[ 
+------------------------------------ 
+; Method Name: Create
+; Author: Stuby085
+; Version: 1.0
+; Client Tested with: 5.0.9.1 (Patch 46)
+; EUO version tested with: OpenEUO 0.9s
+; Shard OSI / FS: FS
+; Revision Date: October 4, 2010
+; Public Release: October 4, 2010
+; Purpose: Creates a new instance of the
+;   DateTime class.  The instance is used
+;   to create timestamps.  They are not
+;   modified (internally) after they are
+;   created.
+; Parameters:
+; Return Values:
+;   table An instance of the DateTime class.
+; Copyright: 2010 Stuby085
+------------------------------------
+]]
+DateTime.Create = 
+  function() 
+    local returnValue = Class.Create("DateTime", DateTime)
+    updateDateInformationFunction(returnValue)
+    updateTimeInformationFunction(returnValue)
+    returnValue.Print = function() DateTime.Print(returnValue) end
+    returnValue.ToString = function() return DateTime.ToString(returnValue) end
+    returnValue.SetIndexValue("TotalSeconds", calculateTotalSeconds(returnValue.GetIndexValue("Year"), returnValue.GetIndexValue("Month"), returnValue.GetIndexValue("Day"), returnValue.GetIndexValue("Hour"), returnValue.GetIndexValue("Minute"), returnValue.GetIndexValue("Second")))
+    returnValue.SetIndexValue("TotalMilliseconds", calculateTotalMilliseconds(returnValue.GetIndexValue("Year"), returnValue.GetIndexValue("Month"), returnValue.GetIndexValue("Day"), returnValue.GetIndexValue("Hour"), returnValue.GetIndexValue("Minute"), returnValue.GetIndexValue("Second"), returnValue.GetIndexValue("Millisecond")))    
+    return returnValue
+  end
+  
+--[[
+  Setup the time variables Hour, Minute, Second,
+  and Millisecond for the static DateTime class.
+]]
+local getterEvents = DateTime.MetaDataRetrievalEvents
+getterEvents["Hour"] = function() local hour = gettime() return hour end
+getterEvents["Minute"] = function() local _, minute = gettime() return minute end
+getterEvents["Second"] = function() local _, _, second = gettime() return second end
+getterEvents["Millisecond"] = function() local _, _, _, millisecond = gettime() return millisecond end
+
+--[[
+  Setup the date variables Year, Month, Day,
+  and DayOfWeek for the static DateTime class.
+]]
+getterEvents["Year"] = function() local year = getdate() return year end
+getterEvents["Month"] = function() local _, month = getdate() return month end
+getterEvents["Day"] = function() local _, _, day = getdate() return day end
+getterEvents["DayOfWeek"] = function() local _, _, _, dayOfWeek = getdate() return dayOfWeek end
+
+
+--[[
+  Setup the time variables RunningSeconds and
+  RunningMilliseconds for the static DateTime 
+  class.  When either are called, their values
+  are recalculated to stay current.
+]]
+getterEvents["TotalSeconds"] = function() updateTimeSinceInitialization() return DateTime.GetIndexValue("TotalSeconds") end
+getterEvents["TotalMilliseconds"] = function() updateTimeSinceInitialization() return DateTime.GetIndexValue("TotalMilliseconds") end
+getterEvents["RunningSeconds"] = function() updateTimeSinceInitialization() return DateTime.GetIndexValue("RunningSeconds") end
+getterEvents["RunningMilliseconds"] = function() updateTimeSinceInitialization() return DateTime.GetIndexValue("RunningMilliseconds") end
+updateTimeSinceInitialization()
+
+
+--[[ 
+------------------------------------ 
+; Method Name: ToString
+; Author: Stuby085
+; Version: 1.0
+; Client Tested with: 5.0.9.1 (Patch 46)
+; EUO version tested with: OpenEUO 0.9s
+; Shard OSI / FS: FS
+; Revision Date: October 4, 2010
+; Public Release: October 4, 2010
+; Purpose: Creates a legible string
+;   representation of a DateTime instance.
+; Parameters:
+;   @instance An optional instance of the 
+;     DateTime class.  If an instance is
+;     not provided, then the static 
+;     DateTime class is used.
+; Return Values:
+;   string A string representation of
+;     the DateTime instance.  
+; Copyright: 2010 Stuby085
+------------------------------------
+]]
+function DateTime.ToString(instance)
+  if instance == nil then
+    instance = DateTime
+  end
+
+  updateTimeSinceInitialization(instance)
+  local baseInstance = instance.InternalProxy
+  
+  local daysOfTheWeek = {
+    [0] = "Monday",
+    [1] = "Tuesday",
+    [2] = "Wednesday",
+    [3] = "Thursday",
+    [4] = "Friday",
+    [5] = "Saturday",
+    [6] = "Sunday"
+  }
+  
+  local monthsOfTheYear = {
+    [1] = "January",
+    [2] = "February",
+    [3] = "March",
+    [4] = "April",
+    [5] = "May",
+    [6] = "June",
+    [7] = "July",
+    [8] = "August",
+    [9] = "September",
+    [10] = "October",
+    [11] = "November",
+    [12] = "December"
+  }
+  
+  local meridiem = "a.m."
+  local hour = instance.Hour
+  if hour == 0 then
+    hour = 12
+  elseif hour == 12 then
+    meridiem = "p.m."
+  elseif hour > 12 then
+    hour = hour - 12
+    meridiem = "p.m."
+  end
+  
+  local leftPad = function(stringValue, amount)
+    local length = string.len(stringValue)
+    if amount <= length then
+      return stringValue
+    end
+    
+    for padCount = amount - length, 1, -1 do
+      stringValue = "0" .. stringValue
+    end
+    
+    return stringValue
+  end
+  
+  local returnValue = daysOfTheWeek[instance.DayOfWeek] .. ", "
+  returnValue = returnValue .. monthsOfTheYear[instance.Month] .. " "
+  returnValue = returnValue .. leftPad(instance.Day, 2) .. ", " .. leftPad(instance.Year, 4) .. " "
+  returnValue = returnValue .. leftPad(hour, 2) .. ":" .. leftPad(instance.Minute, 2) .. ":"
+  returnValue = returnValue .. leftPad(instance.Second, 2) .. "." .. leftPad(instance.Millisecond, 4)
+  return returnValue .. " " .. meridiem
+end
+
+
+--[[ 
+------------------------------------ 
+; Method Name: Print
+; Author: Stuby085
+; Version: 1.0
+; Client Tested with: 5.0.9.1 (Patch 46)
+; EUO version tested with: OpenEUO 0.9s
+; Shard OSI / FS: FS
+; Revision Date: October 4, 2010
+; Public Release: October 4, 2010
+; Purpose: Prints a legible string
+;   representation of a DateTime instance.
+; Parameters:
+;   @instance An optional instance of the 
+;     DateTime class.  If an instance is
+;     not provided, then the static 
+;     DateTime class is used.
+; Return Values:  
+; Copyright: 2010 Stuby085
+------------------------------------
+]]
+function DateTime.Print(instance)
+  if instance == nil then
+    print(DateTime.ToString(DateTime))
+  else
+    print(DateTime.ToString(instance))
+  end
+end
+
+--[[
+local startTime = DateTime.Create()
+print("Start: " .. startTime.ToString()) 
+local timeout = 10000 + DateTime.RunningMilliseconds
+while timeout > DateTime.RunningMilliseconds do
+  DateTime.Print()
+  wait(1000)  
+end
+local endTime = DateTime.Create()
+print("End: " .. endTime.ToString())
+--]]

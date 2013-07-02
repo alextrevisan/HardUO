@@ -91,5 +91,5 @@ void SkillsList::insertItem(const QString &_skill, const QString &_value)
     int row = ui->SkillsTable->rowCount();
     ui->SkillsTable->insertRow(row);
     ui->SkillsTable->setItem(row, 0,new QTableWidgetItem(_skill));
-    ui->SkillsTable->setItem(row, 1,new QTableWidgetItem(QString::number((float)uo->GetSkill(_value.toStdString()).real/10)));
+    ui->SkillsTable->setItem(row, 1,new QTableWidgetItem(QString::number((float)uo->GetSkill(_value.toStdString())/10)));
 }

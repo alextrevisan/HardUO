@@ -13,8 +13,9 @@
 
 QStringList CodeArea::mWordList;
 
-CodeArea::CodeArea()
-    :mCompleter(NULL)
+CodeArea::CodeArea(QWidget *parent)
+    :QPlainTextEdit(parent)
+    ,mCompleter(NULL)
     ,mPauseLine(0)
 {
 
@@ -27,7 +28,7 @@ CodeArea::CodeArea()
     setWordWrapMode(QTextOption::NoWrap);
 
 
-    MyCustomHighlighter *mCustomHighlighter = new MyCustomHighlighter();
+    MyCustomHighlighter *mCustomHighlighter = new MyCustomHighlighter(this);
     mCustomHighlighter->setDocument(document());
     //mCh->setDocument(this->document());
     //setPlainText(tr("--[[\ncomentario\nmulti\nline ]]--\n\n--comentario single line\n\nfor i=0,5 do\n    print(\"hello uo! \"..i)\nend"));

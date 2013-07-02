@@ -123,6 +123,7 @@ void ScriptRunner::run()
                 .def("getinstalldir", &ScriptRunner::getinstalldir)
                 .def("setGlobal", &ScriptRunner::setGlobal)
                 .def("getGlobal", &ScriptRunner::getGlobal)
+                .def("stop", &ScriptRunner::stop)
         ];
 
         luabind::globals(L)["ScriptRunner"] = this;
@@ -135,15 +136,16 @@ void ScriptRunner::run()
         luaL_dostring(L, "function getinstalldir() return ScriptRunner:getinstalldir() end");
         luaL_dostring(L, "function setGlobal(a,b) ScriptRunner:setGlobal(a,b) end");
         luaL_dostring(L, "function getGlobal(a) return ScriptRunner:getGlobal(a) end");
+        luaL_dostring(L, "function stop() ScriptRunner:stop() end");
 
-        module(L)
+        /*module(L)
         [
             class_<ItemProperty>("Property")
                 .def(constructor<>())
                 .def_readonly("name", &ItemProperty::itemname)
                 .def_readonly("info", &ItemProperty::iteminfo)
-        ];
-
+        ];*/
+/*
         module(L)
         [
             class_<Item>("Item")
@@ -159,7 +161,7 @@ void ScriptRunner::run()
                 .def_readonly("rep", &Item::rep)
                 .def_readonly("color", &Item::color)
         ];
-
+*/
 
 
         module(L)
@@ -178,7 +180,7 @@ void ScriptRunner::run()
                 .def_readonly("color", &Journal::color)
         ];
 
-        module(L)
+        /*module(L)
         [
             class_<Skill>("Skill")
                 .def(constructor<>())
@@ -186,7 +188,7 @@ void ScriptRunner::run()
                 .def_readonly("real", &Skill::real)
                 .def_readonly("cap", &Skill::cap)
                 .def_readonly("lock", &Skill::lock)
-        ];
+        ];*/
 
         module(L)
         [
@@ -260,7 +262,7 @@ void ScriptRunner::run()
                 .def("LSpell", (void(UO::*)(int)) &UO::LSpell)
                 .def("LSpell", (int(UO::*)()) &UO::LSpell)
                 .def("EventMacro", &UO::EventMacro)
-                .def("GetSkill", &UO::GetSkill)
+                .def("GetSkill", (luabind::object(UO::*)(luabind::object))&UO::GetSkill)
                 .def("TargCurs", &UO::TargCurs)
                 .def("setTargCurs", &UO::setTargCurs)
                 .def("CursKind", &UO::CursKind)
@@ -357,6 +359,13 @@ void ScriptRunner::run()
     {
         qDebug()<<QString("erroooss o0");
     }
+}
+
+void ScriptRunner::stop()
+{
+    if(isRunning())
+        terminate();
+    emit Stopped();
 }
 void ScriptRunner::SetUO(UO *uo)
 {

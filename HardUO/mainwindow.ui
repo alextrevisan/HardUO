@@ -257,6 +257,11 @@
     <string>Step Line</string>
    </property>
   </action>
+  <action name="action">
+   <property name="text">
+    <string>ç--ã</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>

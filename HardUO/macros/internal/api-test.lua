@@ -145,7 +145,6 @@ print("UO.NextCPosY = "..UO.NextCPosY)
 if UO.NextCPosY <= 0 then
     print("warning: zero value - UO.NextCPosY")
 end
---=============================================--
 print("UO.ContSizeX = "..UO.ContSizeX)
 if UO.ContSizeX <= 0 then
     print("warning: zero value - UO.ContSizeX")

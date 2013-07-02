@@ -4,273 +4,273 @@ function setLagOffset(value) __lag_offset__ = value end
 
 -- OpenEUO compatibility variables
 UO = {}
-local ReadOpenEUOtoHardUO={}
-local WriteOpenEUOtoHardUO={}
-local IgnoredFunctions = {}
+local OpenEUOReadVariables={}
+local OpenEUOWriteVariables={}
+local OpenEUOFunctions = {}
 
 --Character Variables
 --The character category of system variables contains information specific to the character in the current instance of Ultima Online that EasyUO is attached to. 
 UO.CharPosX = 0
 local function CharPosX() return UOInstance:CharPosX() end
-ReadOpenEUOtoHardUO["CharPosX"] = CharPosX
+OpenEUOReadVariables["CharPosX"] = CharPosX
 
 UO.CharPosY = 0
 local function CharPosY() return UOInstance:CharPosY() end
-ReadOpenEUOtoHardUO["CharPosY"] = CharPosY
+OpenEUOReadVariables["CharPosY"] = CharPosY
 
 UO.CharPosZ = 0
 local function CharPosZ() return UOInstance:CharPosZ() end
-ReadOpenEUOtoHardUO["CharPosZ"] = CharPosZ
+OpenEUOReadVariables["CharPosZ"] = CharPosZ
 
 UO.CharDir = 0
 local function CharDir() return UOInstance:CharDir() end
-ReadOpenEUOtoHardUO["CharDir"] = CharDir
+OpenEUOReadVariables["CharDir"] = CharDir
 
 UO.CharStatus = 0
 local function CharStatus() return UOInstance:CharStatus() end
-ReadOpenEUOtoHardUO["CharStatus"] = CharStatus
+OpenEUOReadVariables["CharStatus"] = CharStatus
 
 UO.CharID = 0
 local function CharID() return UOInstance:CharID() end
-ReadOpenEUOtoHardUO["CharID"] = CharID
+OpenEUOReadVariables["CharID"] = CharID
 
 UO.CharType = 0
 local function CharType() return UOInstance:CharType() end
-ReadOpenEUOtoHardUO["CharType"] = CharType
+OpenEUOReadVariables["CharType"] = CharType
 
 UO.BackpackID = 0
 local function BackpackID() return UOInstance:BackpackID() end
-ReadOpenEUOtoHardUO["BackpackID"] = BackpackID
+OpenEUOReadVariables["BackpackID"] = BackpackID
 
 --Status Variables
 --Status variables come from the UO Status Bar in game. They provide information about the current character.
 UO.CharName = 0
 local function CharName() return UOInstance:CharName() end
-ReadOpenEUOtoHardUO["CharName"] = CharName
+OpenEUOReadVariables["CharName"] = CharName
 
 UO.Sex = 0
 local function Sex() return UOInstance:Sex() end
-ReadOpenEUOtoHardUO["Sex"] = Sex
+OpenEUOReadVariables["Sex"] = Sex
 
 UO.Str = 0
 local function Str() return UOInstance:Str() end
-ReadOpenEUOtoHardUO["Str"] = Str
+OpenEUOReadVariables["Str"] = Str
 
 UO.Hits = 0
 local function Hits() return UOInstance:Hits() end
-ReadOpenEUOtoHardUO["Hits"] = Hits
+OpenEUOReadVariables["Hits"] = Hits
 
 UO.MaxHits = 0
 local function MaxHits() return UOInstance:MaxHits() end
-ReadOpenEUOtoHardUO["MaxHits"] = MaxHits
+OpenEUOReadVariables["MaxHits"] = MaxHits
 
 UO.Dex = 0
 local function Dex() return UOInstance:Dex() end
-ReadOpenEUOtoHardUO["Dex"] = Dex
+OpenEUOReadVariables["Dex"] = Dex
 
 UO.Stamina = 0
 local function Stamina() return UOInstance:Stamina() end
-ReadOpenEUOtoHardUO["Stamina"] = Stamina
+OpenEUOReadVariables["Stamina"] = Stamina
 
 UO.MaxStam = 0
 local function MaxStam() return UOInstance:MaxStam() end
-ReadOpenEUOtoHardUO["MaxStam"] = MaxStam
+OpenEUOReadVariables["MaxStam"] = MaxStam
 
 UO.Int = 0
 local function Int() return UOInstance:Int() end
-ReadOpenEUOtoHardUO["Int"] = Int
+OpenEUOReadVariables["Int"] = Int
 
 UO.Mana = 0
 local function Mana() return UOInstance:Mana() end
-ReadOpenEUOtoHardUO["Mana"] = Mana
+OpenEUOReadVariables["Mana"] = Mana
 
 UO.MaxMana = 0
 local function MaxMana() return UOInstance:MaxMana() end
-ReadOpenEUOtoHardUO["MaxMana"] = MaxMana
+OpenEUOReadVariables["MaxMana"] = MaxMana
 
 UO.MaxStats = 0
 local function MaxStats() return UOInstance:MaxStats() end
-ReadOpenEUOtoHardUO["MaxStats"] = MaxStats
+OpenEUOReadVariables["MaxStats"] = MaxStats
 
 UO.Luck = 0
 local function Luck() return UOInstance:Luck() end
-ReadOpenEUOtoHardUO["Luck"] = Luck
+OpenEUOReadVariables["Luck"] = Luck
 
 UO.Weight = 0
 local function Weight() return UOInstance:Weight() end
-ReadOpenEUOtoHardUO["Weight"] = Weight
+OpenEUOReadVariables["Weight"] = Weight
 
 UO.MaxWeight = 0
 local function MaxWeight() return UOInstance:MaxWeight() end
-ReadOpenEUOtoHardUO["MaxWeight"] = MaxWeight
+OpenEUOReadVariables["MaxWeight"] = MaxWeight
 
 UO.MinDmg = 0
 local function MinDmg() return UOInstance:MinDmg() end
-ReadOpenEUOtoHardUO["MinDmg"] = MinDmg
+OpenEUOReadVariables["MinDmg"] = MinDmg
 
 UO.MaxDmg = 0
 local function MaxDmg() return UOInstance:MaxDmg() end
-ReadOpenEUOtoHardUO["MaxDmg"] = MaxDmg
+OpenEUOReadVariables["MaxDmg"] = MaxDmg
 
 UO.Gold = 0
 local function Gold() return UOInstance:Gold() end
-ReadOpenEUOtoHardUO["Gold"] = Gold
+OpenEUOReadVariables["Gold"] = Gold
 
 UO.Followers = 0
 local function Followers() return UOInstance:Followers() end
-ReadOpenEUOtoHardUO["Followers"] = Followers
+OpenEUOReadVariables["Followers"] = Followers
 
 UO.MaxFol = 0
 local function MaxFol() return UOInstance:MaxFol() end
-ReadOpenEUOtoHardUO["MaxFol"] = MaxFol
+OpenEUOReadVariables["MaxFol"] = MaxFol
 
 UO.AR = 0
 local function Ar() return UOInstance:Ar() end
-ReadOpenEUOtoHardUO["AR"] = Ar
+OpenEUOReadVariables["AR"] = Ar
 
 UO.FR = 0
 local function FR() return UOInstance:Fr() end
-ReadOpenEUOtoHardUO["FR"] = FR
+OpenEUOReadVariables["FR"] = FR
 
 UO.CR = 0
 local function CR() return UOInstance:Cr() end
-ReadOpenEUOtoHardUO["CR"] = CR
+OpenEUOReadVariables["CR"] = CR
 
 UO.PR = 0
 local function PR() return UOInstance:Pr() end
-ReadOpenEUOtoHardUO["PR"] = PR
+OpenEUOReadVariables["PR"] = PR
 
 UO.ER = 0
 local function ER() return UOInstance:Er() end
-ReadOpenEUOtoHardUO["ER"] = ER
+OpenEUOReadVariables["ER"] = ER
 
 UO.TP = 0
 local function TP() return UOInstance:Tp() end
-ReadOpenEUOtoHardUO["TP"] = TP
+OpenEUOReadVariables["TP"] = TP
 --Container 
 --Container system variables represent information available about the top most (or most reacent) gump that was opened, moved, or clicked in the Ultima Online Client. 
 
 UO.NextCPosX = 0
 local function getNextCPosX() return UOInstance:NextCPosX() end
 local function setNextCPosX(x) return UOInstance:NextCPosX(x) end
-ReadOpenEUOtoHardUO["NextCPosX"] = getNextCPosX
-WriteOpenEUOtoHardUO["NextCPosX"] = setNextCPosX
+OpenEUOReadVariables["NextCPosX"] = getNextCPosX
+OpenEUOWriteVariables["NextCPosX"] = setNextCPosX
 
 UO.NextCPosY = 0
 local function getNextCPosY() return UOInstance:NextCPosY() end
 local function setNextCPosY(x) return UOInstance:NextCPosY(x) end
-ReadOpenEUOtoHardUO["NextCPosY"] = getNextCPosY
-WriteOpenEUOtoHardUO["NextCPosY"] = setNextCPosY
+OpenEUOReadVariables["NextCPosY"] = getNextCPosY
+OpenEUOWriteVariables["NextCPosY"] = setNextCPosY
 
 UO.ContSizeX = 0
 local function ContSizeX() return UOInstance:ContSizeX() end
-ReadOpenEUOtoHardUO["ContSizeX"] = ContSizeX
+OpenEUOReadVariables["ContSizeX"] = ContSizeX
 
 UO.ContSizeY = 0
 local function ContSizeY() return UOInstance:ContSizeY() end
-ReadOpenEUOtoHardUO["ContSizeY"] = ContSizeY
+OpenEUOReadVariables["ContSizeY"] = ContSizeY
 
 UO.ContPosX = 0
 local function ContPosX() return UOInstance:ContPosX() end
-ReadOpenEUOtoHardUO["ContPosX"] = ContPosX
+OpenEUOReadVariables["ContPosX"] = ContPosX
 
 UO.ContPosY = 0
 local function ContPosY() return UOInstance:ContPosY() end
-ReadOpenEUOtoHardUO["ContPosY"] = ContPosY
+OpenEUOReadVariables["ContPosY"] = ContPosY
 
 UO.ContKind = 0
 local function ContKind() return UOInstance:ContKind() end
-ReadOpenEUOtoHardUO["ContKind"] = ContKind
+OpenEUOReadVariables["ContKind"] = ContKind
 
 UO.ContID = 0
 local function ContID() return UOInstance:ContID() end
-ReadOpenEUOtoHardUO["ContID"] = ContID
+OpenEUOReadVariables["ContID"] = ContID
 
 UO.ContType = 0
 local function ContType() return UOInstance:ContType() end
-ReadOpenEUOtoHardUO["ContType"] = ContType
+OpenEUOReadVariables["ContType"] = ContType
 
 UO.ContName = 0
 local function ContName() return UOInstance:ContName() end
-ReadOpenEUOtoHardUO["ContName"] = ContName
+OpenEUOReadVariables["ContName"] = ContName
 
 UO.LObjectID = 0
 local function setLObjectID(id) UOInstance:LObjectID(id) end
 local function getLObjectID() return UOInstance:LObjectID() end
-ReadOpenEUOtoHardUO["LObjectID"] = getLObjectID
-WriteOpenEUOtoHardUO["LObjectID"] = setLObjectID
+OpenEUOReadVariables["LObjectID"] = getLObjectID
+OpenEUOWriteVariables["LObjectID"] = setLObjectID
 
 UO.LObjectType = 0
 local function setLObjectType(id) UOInstance:LObjectType(id) end
 local function getLObjectType() return UOInstance:LObjectType() end
-ReadOpenEUOtoHardUO["LObjectType"] = getLObjectType
-WriteOpenEUOtoHardUO["LObjectType"] = setLObjectType
+OpenEUOReadVariables["LObjectType"] = getLObjectType
+OpenEUOWriteVariables["LObjectType"] = setLObjectType
 
 UO.LTargetID = 0
 local function getLTargetID() return UOInstance:getLastTargetID() end
 local function setLTargetID(id) UOInstance:setLastTargetID(id) end
-ReadOpenEUOtoHardUO["LTargetID"] = getLTargetID
-WriteOpenEUOtoHardUO["LTargetID"] = setLTargetID
+OpenEUOReadVariables["LTargetID"] = getLTargetID
+OpenEUOWriteVariables["LTargetID"] = setLTargetID
 
 UO.LTargetX = 0
 local function getLTargetX() return UOInstance:LTargetX() end
 local function setLTargetX(target) UOInstance:setLTargetX(target) end
-ReadOpenEUOtoHardUO["LTargetX"] = getLTargetX
-WriteOpenEUOtoHardUO["LTargetX"] = setLTargetX
+OpenEUOReadVariables["LTargetX"] = getLTargetX
+OpenEUOWriteVariables["LTargetX"] = setLTargetX
 
 
 UO.LTargetY = 0
 local function getLTargetY() return UOInstance:LTargetY() end
 local function setLTargetY(target) UOInstance:setLTargetY(target) end
-ReadOpenEUOtoHardUO["LTargetY"] = getLTargetY
-WriteOpenEUOtoHardUO["LTargetY"] = setLTargetY
+OpenEUOReadVariables["LTargetY"] = getLTargetY
+OpenEUOWriteVariables["LTargetY"] = setLTargetY
 
 UO.LTargetZ = 0
 local function getLTargetZ() return UOInstance:LTargetZ() end
 local function setLTargetZ(target) UOInstance:setLTargetZ(target) end
-ReadOpenEUOtoHardUO["LTargetZ"] = getLTargetZ
-WriteOpenEUOtoHardUO["LTargetZ"] = setLTargetZ
+OpenEUOReadVariables["LTargetZ"] = getLTargetZ
+OpenEUOWriteVariables["LTargetZ"] = setLTargetZ
 
 UO.LTargetKind = 0
 local function getLTargetKind() return UOInstance:LTargetKind() end
 local function setLTargetKind(kind) UOInstance:setLTargetKind(kind) end
-ReadOpenEUOtoHardUO["LTargetKind"] = getLTargetKind
-WriteOpenEUOtoHardUO["LTargetKind"] = setLTargetKind
+OpenEUOReadVariables["LTargetKind"] = getLTargetKind
+OpenEUOWriteVariables["LTargetKind"] = setLTargetKind
 
 UO.LTargetTile = 0
 local function LTargetTile() return UOInstance:LTargetTile() end
-ReadOpenEUOtoHardUO["LTargetTile"] = LTargetTile
+OpenEUOReadVariables["LTargetTile"] = LTargetTile
 
 UO.LLiftedID = 0
 local function LLiftedID() return UOInstance:LLiftedID() end
-ReadOpenEUOtoHardUO["LLiftedID"] = LLiftedID
+OpenEUOReadVariables["LLiftedID"] = LLiftedID
 
 UO.LLiftedKind = 0
 local function LLiftedKind() return UOInstance:LLiftedKind() end
-ReadOpenEUOtoHardUO["LLiftedKind"] = LLiftedKind
+OpenEUOReadVariables["LLiftedKind"] = LLiftedKind
 
 UO.LLiftedType = 0
 local function LLiftedType() return UOInstance:LLiftedType() end
-ReadOpenEUOtoHardUO["LLiftedType"] = LLiftedType
+OpenEUOReadVariables["LLiftedType"] = LLiftedType
 
 UO.LSkill = 0
 local function setLSkill(skill)  UOInstance:LSkill(skill) end
 local function getLSkill() return UOInstance:LSkill() end
-ReadOpenEUOtoHardUO["LSkill"] = getLSkill
-WriteOpenEUOtoHardUO["LSkill"] = setLSkill
+OpenEUOReadVariables["LSkill"] = getLSkill
+OpenEUOWriteVariables["LSkill"] = setLSkill
 
 UO.LSpell = 0
 local function setLSpell(spell) return UOInstance:LSpell(spell) end
 local function getLSpell() return UOInstance:LSpell() end
-ReadOpenEUOtoHardUO["LSpell"] = getLSpell
-WriteOpenEUOtoHardUO["LSpell"] = setLSpell
+OpenEUOReadVariables["LSpell"] = getLSpell
+OpenEUOWriteVariables["LSpell"] = setLSpell
 
 --FindItem 
 --The euox system variables are set when the FindItem command is used, however in oeuo the command UO.GetItem populates most of these fields. 
 
 local function ScanItems(a) return UOInstance:ScanItems(a) end
 UO.ScanItems = ScanItems
-IgnoredFunctions["ScanItems"] = ScanItems
+OpenEUOFunctions["ScanItems"] = ScanItems
 
 
 local function GetItem(a)
@@ -278,59 +278,59 @@ local function GetItem(a)
 	return i.id, i.type, i.kind, i.contId, i.x, i.y, i.z, i.stack, i.rep, i.color
 end
 UO.GetItem = GetItem
-IgnoredFunctions["GetItem"] = GetItem
+OpenEUOFunctions["GetItem"] = GetItem
 
 --Extended 
 --Extended system variables show information about various systems in the Ultima Online client that can be gained by using certain commands. 
 local function SysMessage(s, col) UOInstance:SystemMessage(s,col or 0) end
 UO.SysMessage = SysMessage
-IgnoredFunctions["SysMessage"] = SysMessage
+OpenEUOFunctions["SysMessage"] = SysMessage
 
 UO.TargCurs = 0
 local function TargCurs() return UOInstance:TargCurs() end
 local function setTargCurs(a) UOInstance:setTargCurs(a) end
-ReadOpenEUOtoHardUO["TargCurs"] = TargCurs
-WriteOpenEUOtoHardUO["TargCurs"] = setTargCurs
+OpenEUOReadVariables["TargCurs"] = TargCurs
+OpenEUOWriteVariables["TargCurs"] = setTargCurs
 
 UO.CursKind = 0
 local function CursKind() return UOInstance:CursKind() end
-ReadOpenEUOtoHardUO["CursKind"] = CursKind
+OpenEUOReadVariables["CursKind"] = CursKind
 
 UO.GetSkill = 0
 local function GetSkill(a)
 	s = UOInstance:GetSkill(a)
 	return s.norm, s.real, s.cap, s.lock
 end
-IgnoredFunctions["GetSkill"] = GetSkill
+OpenEUOFunctions["GetSkill"] = GetSkill
 
 UO.GetJournal = 0
 local function GetJournal(index)
 	j = UOInstance:GetJournal(index)
 	return j.line, j.color
 end
-IgnoredFunctions["GetJournal"] = GetJournal
+OpenEUOFunctions["GetJournal"] = GetJournal
 
 UO.ScanJournal = 0
 local function ScanJournal(index)
 	j = UOInstance:ScanJournal(index)
 	return j.ref, j.count
 end
-IgnoredFunctions["ScanJournal"] = ScanJournal
+OpenEUOFunctions["ScanJournal"] = ScanJournal
 
 UO.Drag = 0
 local function Drag(a,b) if b~=nil then UOInstance:Drag(a,b) else UOInstance:Drag(a) end end
-IgnoredFunctions["Drag"] = Drag
+OpenEUOFunctions["Drag"] = Drag
 
 UO.DropC = 0
 local function DropC(a,b,c) if b~=nil and c~=nil then UOInstance:DropC(a,b,c) else UOInstance:DropC(a) end end
-IgnoredFunctions["DropC"] = DropC
+OpenEUOFunctions["DropC"] = DropC
 
 UO.Property = 0
 local function Property(id)
 	local p = UOInstance:Property(id)
 	return p.name, p.info
 end
-IgnoredFunctions["Property"] = Property
+OpenEUOFunctions["Property"] = Property
 
 
 --Status
@@ -524,18 +524,18 @@ UO = {}
 -- create metatable
 local __mt__ = {
 	__index = function (t,k)
-		if ReadOpenEUOtoHardUO[k] ~= nil then--print("*access to element " .. tostring(k))
-			return ReadOpenEUOtoHardUO[k]()--_t[k]   -- access the original table
+		if OpenEUOReadVariables[k] ~= nil then--print("*access to element " .. tostring(k))
+			return OpenEUOReadVariables[k]()--_t[k]   -- access the original table
 		else
-			if IgnoredFunctions[k] ~=nil then
-				return IgnoredFunctions[k]
+			if OpenEUOFunctions[k] ~=nil then
+				return OpenEUOFunctions[k]
 			end
 		end
 	end,
 	__newindex = function (t,k,v)
 		--print("*update of element " .. tostring(k) .. " to " .. tostring(v))
-		if WriteOpenEUOtoHardUO[k] ~= nil then
-			WriteOpenEUOtoHardUO[k](v)--_t[k] = v   -- update original table
+		if OpenEUOWriteVariables[k] ~= nil then
+			OpenEUOWriteVariables[k](v)--_t[k] = v   -- update original table
 		else
 			error(k ..' is a read only variable', 2)
 		end
