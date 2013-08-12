@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resource.qrc">
+   <iconset>
     <normaloff>:/icon/icons/uo.png</normaloff>:/icon/icons/uo.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -123,9 +123,6 @@
        <attribute name="headerVisible">
         <bool>false</bool>
        </attribute>
-       <attribute name="headerCascadingSectionResizes">
-        <bool>false</bool>
-       </attribute>
        <attribute name="headerHighlightSections">
         <bool>false</bool>
        </attribute>
@@ -136,7 +133,7 @@
   </widget>
   <action name="actionNovo">
    <property name="icon">
-    <iconset resource="resource.qrc">
+    <iconset>
      <normaloff>:/icon/icons/new_icon.png</normaloff>:/icon/icons/new_icon.png</iconset>
    </property>
    <property name="text">
@@ -145,7 +142,7 @@
   </action>
   <action name="actionAbrir">
    <property name="icon">
-    <iconset resource="resource.qrc">
+    <iconset>
      <normaloff>:/icon/icons/open_icon.png</normaloff>:/icon/icons/open_icon.png</iconset>
    </property>
    <property name="text">
@@ -159,7 +156,7 @@
   </action>
   <action name="actionRun_F9">
    <property name="icon">
-    <iconset resource="resource.qrc">
+    <iconset>
      <normaloff>:/icon/icons/play_icon.png</normaloff>:/icon/icons/play_icon.png</iconset>
    </property>
    <property name="text">
@@ -171,7 +168,7 @@
   </action>
   <action name="actionPause_F10">
    <property name="icon">
-    <iconset resource="resource.qrc">
+    <iconset>
      <normaloff>:/icon/icons/pause_icon.png</normaloff>:/icon/icons/pause_icon.png</iconset>
    </property>
    <property name="text">
@@ -183,7 +180,7 @@
   </action>
   <action name="actionStop_F11">
    <property name="icon">
-    <iconset resource="resource.qrc">
+    <iconset>
      <normaloff>:/icon/icons/stop_icon.png</normaloff>:/icon/icons/stop_icon.png</iconset>
    </property>
    <property name="text">
@@ -200,7 +197,7 @@
   </action>
   <action name="actionStop_All_F12">
    <property name="icon">
-    <iconset resource="resource.qrc">
+    <iconset>
      <normaloff>:/icon/icons/stopall_icon.png</normaloff>:/icon/icons/stopall_icon.png</iconset>
    </property>
    <property name="text">
@@ -212,7 +209,7 @@
   </action>
   <action name="actionReopen">
    <property name="icon">
-    <iconset resource="resource.qrc">
+    <iconset>
      <normaloff>:/icon/icons/reopen_icon.png</normaloff>:/icon/icons/reopen_icon.png</iconset>
    </property>
    <property name="text">
@@ -221,7 +218,7 @@
   </action>
   <action name="actionSave">
    <property name="icon">
-    <iconset resource="resource.qrc">
+    <iconset>
      <normaloff>:/icon/icons/save_icon.png</normaloff>:/icon/icons/save_icon.png</iconset>
    </property>
    <property name="text">
@@ -230,7 +227,7 @@
   </action>
   <action name="actionSwap">
    <property name="icon">
-    <iconset resource="resource.qrc">
+    <iconset>
      <normaloff>:/icon/icons/swap_icon.png</normaloff>:/icon/icons/swap_icon.png</iconset>
    </property>
    <property name="text">
@@ -247,7 +244,7 @@
   </action>
   <action name="actionStep">
    <property name="icon">
-    <iconset resource="resource.qrc">
+    <iconset>
      <normaloff>:/icon/icons/step_icon.png</normaloff>:/icon/icons/step_icon.png</iconset>
    </property>
    <property name="text">

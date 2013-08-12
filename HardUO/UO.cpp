@@ -552,12 +552,47 @@ void UO::LObjectID(int id)
     PushInteger(hnd, id);
     Execute(hnd);
 }
-
 int UO::LObjectID()
 {
     SetTop(hnd, 0);
     PushStrVal(hnd, "Get");
     PushStrVal(hnd, "LObjectID");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+/// Last WeaponID
+void UO::LHandID(int id)
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Set");
+    PushStrVal(hnd, "LHandID");
+    PushInteger(hnd, id);
+    Execute(hnd);
+}
+/// Last WeaponID
+int UO::LHandID()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "LHandID");
+    Execute(hnd);
+    return GetInteger(hnd, 1);
+}
+/// Last WeaponID
+void UO::RHandID(int id)
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Set");
+    PushStrVal(hnd, "RHandID");
+    PushInteger(hnd, id);
+    Execute(hnd);
+}
+/// Last WeaponID
+int UO::RHandID()
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Get");
+    PushStrVal(hnd, "RHandID");
     Execute(hnd);
     return GetInteger(hnd, 1);
 }
@@ -978,6 +1013,14 @@ void UO::SystemMessage(std::string Text, int color)
     PushInteger(hnd, color);
     Execute(hnd);
 }
+int UO::Msg(const std::string& msg)
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Call");
+    PushStrVal(hnd, "Msg");
+    PushStrVal(hnd,(char*)msg.data());
+    Execute(hnd);
+}
 void UO::WarPeace()
 {
     SetTop(hnd, 0);
@@ -1003,6 +1046,16 @@ void UO::OpenDoor()
     PushStrVal(hnd, "Macro");
     PushInteger(hnd, 12);
     PushInteger(hnd, 0);
+    Execute(hnd);
+}
+void UO::EventMacro(int x, int y, std::string z)
+{
+    SetTop(hnd, 0);
+    PushStrVal(hnd, "Call");
+    PushStrVal(hnd, "Macro");
+    PushInteger(hnd, x);
+    PushInteger(hnd, y);
+    PushStrVal(hnd, (char*)z.data());
     Execute(hnd);
 }
 void UO::EventMacro(int x, int y)
@@ -1094,7 +1147,7 @@ int UO::TargCurs()
     PushStrVal(hnd, "Get");
     PushStrVal(hnd, "TargCurs");
     Execute(hnd);
-    return GetInteger(hnd, 1);
+    return GetBoolean(hnd, 1)==false?0:1;
 }
 
 void UO::setTargCurs(int tc)

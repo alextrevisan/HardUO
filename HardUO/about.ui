@@ -112,7 +112,7 @@
    <item>
     <widget class="QLabel" name="label_4">
      <property name="text">
-      <string>HardUO Version: 1.04</string>
+      <string>HardUO Version: 1.05 - Beta</string>
      </property>
     </widget>
    </item>

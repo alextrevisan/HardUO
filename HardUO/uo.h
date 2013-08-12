@@ -129,6 +129,10 @@ public:
     /// Last Action
     void LObjectID(int id);
     int LObjectID();
+    void LHandID(int id);
+    int LHandID();
+    void RHandID(int id);
+    int RHandID();
     void LObjectType(int type);
     int LObjectType();
     int getLastTargetID();
@@ -185,10 +189,12 @@ public:
     void Speak(std::string Text);
     void Emote(std::string Text);
     void SystemMessage(std::string Text, int color);
+    int Msg(const std::string& msg);
     void WarPeace();
     void Paste(); //Cola o texto que estiver no clipboard
     void OpenDoor();
     void EventMacro(int x, int y);
+    void EventMacro(int x, int y, std::string z);
     void WaitTarget();
     void LastTarget();
     void TargetSelf();
