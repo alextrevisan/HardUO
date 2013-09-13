@@ -1,75 +1,101 @@
 #ifndef SCRIPTRUNNER_H
 #define SCRIPTRUNNER_H
+
 #include <QThread>
-#include <QTextEdit>
-#include <string>
+#include <QMap>
+#include <QLine>
 #include "uo.h"
-#include "SystemKeyboardReadWrite.h"
-#include <QMutex>
-
-extern "C"
-{
-    #include "lua.h"
-    #include "lualib.h"
-    #include "lauxlib.h"
-}
-
-#include <luabind/luabind.hpp>
+#include "mapwindow.h"
 
 class ScriptRunner : public QThread
 {
     Q_OBJECT
 public:
-    ScriptRunner(const QString& script, QTextEdit* log);
-    ScriptRunner(QTextDocument* doc);
-    ScriptRunner();
-    ~ScriptRunner();
-    void Pause(bool pause = true);
-    void Step(bool step = true);
-    bool IsPaused(){return isPaused;}
-    bool InStep(){return inStep;}
-
-    void setGlobal(std::string const& name, std::string const& value)
-    {
-        mGlobalVar[name] = value;
-    }
-    std::string getGlobal(std::string const& name)
-    {
-        return mGlobalVar[name];
-    }
-    void SetUO(UO* uo);
-    void ReadLuaVariables();
-    std::string getinstalldir();
-protected:
-     void run();
-     void stop();
-     //int pause();
-private:
-     int mLine;
-     QTextDocument* mDoc;
-     QString mScript;
-     QTextEdit* mLog;
-     void Print(const std::string& print);
-     void Wait(int ms);
-     void OnPause(int line);
-     void PauseHook();
-     bool isPaused;
-     bool inStep;
-     UO* mUO;
-     void WaitKey(unsigned long keyCode);
-     DWORD mKeyPressed;
-     QMutex mMutexKey;
-     lua_State *L;
-     static QMap<std::string,std::string> mGlobalVar;
-
+    ScriptRunner(int cliNr, int tabIndex, const QString &script);
+    void configure();
+    void setScript(const QString& script);
+    void stop();
+    void swapClient();
 signals:
-     void Log(const QString& log);
-     void Pause(int line);
-     void Started();
-     void Paused();
-     void Stopped();
-private slots:
-     void KeyPressed(byte *keysDepressed, DWORD keyPressed);
+    void finished();
+    void updateButtonsFinished(int tabIndex);
+    void print(int tabIndex,const QString& value);
+protected:
+    void run();
+private:
+    int mCliNr;
+    int mTabIndex;
+    QString mScript;
+    lua_State *L;
+};
+class Log : public QObject
+{
+    Q_OBJECT
+public:
+    static Log* getInstance()
+    {
+        return mInstance;
+    }
+
+    void append(int tabIndex, const QString& string)
+    {
+        emit textChanged(tabIndex,string);
+    }
+
+    QMap<int,bool> isPaused;
+signals:
+    void textChanged(int tabIndex, const QString& text);
+private:
+    static Log* mInstance;
+
 };
 
+class Map:  public QObject
+{
+    Q_OBJECT
+public:
+    static Map& getInstance()
+    {
+        return mInstance;
+    }
+
+    void show(int tabIndex)
+    {
+        emit showMap(tabIndex);
+    }
+    void hide(int tabIndex)
+    {
+        emit hideMap(tabIndex);
+    }
+    void setPosition(int tabIndex, int x, int y)
+    {
+        emit setPositionMap(tabIndex, x, y);
+    }
+    void createLine(int tabIndex, const QLine& line, int lineID, const QColor& color = Qt::yellow)
+    {
+        emit createLineMap(tabIndex, line, lineID, color);
+    }
+    void removeLine(int tabIndex, int lineID)
+    {
+        emit removeLineMap(tabIndex,lineID);
+    }
+    void removeAllLines(int tabIndex)
+    {
+        emit removeAllLinesMap(tabIndex);
+    }
+signals:
+    void showMap(int tabIndex);
+    void hideMap(int tabIndex);
+    void setPositionMap(int tabIndex, int x, int y);
+    void createLineMap(int tabIndex, const QLine& line, int lineID, const QColor& color);
+    void removeLineMap(int tabIndex, int lineID);
+    void removeAllLinesMap(int tabIndex);
+private:
+    static Map mInstance;
+
+};
+
+
+
 #endif // SCRIPTRUNNER_H
+

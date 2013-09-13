@@ -1,8 +1,65 @@
 #include "UOTreeView.h"
 #include <QStandardItemModel>
+#include "uo.h"
+
+#include <QDebug>
+
+int updateValue(lua_State* L)
+{
+    QString key;
+    QString value;
+    int n = lua_gettop(L);
+    if(n == 2)
+    {
+        if(lua_isstring(L,1))
+            key = lua_tostring(L,1);
+        else
+            return 0;
+        if(!lua_isnoneornil(L,2))
+        {
+            if(lua_isboolean(L,2))
+                value = lua_toboolean(L,2)?"true":"false";
+            else
+                value = lua_tostring(L,2);
+        }
+        else
+        {
+            return 0;
+        }
+        QString tmp = key +": "+value;
+        UOTreeView::GetInstance().mViewMap[key]->setText(tmp);
+    }
+    return 0;
+}
+
 UOTreeView UOTreeView::mInstance;
 UOTreeView::UOTreeView()
 {
+    /* initialize Lua */
+    L = luaL_newstate();
+    /* load Lua base libraries */
+    luaL_openlibs(L);
+
+    ConfigureLua(L);
+    int error = luaL_dofile(L, "macros/internal/loader.lua");
+
+    if ( error!=0 )
+    {
+        lua_pop(L, 1);
+        lua_gc(L, LUA_GCCOLLECT, 0); // chama o garbage collector
+        return;
+    }
+
+    QString configure("hnd = Open() SetCliNr(1)");
+    error = luaL_dostring(L, configure.toStdString().data());
+    if ( error!=0 )
+    {
+        lua_pop(L, 1);
+        lua_gc(L, LUA_GCCOLLECT, 0); // chama o garbage collector
+        return;
+    }
+    lua_register(L, "updateValue", updateValue);
+
     mModel = new QStandardItemModel( 5, 1 );
 
     /** Character Info **/
@@ -129,29 +186,29 @@ UOTreeView::UOTreeView()
         mViewMap["Followers"]->setEditable( false );
         item->appendRow( mViewMap["Followers"] );
 
-        mViewMap["Ar"] = new QStandardItem( QString("Ar: %0").arg(0) );
-        mViewMap["Ar"]->setEditable( false );
-        item->appendRow( mViewMap["Ar"] );
+        mViewMap["AR"] = new QStandardItem( QString("Ar: %0").arg(0) );
+        mViewMap["AR"]->setEditable( false );
+        item->appendRow( mViewMap["AR"] );
 
-        mViewMap["Fr"] = new QStandardItem( QString("Fr: %0").arg(0) );
-        mViewMap["Fr"]->setEditable( false );
-        item->appendRow( mViewMap["Fr"] );
+        mViewMap["FR"] = new QStandardItem( QString("Fr: %0").arg(0) );
+        mViewMap["FR"]->setEditable( false );
+        item->appendRow( mViewMap["FR"] );
 
-        mViewMap["Cr"] = new QStandardItem( QString("Cr: %0").arg(0) );
-        mViewMap["Cr"]->setEditable( false );
-        item->appendRow( mViewMap["Cr"] );
+        mViewMap["CR"] = new QStandardItem( QString("Cr: %0").arg(0) );
+        mViewMap["CR"]->setEditable( false );
+        item->appendRow( mViewMap["CR"] );
 
-        mViewMap["Pr"] = new QStandardItem( QString("Pr: %0").arg(0) );
-        mViewMap["Pr"]->setEditable( false );
-        item->appendRow( mViewMap["Pr"] );
+        mViewMap["PR"] = new QStandardItem( QString("Pr: %0").arg(0) );
+        mViewMap["PR"]->setEditable( false );
+        item->appendRow( mViewMap["PR"] );
 
-        mViewMap["Er"] = new QStandardItem( QString("Er: %0").arg(0) );
-        mViewMap["Er"]->setEditable( false );
-        item->appendRow( mViewMap["Er"] );
+        mViewMap["ER"] = new QStandardItem( QString("Er: %0").arg(0) );
+        mViewMap["ER"]->setEditable( false );
+        item->appendRow( mViewMap["ER"] );
 
-        mViewMap["Tp"] = new QStandardItem( QString("Tp: %0").arg(0) );
-        mViewMap["Tp"]->setEditable( false );
-        item->appendRow( mViewMap["Tp"] );
+        mViewMap["TP"] = new QStandardItem( QString("Tp: %0").arg(0) );
+        mViewMap["TP"]->setEditable( false );
+        item->appendRow( mViewMap["TP"] );
     mModel->setItem(1, 0, item);
     /** Container Info **/
     item = new QStandardItem( QString("Container Info") );
@@ -476,65 +533,129 @@ UOTreeView::UOTreeView()
 }
 void UOTreeView::UpdateView()
 {
-    mViewMap["CharPosX"]->setText(QString("CharPosX: %0").arg(CharPosX));
-    mViewMap["CharPosY"]->setText(QString("CharPosY: %0").arg(CharPosY));
-    mViewMap["CharPosZ"]->setText(QString("CharPosZ: %0").arg(CharPosZ));
-    mViewMap["CharDir"]->setText(QString("CharDir: %0").arg(CharDir));
-    mViewMap["CharStatus"]->setText(QString("CharStatus: %0").arg(CharStatus.data()));
-    mViewMap["CharID"]->setText(QString("CharID: %0").arg(CharID));
-    mViewMap["CharType"]->setText(QString("CharType: %0").arg(CharType));
+    QMutexLocker lock(&mMutex);
+    luaL_dostring(L,"SetCliNr(1)");
+    int error = luaL_dofile(L, "macros/internal/treeview.lua");
+    if(error!=0)
+    {
+        qDebug()<<lua_tostring(L, -1);
+    }
+    /*lua_getglobal(L, "CharPosX");
+    mViewMap["CharPosX"]->setText(QString("CharPosX: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "CharPosY");
+    mViewMap["CharPosY"]->setText(QString("CharPosY: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "CharPosZ");
+    mViewMap["CharPosZ"]->setText(QString("CharPosZ: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "CharDir");
+    mViewMap["CharDir"]->setText(QString("CharDir: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "CharStatus");
+    mViewMap["CharStatus"]->setText(QString("CharStatus: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "CharID");
+    mViewMap["CharID"]->setText(QString("CharID: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "CharType");
+    mViewMap["CharType"]->setText(QString("CharType: %0").arg(lua_tostring(L, -1)));
+    //lua_getglobal(L, "CharPosX");
     //mViewMap["CharGhost"]->setText(QString("CharGhost: %0").arg(CharGhost));
-    mViewMap["BackpackID"]->setText(QString("BackpackID: %0").arg(BackpackID));
+    lua_getglobal(L, "BackpackID");
+    mViewMap["BackpackID"]->setText(QString("BackpackID: %0").arg(lua_tostring(L, -1)));
 
-    mViewMap["CharName"]->setText(QString("CharName: %0").arg(CharName));
-    mViewMap["Sex"]->setText(QString("Sex: %0").arg(Sex));
-    mViewMap["Str"]->setText(QString("Str: %0").arg(Str));
-    mViewMap["Dex"]->setText(QString("Dex: %0").arg(Dex));
-    mViewMap["Int"]->setText(QString("Int: %0").arg(Int));
-    mViewMap["Hits"]->setText(QString("Hits: %0").arg(Hits));
-    mViewMap["MaxHits"]->setText(QString("MaxHits: %0").arg(MaxHits));
-    mViewMap["Stamina"]->setText(QString("Stamina: %0").arg(Stamina));
-    mViewMap["MaxStam"]->setText(QString("MaxStam: %0").arg(MaxStam));
-    mViewMap["Mana"]->setText(QString("Mana: %0").arg(Mana));
-    mViewMap["MaxMana"]->setText(QString("MaxMana: %0").arg(MaxMana));
-    mViewMap["MaxStats"]->setText(QString("MaxStats: %0").arg(MaxStats));
-    mViewMap["Luck"]->setText(QString("Luck: %0").arg(Luck));
-    mViewMap["Weight"]->setText(QString("Weight: %0").arg(Weight));
-    mViewMap["MaxWeight"]->setText(QString("MaxWeight: %0").arg(MaxWeight));
-    mViewMap["MinDmg"]->setText(QString("MinDmg: %0").arg(MinDmg));
-    mViewMap["MaxDmg"]->setText(QString("MaxDmg: %0").arg(MaxDmg));
-    mViewMap["Gold"]->setText(QString("Gold: %0").arg(Gold));
-    mViewMap["Followers"]->setText(QString("Followers: %0").arg(Followers));
-    mViewMap["MaxFol"]->setText(QString("MaxFol: %0").arg(MaxFol));
-    mViewMap["Ar"]->setText(QString("Ar: %0").arg(Ar));
-    mViewMap["Fr"]->setText(QString("Fr: %0").arg(Fr));
-    mViewMap["Cr"]->setText(QString("Cr: %0").arg(Cr));
-    mViewMap["Pr"]->setText(QString("Pr: %0").arg(Pr));
-    mViewMap["Er"]->setText(QString("Er: %0").arg(Er));
-    mViewMap["Tp"]->setText(QString("Tp: %0").arg(Tp));
-
-    mViewMap["ContID"]->setText(QString("ContID: %0").arg(ContID));
-    mViewMap["ContType"]->setText(QString("ContType: %0").arg(ContType));
-    mViewMap["ContKind"]->setText(QString("ContKind: %0").arg(ContKind));
-    mViewMap["ContName"]->setText(QString("ContName: %0").arg(ContName));
-    mViewMap["ContPosX"]->setText(QString("ContPosX: %0").arg(ContPosX));
-    mViewMap["ContPosY"]->setText(QString("ContPosY: %0").arg(ContPosY));
-    mViewMap["ContSizeX"]->setText(QString("ContSizeX: %0").arg(ContSizeX));
-    mViewMap["ContSizeY"]->setText(QString("ContSizeY: %0").arg(ContSizeY));
-    mViewMap["NextCPosX"]->setText(QString("NextCPosX: %0").arg(NextCPosX));
-    mViewMap["NextCPosY"]->setText(QString("NextCPosY: %0").arg(NextCPosY));
-
-    mViewMap["CliNr"]->setText(QString("CliNr: %0").arg(CliNr));
-    mViewMap["CliCnt"]->setText(QString("CliCnt: %0").arg(CliCnt));
-    mViewMap["CliLang"]->setText(QString("CliLang: %0").arg(CliLang));
-    mViewMap["CliVer"]->setText(QString("CliVer: %0").arg(CliVer));
-    mViewMap["CliLogged"]->setText(QString("CliLogged: %0").arg(CliLogged?"true":"false"));
-    mViewMap["CliLeft"]->setText(QString("CliLeft: %0").arg(CliLeft));
-    mViewMap["CliTop"]->setText(QString("CliTop: %0").arg(CliTop));
-    mViewMap["CliXRes"]->setText(QString("CliXRes: %0").arg(CliXRes));
-    mViewMap["CliYRes"]->setText(QString("CliYRes: %0").arg(CliYRes));
-    mViewMap["CliTitle"]->setText(QString("CliTitle: %0").arg(CliTitle));
-
+    lua_getglobal(L, "CharName");
+    mViewMap["CharName"]->setText(QString("CharName: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "Sex");
+    mViewMap["Sex"]->setText(QString("Sex: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "Str");
+    mViewMap["Str"]->setText(QString("Str: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "Dex");
+    mViewMap["Dex"]->setText(QString("Dex: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "Int");
+    mViewMap["Int"]->setText(QString("Int: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "Hits");
+    mViewMap["Hits"]->setText(QString("Hits: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "MaxHits");
+    mViewMap["MaxHits"]->setText(QString("MaxHits: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "Stamina");
+    mViewMap["Stamina"]->setText(QString("Stamina: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "MaxStam");
+    mViewMap["MaxStam"]->setText(QString("MaxStam: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "Mana");
+    mViewMap["Mana"]->setText(QString("Mana: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "MaxMana");
+    mViewMap["MaxMana"]->setText(QString("MaxMana: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "MaxStats");
+    mViewMap["MaxStats"]->setText(QString("MaxStats: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "Luck");
+    mViewMap["Luck"]->setText(QString("Luck: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "Weight");
+    mViewMap["Weight"]->setText(QString("Weight: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "MaxWeight");
+    mViewMap["MaxWeight"]->setText(QString("MaxWeight: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "MinDmg");
+    mViewMap["MinDmg"]->setText(QString("MinDmg: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "MaxDmg");
+    mViewMap["MaxDmg"]->setText(QString("MaxDmg: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "Gold");
+    mViewMap["Gold"]->setText(QString("Gold: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "Followers");
+    mViewMap["Followers"]->setText(QString("Followers: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "MaxFol");
+    mViewMap["MaxFol"]->setText(QString("MaxFol: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "Ar");
+    mViewMap["Ar"]->setText(QString("Ar: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "Fr");
+    mViewMap["Fr"]->setText(QString("Fr: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "Cr");
+    mViewMap["Cr"]->setText(QString("Cr: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "Pr");
+    mViewMap["Pr"]->setText(QString("Pr: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "Er");
+    mViewMap["Er"]->setText(QString("Er: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "Tp");
+    mViewMap["Tp"]->setText(QString("Tp: %0").arg(lua_tostring(L, -1)));
+    */
+/*
+    lua_getglobal(L, "ContID");
+    mViewMap["ContID"]->setText(QString("ContID: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "ContType");
+    mViewMap["ContType"]->setText(QString("ContType: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "ContKind");
+    mViewMap["ContKind"]->setText(QString("ContKind: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "ContName");
+    mViewMap["ContName"]->setText(QString("ContName: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "ContPosX");
+    mViewMap["ContPosX"]->setText(QString("ContPosX: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "ContPosY");
+    mViewMap["ContPosY"]->setText(QString("ContPosY: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "ContSizeX");
+    mViewMap["ContSizeX"]->setText(QString("ContSizeX: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "ContSizeY");
+    mViewMap["ContSizeY"]->setText(QString("ContSizeY: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "NextCPosX");
+    mViewMap["NextCPosX"]->setText(QString("NextCPosX: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "NextCPosY");
+    mViewMap["NextCPosY"]->setText(QString("NextCPosY: %0").arg(lua_tostring(L, -1)));
+*/
+    /*lua_getglobal(L, "CliNr");
+    mViewMap["CliNr"]->setText(QString("CliNr: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "CliCnt");
+    mViewMap["CliCnt"]->setText(QString("CliCnt: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "CliLang");
+    mViewMap["CliLang"]->setText(QString("CliLang: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "CliVer");
+    mViewMap["CliVer"]->setText(QString("CliVer: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "CliLogged");
+    mViewMap["CliLogged"]->setText(QString("CliLogged: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "CliLeft");
+    mViewMap["CliLeft"]->setText(QString("CliLeft: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "CliTop");
+    mViewMap["CliTop"]->setText(QString("CliTop: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "CliXRes");
+    mViewMap["CliXRes"]->setText(QString("CliXRes: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "CliYRes");
+    mViewMap["CliYRes"]->setText(QString("CliYRes: %0").arg(lua_tostring(L, -1)));
+    lua_getglobal(L, "CliTitle");
+    mViewMap["CliTitle"]->setText(QString("CliTitle: %0").arg(lua_tostring(L, -1)));
+*/
+/*
     mViewMap["LObjectID"]->setText(QString("LObjectID: %0").arg(LObjectID));
     mViewMap["LObjectType"]->setText(QString("LObjectType: %0").arg(LObjectType));
     mViewMap["LTargetID"]->setText(QString("LTargetID: %0").arg(LTargetID));
@@ -603,7 +724,7 @@ void UOTreeView::UpdateView()
     mViewMap["ForensicEvaluation"]->setText(QString("ForensicEvaluation:%0").arg(ForensicEvaluation/10));
     mViewMap["ItemIdentification"]->setText(QString("ItemIdentification:%0").arg(ItemIdentification/10));
     mViewMap["TasteIdentification"]->setText(QString("TasteIdentification:%0").arg(TasteIdentification/10));
-
+*/
 
 }
 

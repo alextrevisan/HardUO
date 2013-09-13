@@ -6,71 +6,87 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>795</width>
-    <height>530</height>
+    <width>824</width>
+    <height>559</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>HardUO - Beta</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>:/icon/icons/uo.png</normaloff>:/icon/icons/uo.png</iconset>
+   <iconset resource="icons.qrc">
+    <normaloff>:/icons/icons/uo.png</normaloff>:/icons/icons/uo.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout_2"/>
+   <layout class="QGridLayout" name="gridLayout" rowstretch="0">
+    <property name="leftMargin">
+     <number>2</number>
+    </property>
+    <property name="topMargin">
+     <number>2</number>
+    </property>
+    <property name="rightMargin">
+     <number>2</number>
+    </property>
+    <property name="bottomMargin">
+     <number>2</number>
+    </property>
+    <property name="spacing">
+     <number>2</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QTabWidget" name="tabMacros">
+      <property name="currentIndex">
+       <number>-1</number>
+      </property>
+      <property name="documentMode">
+       <bool>false</bool>
+      </property>
+      <property name="tabsClosable">
+       <bool>true</bool>
+      </property>
+      <property name="movable">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>795</width>
+     <width>824</width>
      <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuArquivo">
+   <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionNovo"/>
+    <addaction name="actionNew"/>
     <addaction name="actionSave"/>
-    <addaction name="actionAbrir"/>
-    <addaction name="actionFechar"/>
+    <addaction name="actionOpen"/>
+    <addaction name="actionClose"/>
     <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuRun">
     <property name="title">
      <string>Run</string>
     </property>
-    <addaction name="actionRun_F9"/>
-    <addaction name="actionPause_F10"/>
-    <addaction name="actionStop_F11"/>
-    <addaction name="actionStop_All_F12"/>
-    <addaction name="separator"/>
+    <addaction name="actionPlay"/>
+    <addaction name="actionStop"/>
+    <addaction name="actionStopAll"/>
    </widget>
-   <widget class="QMenu" name="menuHelp">
-    <property name="title">
-     <string>Help</string>
-    </property>
-    <addaction name="actionAbout"/>
-   </widget>
-   <widget class="QMenu" name="menuView">
-    <property name="title">
-     <string>View</string>
-    </property>
-    <addaction name="actionSkills"/>
-   </widget>
-   <addaction name="menuArquivo"/>
+   <addaction name="menuFile"/>
    <addaction name="menuRun"/>
-   <addaction name="menuView"/>
-   <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <property name="iconSize">
     <size>
-     <width>16</width>
-     <height>16</height>
+     <width>18</width>
+     <height>18</height>
     </size>
    </property>
    <attribute name="toolBarArea">
@@ -79,50 +95,47 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionNovo"/>
+   <addaction name="actionNew"/>
    <addaction name="actionSave"/>
-   <addaction name="actionAbrir"/>
-   <addaction name="actionReopen"/>
+   <addaction name="actionOpen"/>
    <addaction name="separator"/>
-   <addaction name="actionRun_F9"/>
-   <addaction name="actionPause_F10"/>
-   <addaction name="actionStep"/>
-   <addaction name="actionStop_F11"/>
-   <addaction name="actionStop_All_F12"/>
+   <addaction name="actionPlay"/>
+   <addaction name="actionStop"/>
+   <addaction name="actionStopAll"/>
    <addaction name="separator"/>
    <addaction name="actionSwap"/>
    <addaction name="separator"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <widget class="QDockWidget" name="dockWidget_6">
-   <property name="minimumSize">
-    <size>
-     <width>150</width>
-     <height>315</height>
-    </size>
-   </property>
-   <property name="floating">
-    <bool>false</bool>
-   </property>
-   <property name="features">
-    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
-   </property>
+  <widget class="QDockWidget" name="dockWidget">
    <attribute name="dockWidgetArea">
     <number>2</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents_6">
-    <layout class="QVBoxLayout" name="verticalLayout_3">
-     <item>
+   <widget class="QWidget" name="dockWidgetContents">
+    <layout class="QGridLayout" name="gridLayout_2">
+     <property name="leftMargin">
+      <number>2</number>
+     </property>
+     <property name="topMargin">
+      <number>2</number>
+     </property>
+     <property name="rightMargin">
+      <number>2</number>
+     </property>
+     <property name="bottomMargin">
+      <number>2</number>
+     </property>
+     <property name="spacing">
+      <number>2</number>
+     </property>
+     <item row="0" column="0">
       <widget class="QTreeView" name="treeView">
        <property name="alternatingRowColors">
         <bool>true</bool>
        </property>
-       <property name="rootIsDecorated">
+       <property name="headerHidden">
         <bool>true</bool>
        </property>
-       <attribute name="headerVisible">
-        <bool>false</bool>
-       </attribute>
        <attribute name="headerHighlightSections">
         <bool>false</bool>
        </attribute>
@@ -131,138 +144,78 @@
     </layout>
    </widget>
   </widget>
-  <action name="actionNovo">
+  <action name="actionNew">
    <property name="icon">
-    <iconset>
-     <normaloff>:/icon/icons/new_icon.png</normaloff>:/icon/icons/new_icon.png</iconset>
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/icons/new_icon.png</normaloff>:/icons/icons/new_icon.png</iconset>
    </property>
    <property name="text">
     <string>New</string>
    </property>
   </action>
-  <action name="actionAbrir">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/icon/icons/open_icon.png</normaloff>:/icon/icons/open_icon.png</iconset>
-   </property>
-   <property name="text">
-    <string>Open</string>
-   </property>
-  </action>
-  <action name="actionFechar">
-   <property name="text">
-    <string>Close</string>
-   </property>
-  </action>
-  <action name="actionRun_F9">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/icon/icons/play_icon.png</normaloff>:/icon/icons/play_icon.png</iconset>
-   </property>
-   <property name="text">
-    <string>Run (F9)</string>
-   </property>
-   <property name="shortcut">
-    <string>F9</string>
-   </property>
-  </action>
-  <action name="actionPause_F10">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/icon/icons/pause_icon.png</normaloff>:/icon/icons/pause_icon.png</iconset>
-   </property>
-   <property name="text">
-    <string>Pause(F10)</string>
-   </property>
-   <property name="shortcut">
-    <string>F10</string>
-   </property>
-  </action>
-  <action name="actionStop_F11">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/icon/icons/stop_icon.png</normaloff>:/icon/icons/stop_icon.png</iconset>
-   </property>
-   <property name="text">
-    <string>Stop(F11)</string>
-   </property>
-   <property name="shortcut">
-    <string>F11</string>
-   </property>
-  </action>
-  <action name="actionAbout">
-   <property name="text">
-    <string>About</string>
-   </property>
-  </action>
-  <action name="actionStop_All_F12">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/icon/icons/stopall_icon.png</normaloff>:/icon/icons/stopall_icon.png</iconset>
-   </property>
-   <property name="text">
-    <string>Stop All (F12)</string>
-   </property>
-   <property name="shortcut">
-    <string>F12</string>
-   </property>
-  </action>
-  <action name="actionReopen">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/icon/icons/reopen_icon.png</normaloff>:/icon/icons/reopen_icon.png</iconset>
-   </property>
-   <property name="text">
-    <string>Reopen</string>
-   </property>
-  </action>
   <action name="actionSave">
    <property name="icon">
-    <iconset>
-     <normaloff>:/icon/icons/save_icon.png</normaloff>:/icon/icons/save_icon.png</iconset>
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/icons/save_icon.png</normaloff>:/icons/icons/save_icon.png</iconset>
    </property>
    <property name="text">
     <string>Save</string>
    </property>
   </action>
+  <action name="actionOpen">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/icons/open_icon.png</normaloff>:/icons/icons/open_icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open</string>
+   </property>
+  </action>
+  <action name="actionPlay">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/icons/play_icon.png</normaloff>:/icons/icons/play_icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Play</string>
+   </property>
+  </action>
+  <action name="actionStop">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/icons/stop_icon.png</normaloff>:/icons/icons/stop_icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Stop</string>
+   </property>
+  </action>
+  <action name="actionStopAll">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/icons/stopall_icon.png</normaloff>:/icons/icons/stopall_icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>StopAll</string>
+   </property>
+  </action>
   <action name="actionSwap">
    <property name="icon">
-    <iconset>
-     <normaloff>:/icon/icons/swap_icon.png</normaloff>:/icon/icons/swap_icon.png</iconset>
+    <iconset resource="icons.qrc">
+     <normaloff>:/icons/icons/swap_icon.png</normaloff>:/icons/icons/swap_icon.png</iconset>
    </property>
    <property name="text">
     <string>Swap</string>
    </property>
-   <property name="toolTip">
-    <string>Swap UO client</string>
-   </property>
   </action>
-  <action name="actionSkills">
+  <action name="actionClose">
    <property name="text">
-    <string>Skills</string>
-   </property>
-  </action>
-  <action name="actionStep">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/icon/icons/step_icon.png</normaloff>:/icon/icons/step_icon.png</iconset>
-   </property>
-   <property name="text">
-    <string>Step</string>
-   </property>
-   <property name="toolTip">
-    <string>Step Line</string>
-   </property>
-  </action>
-  <action name="action">
-   <property name="text">
-    <string>ç--ã</string>
+    <string>Close</string>
    </property>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="resource.qrc"/>
+  <include location="icons.qrc"/>
  </resources>
  <connections/>
 </ui>

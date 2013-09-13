@@ -9,7 +9,7 @@ class MyCustomHighlighter : public QSyntaxHighlighter
 {
     Q_OBJECT
 public:
-    MyCustomHighlighter(QObject *parent = 0);
+    MyCustomHighlighter(QTextDocument *parent = 0);
 
 protected:
     void highlightBlock(const QString &text);

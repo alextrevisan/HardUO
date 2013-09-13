@@ -25,6 +25,7 @@ typedef struct luaL_Reg {
   lua_CFunction func;
 } luaL_Reg;
 
+typedef luaL_Reg luaL_reg;
 
 LUALIB_API void (luaL_checkversion_) (lua_State *L, lua_Number ver);
 #define luaL_checkversion(L)	luaL_checkversion_(L, LUA_VERSION_NUM)

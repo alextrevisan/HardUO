@@ -4,37 +4,33 @@
 #include <QPlainTextEdit>
 #include <QCompleter>
 #include "customhighlighter.h"
+#include <QCompleter>
 
 class CodeArea : public QPlainTextEdit
 {
     Q_OBJECT
 public:
-    CodeArea(QWidget *parent = 0);
-    void setCompleter(QCompleter *mCompleter);
-    QCompleter *completer() const;
-    void lineNumberAreaPaintEvent (QPaintEvent *event);
+    CodeArea(QWidget* parent);
+    void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
-    void SetPause(int line);
+private:
+    MyCustomHighlighter highlighter;
+    QWidget *lineNumberArea;
+    QCompleter *mCompleter;
+    QStringList mWordList;
+    QString textUnderCursor() const;
 protected:
-    void keyPressEvent(QKeyEvent *e);
-    void focusInEvent(QFocusEvent *e);
     void resizeEvent(QResizeEvent *event);
+    void keyPressEvent(QKeyEvent *e);
 
 private slots:
-    void insertCompletion(const QString &completion);
-
-    void updateLineNumberAreaWidth ( int newBlockCount);
-    void highlightCurrentLine ();
+    void updateLineNumberAreaWidth(int newBlockCount);
+    void highlightCurrentLine();
     void updateLineNumberArea(const QRect &, int);
+    void insertCompletion(const QString &completion);
     void onTextChange();
-
-private:
-    QString textUnderCursor() const;
-    QCompleter *mCompleter;
-    QWidget *lineNumberArea;
-    int mPauseLine;
-    static QStringList mWordList;
 };
+
 
 class LineNumberArea : public QWidget
 {

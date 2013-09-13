@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/new_icon.png</file>
+        <file>icons/open_icon.png</file>
+        <file>icons/pause_icon.png</file>
+        <file>icons/play_icon.png</file>
+        <file>icons/reopen_icon.png</file>
+        <file>icons/save_icon.png</file>
+        <file>icons/step_icon.png</file>
+        <file>icons/stop_icon.png</file>
+        <file>icons/stopall_icon.png</file>
+        <file>icons/swap_icon.png</file>
+        <file>icons/uo.ico</file>
+        <file>icons/uo.png</file>
+    </qresource>
+</RCC>

@@ -1,57 +1,48 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2011-06-27T13:30:01
+# Project created by QtCreator 2013-07-08T19:47:05
 #
 #-------------------------------------------------
 
 QT       += core gui
 
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
 TARGET = HardUO
 TEMPLATE = app
 
+
 SOURCES += main.cpp\
         mainwindow.cpp \
-    CodeArea.cpp \
+    codearea.cpp \
     customhighlighter.cpp \
-    ScriptRunner.cpp \
-    TabWindow.cpp \
+    uo.cpp \
+    scriptrunner.cpp \
     UOTreeView.cpp \
-    UO.cpp \
-    ScopedLock.cpp \
-    SystemKeyboardReadWrite.cpp \
-    skillslist.cpp \
-    about.cpp
+    mapwindow.cpp
 
 HEADERS  += mainwindow.h \
-    CodeArea.h \
+    codearea.h \
     customhighlighter.h \
-    ScriptRunner.h \
-    TabWindow.h \
-    UOdll.h \
     uo.h \
+    gamedll.h \
+    scriptrunner.h \
     UOTreeView.h \
-    ScopedLock.h \
-    SystemKeyboardReadWrite.h \
-    skillslist.h \
-    about.h
+    mapwindow.h
 
 FORMS    += mainwindow.ui \
-    skillslist.ui \
-    about.ui
+    mapwindow.ui
+
 
 RESOURCES += \
+    icons.qrc \
     resource.qrc
 
-INCLUDEPATH += ../Dependencies/Lua_5_2/include \
-               ../Dependencies/luabind/include \
-               ../Dependencies/boost_1_53_0
+INCLUDEPATH += ../Dependencies/Lua_5_2/include
 
-LIBS += ../Dependencies/luabind/libluabind.a \
-        ../Dependencies/Lua_5_2/lib/liblua52.a
+LIBS += ../Dependencies/Lua_5_2/lib/liblua.a
 
 OTHER_FILES += \
     icone.rc
 
 RC_FILE = icone.rc
-
-#QMAKE_CXXFLAGS += -std=c++11

@@ -1,112 +1,56 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "ui_skillslist.h"
-#include <QProcess>
-#include <QVBoxLayout>
-#include <QTextEdit>
-#include <QCompleter>
-#include <QFile>
+#include "UOTreeView.h"
+#include <QPlainTextEdit>
 #include <QMessageBox>
 #include <QFileDialog>
-#include <QStandardItemModel>
+#include <QTextStream>
 #include <QTimer>
-#include <QStringListModel>
-#include <QUrl>
 #include <QSettings>
-#include <QMimeData>
 
-#include <windows.h>
-#include "CodeArea.h"
-#include "ScriptRunner.h"
-#include "UOTreeView.h"
-#include "about.h"
+#define MAX_RECENT_FILES 5
+
+extern "C" {
+    #include "lua.h"
+    #include "lualib.h"
+    #include "lauxlib.h"
+
+}
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
-  ,mTabNum(1)
 {
     ui->setupUi(this);
-
-    wordList << "print()"
-             << "UO:BackpackID()"
-             << "UO:Mana()"
-             << "UO:MaxMana()"
-             << "wait "
-
-             << "Speak "
-             << "true "
-
-             << "while ";
-
-
-    //completingTextEdit = new CodeArea();
-
-    completer = new QCompleter(this);
-    completer->setModel(new QStringListModel(wordList, completer));
-    completer->setModelSorting(QCompleter::CaseSensitivelySortedModel);
-    completer->setCaseSensitivity(Qt::CaseSensitive);
-    completer->setWrapAround(false);
-    //completer->
-   // completingTextEdit->setCompleter(completer);
-
-    mTabWidget = new QTabWidget();
-    setCentralWidget(mTabWidget);
-    mTabWidget->setTabsClosable(true);
-    mTabWidget->setMovable(true);
-
-    TabWindow* tmp = new TabWindow(this);
-
-    mTabWidget->addTab(tmp,"new "+QString::number(mTabNum++));
-    mTabWindows.append(tmp);
-    tmp->SetCompleter(completer);
-
-    connect(mTabWidget, SIGNAL(tabCloseRequested(int)),this,SLOT(CloseTab(int)));
-    connect(mTabWidget, SIGNAL(currentChanged(int)),this,SLOT(TabChange(int)));
-
-
-    setWindowTitle(tr("HardUO"));
-
-    mStatusText = new QLabel();
-    ui->statusBar->addWidget(mStatusText);
-
     UOTreeView::GetInstance().SetView(ui->treeView);
-    SetButtonStatus(0);
+    CreateTab();
+    connect(ui->tabMacros,SIGNAL(tabCloseRequested(int)),this, SLOT(CloseTab(int)));
+    connect(ui->tabMacros,SIGNAL(currentChanged(int)),this, SLOT(updateButtons(int)));
+    connect(Log::getInstance(),SIGNAL(textChanged(int,QString)),this,SLOT(printFromScript(int,QString)));
+    QTimer* treeViewTimer = new QTimer(this);
+    treeViewTimer->setInterval(500);
+    UOTreeView* treeView = &UOTreeView::GetInstance();
+    connect(treeViewTimer,SIGNAL(timeout()),treeView,SLOT(UpdateView()));
+    treeViewTimer->start();
 
 
-    QTimer* timer = new QTimer(this);
-    timer->setInterval(500);
-    connect(timer, SIGNAL(timeout()), this, SLOT(UpdateView()));
-    connect(timer, SIGNAL(timeout()), this, SLOT(updateButtons()));
-    timer->start();
+    connect(&Map::getInstance(),SIGNAL(showMap(int)),this, SLOT(showMap(int)));
+    connect(&Map::getInstance(),SIGNAL(hideMap(int)),this, SLOT(hideMap(int)));
+    connect(&Map::getInstance(),SIGNAL(setPositionMap(int,int,int)),this, SLOT(setPositionMap(int,int,int)));
+    connect(&Map::getInstance(),SIGNAL(createLineMap(int,QLine,int,QColor)),this, SLOT(createLineMap(int,QLine,int,QColor)));
+    connect(&Map::getInstance(),SIGNAL(removeLineMap(int,int)),this, SLOT(removeLineMap(int,int)));
+    connect(&Map::getInstance(),SIGNAL(removeAllLinesMap(int)),this, SLOT(removeAllLinesMap(int)));
 
-    SL = new SkillsList();
-    setAcceptDrops(true);
-    ui->menuArquivo->addSeparator();
+    ui->menuFile->addSeparator();
     for (int i = 0; i < MAX_RECENT_FILES; ++i)
     {
         recentFileActs[i] = new QAction(this);
         recentFileActs[i]->setVisible(false);
         connect(recentFileActs[i], SIGNAL(triggered()),
              this, SLOT(openRecentFile()));
-        ui->menuArquivo->addAction(recentFileActs[i]);
+        ui->menuFile->addAction(recentFileActs[i]);
     }
-
-
-    openAll = new QAction(this);
-    openAll->setText("Open all recent files");
-    connect(openAll, SIGNAL(triggered()),
-         this, SLOT(openAllRecentFile()));
-
-    clearAll = new QAction(this);
-    clearAll->setText("Clear all recent files");
-    connect(clearAll, SIGNAL(triggered()),
-         this, SLOT(clearAllRecentFiles()));
-    ui->menuArquivo->addSeparator();
-    ui->menuArquivo->addAction(openAll);
-    ui->menuArquivo->addAction(clearAll);
-    //ui->menuRecentes->addAction()
-
+    ChangeStatus(0,2);
     UpdateRecentFileActions();
 }
 
@@ -115,211 +59,232 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_actionRun_F9_triggered()
+void MainWindow::CreateTab(const QString &text,const QString &name)
 {
-    if(mTabWidget->currentIndex()>=0)
+    static int codeID = 0;
+
+    /** CODE AREA **/
+    CodeArea* newCodeArea = new CodeArea(this);
+    mCodeAreas.push_back(newCodeArea);
+    if(!text.isEmpty())
     {
-        mTabWindows[mTabWidget->currentIndex()]->Step(false);
-        mTabWindows[mTabWidget->currentIndex()]->Start();
-        SetButtonStatus(mTabWindows[mTabWidget->currentIndex()]->Status());
+        newCodeArea->document()->setPlainText(text);
     }
-}
-void MainWindow::on_actionPause_F10_triggered()
-{
-    if(mTabWidget->currentIndex()>=0)
-    {
-        TabWindow* tab = mTabWindows[mTabWidget->currentIndex()];
-        tab->Step(false);
-        tab->Pause();
-        SetButtonStatus(tab->Status());
-    }
+
+    /** LOG **/
+    QTextEdit* newLogText = new QTextEdit();
+    newLogText->setMaximumSize(16777215,150);
+    mLogTexts.push_back(newLogText);
+
+    /** LAYOUT **/
+    Block* newWidget = new Block(this);
+    newWidget->codeID = codeID;
+    QVBoxLayout* newLayout = new QVBoxLayout(newWidget);
+
+    mVBoxLayouts.push_back(newLayout);
+    newLayout->addWidget(newCodeArea);
+    newLayout->addWidget(newLogText);
+
+    /** SCRIPT **/
+    //mThreads.push_back(new QThread());
+    mScripts.push_back(new ScriptRunner(1,codeID,newCodeArea->document()->toPlainText()));
+
+    //QThread* thread = mThreads.at(codeID);
+    ScriptRunner* script = mScripts.at(codeID);
+    //connect(thread, &QThread::started, script, &ScriptRunner::run);
+    //connect(script, &ScriptRunner::finished, thread, &QThread::quit);
+    connect(script, SIGNAL(updateButtonsFinished(int)), this, SLOT(MacroFinished(int)));
+    connect(script, SIGNAL(print(int,QString)), this, SLOT(printFromScript(int,QString)));
+    script->configure();
+    /** TAB **/
+    QString tabName = QString("tab %1").arg(codeID);
+    if(!name.isEmpty())
+        tabName = name;
+    ui->tabMacros->addTab(newWidget, tabName);
+    ui->tabMacros->setCurrentIndex(ui->tabMacros->count()-1);
+
+    codeID++;
+
 }
 
-void MainWindow::on_actionStop_F11_triggered()
+void MainWindow::CloseTab(int index)
 {
-    if(mTabWidget->currentIndex()>=0)
+    const int codeID = ((Block*)ui->tabMacros->widget(index))->codeID;
+    ChangeStatus(codeID,2);
+    mScripts.at(codeID)->terminate();
+    mScripts.at(codeID)->stop();
+
+    if(ui->tabMacros->count()<=1)
     {
-        mTabWindows[mTabWidget->currentIndex()]->Stop();
-        SetButtonStatus(mTabWindows[mTabWidget->currentIndex()]->Status());
+        CreateTab();
     }
+    ui->tabMacros->removeTab(index);
+
 }
 
-void MainWindow::LoadFile(const QString &filename)
+void MainWindow::on_actionNew_triggered()
 {
-    QFile file(filename);
+    CreateTab();
+}
+void MainWindow::playMacro()
+{
+}
+void MainWindow::ChangeStatus(int tabIndex, int status)
+{
+    if(tabIndex==((Block*)ui->tabMacros->currentWidget())->codeID)
+    {
+        if(status==1)
+        {
+            ui->actionPlay->setEnabled(false);
+            ui->actionStop->setEnabled(true);
+            //ui->actionPause->setEnabled(true);
+        }
+        if(status == 2)
+        {
+            ui->actionPlay->setEnabled(true);
+            ui->actionStop->setEnabled(false);
+            //ui->actionPause->setEnabled(false);
+        }
+    }
+}
+void MainWindow::MacroFinished(int tabIndex)
+{
+    ChangeStatus(tabIndex,2);
+}
+
+void MainWindow::printFromScript(int tabIndex,const QString &text)
+{
+    mLogTexts.at(tabIndex)->append(text);
+}
+
+void MainWindow::updateButtons(int tabIndex)
+{
+    Q_UNUSED(tabIndex);
+    const int codeID = ((Block*)ui->tabMacros->currentWidget())->codeID;
+    ChangeStatus(codeID,mScripts.at(codeID)->isRunning()?1:2);
+}
+
+void MainWindow::showMap(int tabIndex)
+{
+    if(mMapList[tabIndex]==NULL)
+    {
+        mMapList[tabIndex] = new MapWindow();
+    }
+    mMapList[tabIndex]->show();
+}
+
+void MainWindow::hideMap(int tabIndex)
+{
+    if(mMapList[tabIndex]==NULL)
+    {
+        mMapList[tabIndex] = new MapWindow();
+    }
+    mMapList[tabIndex]->hide();
+}
+
+void MainWindow::setPositionMap(int tabIndex, int x, int y)
+{
+    if(mMapList[tabIndex]==NULL)
+    {
+        mMapList[tabIndex] = new MapWindow();
+    }
+    mMapList[tabIndex]->setPosition(x,y);
+}
+
+void MainWindow::createLineMap(int tabIndex, const QLine &line, int lineID, const QColor &color)
+{
+    if(mMapList[tabIndex]==NULL)
+    {
+        mMapList[tabIndex] = new MapWindow();
+    }
+    mMapList[tabIndex]->createLine(line,lineID,color);
+}
+
+void MainWindow::removeLineMap(int tabIndex, int lineID)
+{
+    if(mMapList[tabIndex]==NULL)
+    {
+        mMapList[tabIndex] = new MapWindow();
+    }
+    mMapList[tabIndex]->removeLine(lineID);
+}
+
+void MainWindow::removeAllLinesMap(int tabIndex)
+{
+    if(mMapList[tabIndex]==NULL)
+    {
+        mMapList[tabIndex] = new MapWindow();
+    }
+    mMapList[tabIndex]->removeAllLines();
+}
+
+void MainWindow::on_actionPlay_triggered()
+{
+    const int index = ((Block*)ui->tabMacros->currentWidget())->codeID;
+    ChangeStatus(index,1);
+    //QThread* thread = mThreads.at(index);
+    ScriptRunner* script = mScripts.at(index);
+    script->setScript(mCodeAreas.at(index)->document()->toPlainText());
+    script->start();
+}
+
+void MainWindow::on_actionStop_triggered()
+{
+    const int codeID = ((Block*)ui->tabMacros->currentWidget())->codeID;
+    ChangeStatus(codeID,2);
+    mScripts.at(codeID)->terminate();
+    mScripts.at(codeID)->stop();
+    //mThreads.at(codeID)->terminate();
+}
+
+void MainWindow::on_actionSwap_triggered()
+{
+    const int codeID = ((Block*)ui->tabMacros->currentWidget())->codeID;
+    mScripts.at(codeID)->swapClient();
+    UOTreeView::GetInstance().UpdateView();
+}
+
+void MainWindow::on_actionOpen_triggered()
+{
+    QString fileName = QFileDialog::getOpenFileName(this);
+    if (fileName.isEmpty())
+        return;
+    QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
         QMessageBox::warning(this, tr("Recent Files"),
                              tr("Cannot read file %1:\n%2.")
-                             .arg(filename)
+                             .arg(fileName)
                              .arg(file.errorString()));
         return;
     }
 
     QTextStream in(&file);
     QApplication::setOverrideCursor(Qt::WaitCursor);
-
-
-    //textEdit->setPlainText(in.readAll());
-    if(mTabWindows.size()>0 && mTabWindows[0]->TextEdit()->document()->toPlainText().size() == 0)
-    {
-        mTabWidget->removeTab(0);
-        delete mTabWindows[0];
-        mTabWindows.removeAt(0);
-    }
-    QString script = in.readAll();
-    TabWindow* tmp = new TabWindow(script);
-    tmp->SetFileName(filename);
-    QFileInfo f(file);
-
-    mTabWidget->addTab(tmp,f.fileName());
-    mTabWindows.append(tmp);
-
-    tmp->SetCompleter(completer);
-    tmp->TextEdit()->document()->setModified(false);
-    SetCurrentFile(filename);
+    QFileInfo fileInfo(file);
+    CreateTab(in.readAll(),fileInfo.fileName());
+    mFileList[((Block*)ui->tabMacros->currentWidget())->codeID] = file.fileName();
     QApplication::restoreOverrideCursor();
-
+    SetCurrentFile(fileName);
 }
 
-void MainWindow::on_actionNovo_triggered()
+void MainWindow::on_actionSave_triggered()
 {
-    TabWindow* tmp = new TabWindow(this);
-
-    mTabWidget->addTab(tmp,"new "+QString::number(mTabNum++));
-    mTabWindows.append(tmp);
-    tmp->SetCompleter(completer);
-}
-
-void MainWindow::CloseTab(int tab)
-{
-    mTabWidget->removeTab(tab);
-    delete mTabWindows[tab];
-    mTabWindows.removeAt(tab);
-}
-void MainWindow::TabChange(int tab)
-{
-    if(tab>0)
+    const int codeID = ((Block*)ui->tabMacros->currentWidget())->codeID;
+    QString file = mFileList[codeID];
+    if(file.isEmpty())
     {
-        UpdateView();
-        SetButtonStatus(mTabWindows[tab]->Status());
+        file = QFileDialog::getSaveFileName(this,"Save file","","*.lua");
+        if(file.isEmpty())
+            return;
     }
+    QFile f( file );
+    f.open( QIODevice::WriteOnly );
+    f.write(mCodeAreas.at(codeID)->document()->toPlainText().toStdString().data(),mCodeAreas.at(codeID)->document()->toPlainText().size());
+    mCodeAreas.at(codeID)->document()->setModified(false);
+    f.close();
+    mFileList[((Block*)ui->tabMacros->currentWidget())->codeID] = file;
+    SetCurrentFile(file);
 }
-
-void MainWindow::on_actionAbrir_triggered()
-{
-    QString fileName = QFileDialog::getOpenFileName(this);
-    if (!fileName.isEmpty())
-        LoadFile(fileName);
-}
-
-void MainWindow::on_actionStop_All_F12_triggered()
-{
-    foreach(TabWindow* t, mTabWindows)
-    {
-        t->Stop();
-    }
-    SetButtonStatus(0);
-}
-
-void MainWindow::UpdateView()
-{
-    if(mTabWidget->currentIndex()>=0)
-    {
-        mTabWindows[mTabWidget->currentIndex()]->UpdateView();
-        setWindowTitle(QString("HardUO - %0 - CliNr: %1")
-                       .arg(mTabWindows[mTabWidget->currentIndex()]->CharName())
-                       .arg(mTabWindows[mTabWidget->currentIndex()]->CliNr()));
-    }
-
-}
-
-void MainWindow::updateButtons()
-{
-    if(mTabWidget->currentIndex()>=0)
-    {
-        ui->actionSave->setEnabled(mTabWindows[mTabWidget->currentIndex()]->TextEdit()->document()->isModified());
-        SetButtonStatus(mTabWindows[mTabWidget->currentIndex()]->Status());
-    }
-}
-
-void MainWindow::changeEvent(QEvent *e)
-{
-    QMainWindow::changeEvent(e);
-    switch (e->type()) {
-    case QEvent::LanguageChange:
-        ui->retranslateUi(this);
-        break;
-    default:
-        break;
-    }
-}
-
-void MainWindow::dragEnterEvent(QDragEnterEvent *event)
-{
-    event->acceptProposedAction();
-    //emit changed(event->mimeData());
-}
-
-void MainWindow::dragMoveEvent(QDragMoveEvent *event)
-{
-    event->acceptProposedAction();
-}
-
-void MainWindow::dragLeaveEvent(QDragLeaveEvent *event)
-{
-}
-
-void MainWindow::dropEvent(QDropEvent *event)
-{
-    const QMimeData* mimeData = event->mimeData();
-    // check for our needed mime type, here a file or a list of files
-    if (mimeData->hasUrls())
-    {
-        QList<QUrl> urlList = mimeData->urls();
-        // extract the local paths of the files
-        for (int i = 0; i < urlList.size() && i < 32; ++i)
-        {
-            LoadFile(urlList.at(i).toLocalFile());
-        }
-    }
-}
-
-void MainWindow::SetButtonStatus(int status)
-{
-    if(status==0)
-    {
-        ui->actionRun_F9->setEnabled(true);
-        ui->actionPause_F10->setEnabled(false);
-        ui->actionStop_F11->setEnabled(false);
-        mStatusText->setText("Stopped!");
-    }
-    else if(status==1)
-    {
-        ui->actionRun_F9->setEnabled(false);
-        ui->actionPause_F10->setEnabled(true);
-        ui->actionStop_F11->setEnabled(true);
-        mStatusText->setText("Running...");
-    }
-    else if(status==2)
-    {
-        ui->actionRun_F9->setEnabled(true);
-        ui->actionPause_F10->setEnabled(true);
-        ui->actionStop_F11->setEnabled(true);
-        mStatusText->setText("Paused...");
-    }
-
-    bool stopall = false;
-    foreach(TabWindow* tab, mTabWindows)
-    {
-        if(tab->Status()>0)
-        {
-            stopall = true;
-            break;
-        }
-    }
-    ui->actionStop_All_F12->setEnabled(stopall);
-}
-
 void MainWindow::UpdateRecentFileActions()
 {
 
@@ -334,20 +299,10 @@ void MainWindow::UpdateRecentFileActions()
         recentFileActs[i]->setData(files[i]);
         recentFileActs[i]->setVisible(true);
     }
-    if(numRecentFiles>0)
-    {
-        clearAll->setEnabled(true);
-        openAll->setEnabled(true);
-    }
-    else
-    {
-        clearAll->setEnabled(false);
-        openAll->setEnabled(false);
-    }
+
     for (int j = numRecentFiles; j < MAX_RECENT_FILES; ++j)
         recentFileActs[j]->setVisible(false);
 }
-
 void MainWindow::SetCurrentFile(const QString &fileName)
 {
     QSettings settings("HogPog","HardUO");
@@ -362,92 +317,39 @@ void MainWindow::SetCurrentFile(const QString &fileName)
     UpdateRecentFileActions();
 }
 
-void MainWindow::clearAllRecentFiles()
-{
-    QSettings settings("HogPog","HardUO");
-    QStringList files;
-    files.clear();
-    settings.setValue("recentFileList", files);
-    UpdateRecentFileActions();
-}
-
-void MainWindow::on_actionSwap_triggered()
-{
-    mTabWindows[mTabWidget->currentIndex()]->SwapClient();
-    UpdateView();
-}
-
-void MainWindow::on_actionAbout_triggered()
-{
-    about *a = new about();
-    a->setAttribute(Qt::WA_DeleteOnClose);
-    a->show();
-}
-
-void MainWindow::on_actionSkills_triggered()
-{
-    SL->show();
-}
-
-void MainWindow::on_actionStep_triggered()
-{
-    if(mTabWindows[mTabWidget->currentIndex()]->InStep())
-    {
-        mTabWindows[mTabWidget->currentIndex()]->Pause();
-    }
-    else
-    {
-        mTabWindows[mTabWidget->currentIndex()]->Step();
-    }
-}
-
-void MainWindow::on_actionSave_triggered()
-{
-    mTabWindows[mTabWidget->currentIndex()]->Save();
-    QFileInfo f(mTabWindows[mTabWidget->currentIndex()]->GetFileName());
-    SetCurrentFile(mTabWindows[mTabWidget->currentIndex()]->GetFileName());
-    if(!f.exists())
-        return;
-    mTabWidget->setTabText(mTabWidget->currentIndex(),f.fileName());
-}
-
 void MainWindow::openRecentFile()
 {
     QAction *action = qobject_cast<QAction *>(sender());
-         if (action)
-             LoadFile(action->data().toString());
-}
-
-void MainWindow::openAllRecentFile()
-{
-    QSettings settings("HogPog","HardUO");
-    QStringList files = settings.value("recentFileList").toStringList();
-
-    int numRecentFiles = qMin(files.size(), (int)MAX_RECENT_FILES);
-    for (int i = 0; i < numRecentFiles; ++i)
+    if (action)
     {
-        LoadFile(recentFileActs[i]->data().toString());
-    }
-}
-
-void MainWindow::closeEvent(QCloseEvent *event)
-{
-    foreach(TabWindow* tab, mTabWindows)
-    {
-        if(tab->TextEdit()->document()->isModified())
-        {
-            QMessageBox::StandardButton ret;
-            ret = QMessageBox::warning(this, tr("HardUO"),
-                      tr("Tem certeza que deseja sair?\n"
-                         "Todos os documentos não salvos serão perdidos."),
-                      QMessageBox::Ok | QMessageBox::Cancel);
-            if (ret == QMessageBox::Ok)
-                event->accept();
-            else
-                event->ignore();
-            break;
+        QString fileName = action->data().toString();
+        if (fileName.isEmpty())
+            return;
+        QFile file(fileName);
+        if (!file.open(QFile::ReadOnly | QFile::Text)) {
+            QMessageBox::warning(this, tr("Recent Files"),
+                      tr("Cannot read file %1:\n%2.")
+                      .arg(fileName)
+                      .arg(file.errorString()));
+            return;
         }
 
+        QTextStream in(&file);
+        QApplication::setOverrideCursor(Qt::WaitCursor);
+        QFileInfo fileInfo(file);
+        CreateTab(in.readAll(),fileInfo.fileName());
+        QApplication::restoreOverrideCursor();
+        mFileList[((Block*)ui->tabMacros->currentWidget())->codeID] = file.fileName();
+        //CreateTab(action->data().toString(),action->data().toString());
     }
+}
 
+void MainWindow::on_actionStopAll_triggered()
+{
+    foreach (ScriptRunner* script, mScripts)
+    {
+        script->terminate();
+        script->stop();
+    }
+    ChangeStatus(((Block*)ui->tabMacros->currentWidget())->codeID,2);
 }

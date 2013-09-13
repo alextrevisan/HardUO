@@ -3,13 +3,22 @@
 
 #include <QTreeView>
 #include <QStandardItemModel>
+#include <QObject>
+#include <QMutex>
 
-class UOTreeView
+extern "C" {
+    #include "lua.h"
+    #include "lualib.h"
+    #include "lauxlib.h"
+
+}
+
+class UOTreeView : public QObject
 {
+    Q_OBJECT
 public:
     static UOTreeView& GetInstance(){return mInstance;}
     void SetView(QTreeView* view);
-    void UpdateView();
     /// Character Info
     int CharPosX;
     int CharPosY;
@@ -149,13 +158,17 @@ public:
     float ItemIdentification;
     float TasteIdentification;
 
+    QMap<QString, QStandardItem*> mViewMap;
 
+public slots:
+    void UpdateView();
 private:
+    QMutex mMutex;
     UOTreeView();
     QTreeView* mTreeView;
     static UOTreeView mInstance;
     QStandardItemModel* mModel;
-    QMap<QString, QStandardItem*> mViewMap;
+    lua_State* L;
 };
 
 #endif // UOTREEVIEW_H

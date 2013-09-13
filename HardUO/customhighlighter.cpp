@@ -1,6 +1,6 @@
 #include "customhighlighter.h"
 
-MyCustomHighlighter::MyCustomHighlighter(QObject *parent) :
+MyCustomHighlighter::MyCustomHighlighter(QTextDocument *parent) :
     QSyntaxHighlighter(parent)
 {
     HighlightingRule rule;
