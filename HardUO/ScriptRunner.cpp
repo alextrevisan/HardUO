@@ -5,6 +5,19 @@
 Log* Log::mInstance = new Log();
 Map Map::mInstance;
 QMutex mMutex;
+QStringList AutoComplete::autoCompleteList;
+
+int fill_autocomplete(lua_State* L)
+{
+    if(lua_isstring(L,1))
+    {
+        QString value = lua_tostring(L,1);
+        AutoComplete::autoCompleteList.append(value);
+        return 0;
+    }
+    return 0;
+}
+
 int getkey(lua_State* L)
 {
     if(lua_isnumber(L,1))
@@ -132,6 +145,8 @@ void ScriptRunner::configure()
     lua_register(L, "__removeLine__", removeLine);
     lua_register(L, "__removeAllLines__", removeAllLines);
 
+    lua_register(L, "fill_autocomplete", fill_autocomplete);
+
     QString script = QString("function getkey(key) return __getkey__(key) end");
     luaL_dostring(L,script.toStdString().data());
 
@@ -177,6 +192,19 @@ void ScriptRunner::configure()
         emit updateButtonsFinished(mTabIndex);
         return;
     }
+    error = luaL_dofile(L, "macros/internal/autocomplete.lua");
+
+    if ( error!=0 )
+    {
+        emit print(mTabIndex,lua_tostring(L, -1));
+        lua_pop(L, 1);
+        lua_gc(L, LUA_GCCOLLECT, 0); // chama o garbage collector
+        stop();
+        emit finished();
+        emit updateButtonsFinished(mTabIndex);
+        return;
+    }
+
     QString configure("hnd = Open() SetCliNr(1)");
     error = luaL_dostring(L, configure.toStdString().data());
     if ( error!=0 )

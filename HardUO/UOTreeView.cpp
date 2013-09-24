@@ -45,8 +45,10 @@ UOTreeView::UOTreeView()
 
     if ( error!=0 )
     {
+        qDebug()<<"error on loader"<<lua_tostring(L, -1);
         lua_pop(L, 1);
         lua_gc(L, LUA_GCCOLLECT, 0); // chama o garbage collector
+
         return;
     }
 
@@ -54,8 +56,10 @@ UOTreeView::UOTreeView()
     error = luaL_dostring(L, configure.toStdString().data());
     if ( error!=0 )
     {
+        qDebug()<<"error on configure:"<<lua_tostring(L, -1);
         lua_pop(L, 1);
         lua_gc(L, LUA_GCCOLLECT, 0); // chama o garbage collector
+
         return;
     }
     lua_register(L, "updateValue", updateValue);

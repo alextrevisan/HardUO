@@ -1,5 +1,6 @@
 #include "codearea.h"
 #include "customhighlighter.h"
+#include "scriptrunner.h"
 #include <QPainter>
 #include <QStringListModel>
 #include <QScrollBar>
@@ -8,7 +9,6 @@ CodeArea::CodeArea(QWidget *parent)
     :QPlainTextEdit(parent)
     ,highlighter(this->document())
 {
-    mWordList << "testando" << "testado";
     QFont font;
     font.setFamily("Courier");
     font.setFixedPitch(true);
@@ -233,6 +233,7 @@ void CodeArea::onTextChange()
      }*/
      wordList.removeAll(textUnderCursor());
      wordList.append(mWordList);
+     wordList.append( AutoComplete::autoCompleteList.toSet().toList());
      wordList.sort();
 
      if(mCompleter)

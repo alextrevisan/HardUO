@@ -95,7 +95,11 @@ private:
 
 };
 
-
+class AutoComplete
+{
+public:
+    static QStringList autoCompleteList;
+};
 
 #endif // SCRIPTRUNNER_H
 
