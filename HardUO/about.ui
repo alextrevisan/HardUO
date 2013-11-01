@@ -14,8 +14,8 @@
    <string>About</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>:/icon/icons/uo.png</normaloff>:/icon/icons/uo.png</iconset>
+   <iconset resource="icons.qrc">
+    <normaloff>:/icons/icons/uo.png</normaloff>:/icons/icons/uo.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -162,7 +162,7 @@
         </font>
        </property>
        <property name="text">
-        <string>&lt;a href=http://hogpog.com.br/index.php/br/macros-harduo&gt;Macros&lt;/a&gt;</string>
+        <string>&lt;a href=https://github.com/H3xaCod3/HardUO/tree/master/Macros&gt;Macros&lt;/a&gt;</string>
        </property>
        <property name="openExternalLinks">
         <bool>true</bool>
@@ -206,7 +206,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="icons.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>
