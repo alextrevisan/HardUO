@@ -54,6 +54,8 @@ private slots:
 
     void on_actionStopAll_triggered();
 
+    void on_actionAbout_triggered();
+
 private:
     void CreateTab(const QString& text = "", const QString &name = "");
     void UpdateRecentFileActions();

@@ -8,6 +8,8 @@
 #include <QTimer>
 #include <QSettings>
 
+#include "about.h"
+
 #define MAX_RECENT_FILES 5
 
 extern "C" {
@@ -352,4 +354,11 @@ void MainWindow::on_actionStopAll_triggered()
         script->stop();
     }
     ChangeStatus(((Block*)ui->tabMacros->currentWidget())->codeID,2);
+}
+
+void MainWindow::on_actionAbout_triggered()
+{
+    about *a = new about(this);
+    a->setAttribute(Qt::WA_DeleteOnClose);
+    a->show();
 }

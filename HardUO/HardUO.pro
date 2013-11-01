@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     uo.cpp \
     scriptrunner.cpp \
     UOTreeView.cpp \
-    mapwindow.cpp
+    mapwindow.cpp \
+    about.cpp
 
 HEADERS  += mainwindow.h \
     codearea.h \
@@ -28,10 +29,12 @@ HEADERS  += mainwindow.h \
     gamedll.h \
     scriptrunner.h \
     UOTreeView.h \
-    mapwindow.h
+    mapwindow.h \
+    about.h
 
 FORMS    += mainwindow.ui \
-    mapwindow.ui
+    mapwindow.ui \
+    about.ui
 
 
 RESOURCES += \
