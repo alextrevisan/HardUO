@@ -527,21 +527,21 @@ local function getLObjectType()
     Execute(hnd)
     return GetInteger(hnd, 1)
 end
-local function LTargetX()
+local function getLTargetX()
     SetTop(hnd, 0)
     PushStrVal(hnd, "Get")
     PushStrVal(hnd, "LTargetX")
     Execute(hnd)
     return GetInteger(hnd, 1)
 end
-local function LTargetY()
+local function getLTargetY()
     SetTop(hnd, 0)
     PushStrVal(hnd, "Get")
     PushStrVal(hnd, "LTargetY")
     Execute(hnd)
     return GetInteger(hnd, 1)
 end
-local function LTargetZ()
+local function getLTargetZ()
     SetTop(hnd, 0)
     PushStrVal(hnd, "Get")
     PushStrVal(hnd, "LTargetZ")
@@ -568,6 +568,20 @@ local function setLTargetZ(z)
     PushStrVal(hnd, "LTargetZ")
     PushInteger(hnd, z)
     Execute(hnd)
+end
+local function getCursorX()
+	SetTop(hnd, 0)
+    PushStrVal(hnd, "Get")
+    PushStrVal(hnd, "CursorX")
+    Execute(hnd)
+    return GetInteger(hnd, 1)
+end
+local function getCursorY()
+	SetTop(hnd, 0)
+    PushStrVal(hnd, "Get")
+    PushStrVal(hnd, "CursorY")
+    Execute(hnd)
+    return GetInteger(hnd, 1)
 end
 local function LLiftedID()
     SetTop(hnd, 0)
@@ -1147,6 +1161,12 @@ OpenEUOWriteVariables["LTargetY"] = setLTargetY
 UO.LTargetZ = 0
 OpenEUOReadVariables["LTargetZ"] = getLTargetZ
 OpenEUOWriteVariables["LTargetZ"] = setLTargetZ
+
+UO.CursorX = 0
+OpenEUOReadVariables["CursorX"] = getCursorX
+
+UO.CursorY = 0
+OpenEUOReadVariables["CursorY"] = getCursorY
 
 UO.LTargetKind = 0
 OpenEUOReadVariables["LTargetKind"] = getLTargetKind
