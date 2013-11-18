@@ -234,6 +234,7 @@ void CodeArea::onTextChange()
      wordList.removeAll(textUnderCursor());
      wordList.append(mWordList);
      wordList.append( AutoComplete::autoCompleteList.toSet().toList());
+     wordList.append( AutoComplete::autoCompleteUOList.toSet().toList());
      wordList.sort();
 
      if(mCompleter)

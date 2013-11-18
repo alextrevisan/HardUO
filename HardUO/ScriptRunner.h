@@ -99,6 +99,7 @@ class AutoComplete
 {
 public:
     static QStringList autoCompleteList;
+    static QStringList autoCompleteUOList;
 };
 
 #endif // SCRIPTRUNNER_H

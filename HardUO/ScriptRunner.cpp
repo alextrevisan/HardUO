@@ -6,6 +6,7 @@ Log* Log::mInstance = new Log();
 Map Map::mInstance;
 QMutex mMutex;
 QStringList AutoComplete::autoCompleteList;
+QStringList AutoComplete::autoCompleteUOList;
 
 int fill_autocomplete(lua_State* L)
 {
@@ -13,6 +14,17 @@ int fill_autocomplete(lua_State* L)
     {
         QString value = lua_tostring(L,1);
         AutoComplete::autoCompleteList.append(value);
+        return 0;
+    }
+    return 0;
+}
+
+int fill_autocompleteUO(lua_State* L)
+{
+    if(lua_isstring(L,1))
+    {
+        QString value = lua_tostring(L,1);
+        AutoComplete::autoCompleteUOList.append(value);
         return 0;
     }
     return 0;
@@ -146,6 +158,7 @@ void ScriptRunner::configure()
     lua_register(L, "__removeAllLines__", removeAllLines);
 
     lua_register(L, "fill_autocomplete", fill_autocomplete);
+    lua_register(L, "fill_autocompleteUO", fill_autocompleteUO);
 
     QString script = QString("function getkey(key) return __getkey__(key) end");
     luaL_dostring(L,script.toStdString().data());

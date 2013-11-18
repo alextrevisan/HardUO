@@ -1234,6 +1234,12 @@ OpenEUOFunctions["Drag"] = Drag
 UO.DropC = 0
 OpenEUOFunctions["DropC"] = DropC
 
+UO.DropG = 0
+OpenEUOFunctions["DropG"] = DropG
+
+UO.DropC = 0
+OpenEUOFunctions["DropPD"] = DropPD
+
 UO.Property = 0
 OpenEUOFunctions["Property"] = Property
 
@@ -1408,6 +1414,7 @@ end
 ----------------------------------------
 -- keep a private access to original table
 local _t = UO
+__autocompleteUO__ = UO
 -- create proxy
 UO = {}
 -- create metatable
