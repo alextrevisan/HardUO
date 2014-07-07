@@ -1,12 +1,17 @@
 #include "scriptrunner.h"
 #include <QMutex>
+#include <QMap>
+#include <QApplication>
 #include <windows.h>
+
+#include "luawidget.h"
 
 Log* Log::mInstance = new Log();
 Map Map::mInstance;
 QMutex mMutex;
 QStringList AutoComplete::autoCompleteList;
 QStringList AutoComplete::autoCompleteUOList;
+QMap<int,QWidget*> mWidgetList;
 
 int fill_autocomplete(lua_State* L)
 {
@@ -129,6 +134,59 @@ int printFromLua(lua_State* L)
     return 0;
 }
 
+int widgetID = 0;
+
+int create(lua_State* L)
+{
+    if(lua_isstring(L,1))
+    {
+        const char* type = lua_tostring(L,1);
+        if(QString(type)=="TForm")
+        {
+            mWidgetList[widgetID] = new TForm(NULL,L,widgetID);
+            //mWidgetList[widgetID]->setWindowTitle(name);
+
+            lua_pushinteger(L,widgetID++);
+        }
+        return 1;
+    }
+    return 0;
+}
+int caption(lua_State* L)
+{
+    if(lua_isnumber(L,1) && lua_isstring(L,2))
+    {
+        int id = lua_tointeger(L,1);
+        QString name = lua_tostring(L,2);
+        if(mWidgetList.contains(id))
+        {
+            ((TForm*)mWidgetList[id])->setCaption(name);
+        }
+    }
+    return 0;
+}
+
+int show(lua_State* L)
+{
+    if(lua_isnumber(L,1))
+    {
+        if(mWidgetList.contains(lua_tonumber(L,1)))
+        {
+            mWidgetList[lua_tonumber(L,1)]->show();
+        }
+    }
+    return 0;
+}
+int objloop(lua_State* L)
+{
+    QApplication::processEvents();
+    for(auto widget:mWidgetList)
+    {
+        if(((TForm*)widget)->eventOnClose)
+            luaL_dostring(L,QString("Obj.OnClose("+QString::number(((TForm*)widget)->ID)+")").toStdString().data());
+    }
+    return 0;
+}
 
 ScriptRunner::ScriptRunner(int cliNr, int tabIndex, const QString& script)
     :mCliNr(cliNr)
@@ -156,6 +214,11 @@ void ScriptRunner::configure()
     lua_register(L, "__createLine__", createLine);
     lua_register(L, "__removeLine__", removeLine);
     lua_register(L, "__removeAllLines__", removeAllLines);
+
+    lua_register(L, "__create__", create);
+    lua_register(L, "__show__", show);
+    lua_register(L, "__objloop__", objloop);
+    lua_register(L, "__caption__", caption);
 
     lua_register(L, "fill_autocomplete", fill_autocomplete);
     lua_register(L, "fill_autocompleteUO", fill_autocompleteUO);

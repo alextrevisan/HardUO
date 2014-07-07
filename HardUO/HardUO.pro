@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     scriptrunner.cpp \
     UOTreeView.cpp \
     mapwindow.cpp \
-    about.cpp
+    about.cpp \
+    luawidget.cpp
 
 HEADERS  += mainwindow.h \
     codearea.h \
@@ -30,7 +31,8 @@ HEADERS  += mainwindow.h \
     scriptrunner.h \
     UOTreeView.h \
     mapwindow.h \
-    about.h
+    about.h \
+    luawidget.h
 
 FORMS    += mainwindow.ui \
     mapwindow.ui \
@@ -49,3 +51,5 @@ OTHER_FILES += \
     icone.rc
 
 RC_FILE = icone.rc
+
+CONFIG+=c++11

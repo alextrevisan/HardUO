@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QStringListModel>
 #include <QScrollBar>
+#include <QAbstractItemView>
 
 CodeArea::CodeArea(QWidget *parent)
     :QPlainTextEdit(parent)
