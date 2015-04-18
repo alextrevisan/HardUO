@@ -1,5 +1,8 @@
 #include "UOTreeView.h"
 #include <QStandardItemModel>
+#include <QMenu>
+#include <QApplication>
+#include <QClipboard>
 #include "uo.h"
 
 int updateValue(lua_State* L)
@@ -733,5 +736,29 @@ void UOTreeView::SetView(QTreeView* view)
     mTreeView = view;
     mTreeView->setModel(mModel);
     mTreeView->expandAll();
+    mTreeView->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(mTreeView, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onCustomContextMenu(const QPoint &)));
+
+}
+
+void UOTreeView::onCustomContextMenu(const QPoint &point)
+{
+    mModelIndexCustomMenu = mTreeView->indexAt(point);
+    if (mModelIndexCustomMenu.isValid())
+    {
+        QMenu contextMenu;
+        contextMenu.addAction("Copiar nome da variavel", this,SLOT(onCopyIndex()));
+        contextMenu.addAction("Copiar valor da variavel", this,SLOT(onCopyValue()));
+        contextMenu.exec(mTreeView->mapToGlobal(point));
+    }
+}
+
+void UOTreeView::onCopyIndex()
+{
+    QApplication::clipboard()->setText(mModelIndexCustomMenu.data().toString().split(":").at(0));
+}
+void UOTreeView::onCopyValue()
+{
+    QApplication::clipboard()->setText(mModelIndexCustomMenu.data().toString().split(":").at(1).trimmed());
 }
 

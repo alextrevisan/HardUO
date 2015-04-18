@@ -3,6 +3,7 @@
 
 #include <QTreeView>
 #include <QStandardItemModel>
+#include <QModelIndex>
 #include <QObject>
 #include <QMutex>
 
@@ -162,7 +163,12 @@ public:
 
 public slots:
     void UpdateView();
+protected slots:
+    void onCustomContextMenu(const QPoint &point);
+    void onCopyIndex();
+    void onCopyValue();
 private:
+    QModelIndex mModelIndexCustomMenu;
     QMutex mMutex;
     UOTreeView();
     QTreeView* mTreeView;
