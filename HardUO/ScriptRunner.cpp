@@ -3,6 +3,7 @@
 #include <QMap>
 #include <QApplication>
 #include <windows.h>
+#include <QMessageBox>
 
 #include "luawidget.h"
 
@@ -261,21 +262,27 @@ void ScriptRunner::configure()
     if ( error!=0 )
     {
         emit print(mTabIndex,lua_tostring(L, -1));
+        QMessageBox messageBox;
+        messageBox.critical(0,"Error",lua_tostring(L, -1));
         lua_pop(L, 1);
         lua_gc(L, LUA_GCCOLLECT, 0); // chama o garbage collector
-        stop();
+        lua_close(L);
+        //messageBox.setFixedSize(500,200);
         emit finished();
         emit updateButtonsFinished(mTabIndex);
         return;
     }
+
     error = luaL_dofile(L, "macros/internal/autocomplete.lua");
 
     if ( error!=0 )
     {
         emit print(mTabIndex,lua_tostring(L, -1));
+        QMessageBox messageBox;
+        messageBox.critical(0,"Error",lua_tostring(L, -1));
         lua_pop(L, 1);
         lua_gc(L, LUA_GCCOLLECT, 0); // chama o garbage collector
-        stop();
+        lua_close(L);
         emit finished();
         emit updateButtonsFinished(mTabIndex);
         return;
@@ -286,9 +293,11 @@ void ScriptRunner::configure()
     if ( error!=0 )
     {
         emit print(mTabIndex,lua_tostring(L, -1));
+        QMessageBox messageBox;
+        messageBox.critical(0,"Error",lua_tostring(L, -1));
         lua_pop(L, 1);
         lua_gc(L, LUA_GCCOLLECT, 0); // chama o garbage collector
-        stop();
+        lua_close(L);
         emit finished();
         emit updateButtonsFinished(mTabIndex);
         return;

@@ -4,7 +4,6 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QBrush>
-#include <QDebug>
 #include <QTimer>
 #include <QInputDialog>
 
@@ -187,7 +186,6 @@ void MapWindow::updateMap()
 
     foreach(QLine line, mLines)
     {
-        qDebug()<<"imprimindo linha id";
         painter.setPen( Qt::yellow );
         painter.drawLine(line.x1()-mCurrentX+mMapSize.width()/2,line.y1()-mCurrentY+mMapSize.height()/2,line.x2()-mCurrentX+mMapSize.width()/2,line.y2()-mCurrentY+mMapSize.height()/2);
     }

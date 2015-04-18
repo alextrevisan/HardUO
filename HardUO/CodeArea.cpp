@@ -227,11 +227,6 @@ void CodeArea::onTextChange()
      QRegExp ex("(\\s|\\(|\\)|\\=|,|\\[|\\]|\\{|\\}|\\.|-)");
      QStringList wordList = cleanData.split(ex);
      wordList.removeAll("");
-     /*foreach(QString word, wordList)
-     {
-         //if(word.size()>1)
-            qDebug()<<word;
-     }*/
      wordList.removeAll(textUnderCursor());
      wordList.append(mWordList);
      wordList.append( AutoComplete::autoCompleteList.toSet().toList());

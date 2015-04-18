@@ -2,8 +2,6 @@
 #include <QStandardItemModel>
 #include "uo.h"
 
-#include <QDebug>
-
 int updateValue(lua_State* L)
 {
     QString key;
@@ -45,7 +43,6 @@ UOTreeView::UOTreeView()
 
     if ( error!=0 )
     {
-        qDebug()<<"error on loader"<<lua_tostring(L, -1);
         lua_pop(L, 1);
         lua_gc(L, LUA_GCCOLLECT, 0); // chama o garbage collector
 
@@ -56,7 +53,6 @@ UOTreeView::UOTreeView()
     error = luaL_dostring(L, configure.toStdString().data());
     if ( error!=0 )
     {
-        qDebug()<<"error on configure:"<<lua_tostring(L, -1);
         lua_pop(L, 1);
         lua_gc(L, LUA_GCCOLLECT, 0); // chama o garbage collector
 
@@ -542,7 +538,6 @@ void UOTreeView::UpdateView()
     int error = luaL_dofile(L, "macros/internal/treeview.lua");
     if(error!=0)
     {
-        qDebug()<<lua_tostring(L, -1);
     }
     /*lua_getglobal(L, "CharPosX");
     mViewMap["CharPosX"]->setText(QString("CharPosX: %0").arg(lua_tostring(L, -1)));

@@ -2,7 +2,6 @@
 #define LUAWIDGET_H
 
 #include <QWidget>
-#include <QDebug>
 
 extern "C" {
     #include "lua.h"
@@ -35,7 +34,6 @@ protected:
     {
         //QString script = "Obj.OnClose('"+this->windowTitle()+"')";
         //luaL_dostring(mL,script.toStdString().data());
-        //qDebug()<<script;
         eventOnClose = true;
     }
     lua_State* mL;
