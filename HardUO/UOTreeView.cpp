@@ -747,8 +747,8 @@ void UOTreeView::onCustomContextMenu(const QPoint &point)
     if (mModelIndexCustomMenu.isValid())
     {
         QMenu contextMenu;
-        contextMenu.addAction("Copiar nome da variavel", this,SLOT(onCopyIndex()));
-        contextMenu.addAction("Copiar valor da variavel", this,SLOT(onCopyValue()));
+        contextMenu.addAction("Copy name", this,SLOT(onCopyIndex()));
+        contextMenu.addAction("Copy value", this,SLOT(onCopyValue()));
         contextMenu.exec(mTreeView->mapToGlobal(point));
     }
 }
