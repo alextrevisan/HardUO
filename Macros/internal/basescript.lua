@@ -275,6 +275,20 @@ local function Tp()
     Execute(hnd)
     return GetInteger(hnd, 1)
 end
+local function getCursorX()
+    SetTop(hnd, 0)
+    PushStrVal(hnd, "Get")
+    PushStrVal(hnd, "CursorX")
+    Execute(hnd)
+    return GetInteger(hnd, 1)
+end
+local function getCursorY()
+    SetTop(hnd, 0)
+    PushStrVal(hnd, "Get")
+    PushStrVal(hnd, "CursorY")
+    Execute(hnd)
+    return GetInteger(hnd, 1)
+end
 local function NextCPosX(x)
     SetTop(hnd, 0)
     PushStrVal(hnd, "Set")
@@ -569,20 +583,6 @@ local function setLTargetZ(z)
     PushInteger(hnd, z)
     Execute(hnd)
 end
-local function getCursorX()
-	SetTop(hnd, 0)
-    PushStrVal(hnd, "Get")
-    PushStrVal(hnd, "CursorX")
-    Execute(hnd)
-    return GetInteger(hnd, 1)
-end
-local function getCursorY()
-	SetTop(hnd, 0)
-    PushStrVal(hnd, "Get")
-    PushStrVal(hnd, "CursorY")
-    Execute(hnd)
-    return GetInteger(hnd, 1)
-end
 local function LLiftedID()
     SetTop(hnd, 0)
     PushStrVal(hnd, "Get")
@@ -827,7 +827,7 @@ local function CursKind()
     Execute(hnd)
     return GetInteger(hnd, 1)
 end
-local function LTargetKind()
+local function getLTargetKind()
     SetTop(hnd, 0)
     PushStrVal(hnd, "Get")
     PushStrVal(hnd, "LTargetKind")
@@ -1060,6 +1060,13 @@ UO.ER = 0
 OpenEUOReadVariables["ER"] = Er
 UO.TP = 0
 OpenEUOReadVariables["TP"] = Tp
+--Mouse
+UO.CursorX = 0
+OpenEUOReadVariables["CursorX"] = getCursorX
+
+UO.CursorY = 0
+OpenEUOReadVariables["CursorY"] = getCursorY
+
 --Container 
 --Container system variables represent information available about the top most (or most reacent) gump that was opened, moved, or clicked in the Ultima Online Client. 
 
@@ -1162,12 +1169,6 @@ UO.LTargetZ = 0
 OpenEUOReadVariables["LTargetZ"] = getLTargetZ
 OpenEUOWriteVariables["LTargetZ"] = setLTargetZ
 
-UO.CursorX = 0
-OpenEUOReadVariables["CursorX"] = getCursorX
-
-UO.CursorY = 0
-OpenEUOReadVariables["CursorY"] = getCursorY
-
 UO.LTargetKind = 0
 OpenEUOReadVariables["LTargetKind"] = getLTargetKind
 OpenEUOWriteVariables["LTargetKind"] = setLTargetKind
@@ -1233,12 +1234,6 @@ OpenEUOFunctions["Drag"] = Drag
 
 UO.DropC = 0
 OpenEUOFunctions["DropC"] = DropC
-
-UO.DropG = 0
-OpenEUOFunctions["DropG"] = DropG
-
-UO.DropC = 0
-OpenEUOFunctions["DropPD"] = DropPD
 
 UO.Property = 0
 OpenEUOFunctions["Property"] = Property
@@ -1414,7 +1409,6 @@ end
 ----------------------------------------
 -- keep a private access to original table
 local _t = UO
-__autocompleteUO__ = UO
 -- create proxy
 UO = {}
 -- create metatable
