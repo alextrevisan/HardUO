@@ -145,11 +145,11 @@ local function Str()
 end
 
 local function Dex()
-    SetTop(hnd, 0)
-    PushStrVal(hnd, "Get")
-    PushStrVal(hnd, "Dex")
-    Execute(hnd)
-    return GetInteger(hnd, 1)
+		SetTop(hnd, 0)
+		PushStrVal(hnd, "Get")
+		PushStrVal(hnd, "Dex")
+		Execute(hnd)
+		return GetInteger(hnd, 1)
 end
 
 local function Int()
@@ -338,7 +338,7 @@ local function ContPosX()
     Execute(hnd)
     return GetInteger(hnd, 1)
 end
-local function ContPosX(x)
+local function setContPosX(x)
     SetTop(hnd, 0)
     PushStrVal(hnd, "Set")
     PushStrVal(hnd, "ContPosX")
@@ -352,7 +352,7 @@ local function ContPosY()
     Execute(hnd)
     return GetInteger(hnd, 1)
 end
-local function ContPosY(y)
+local function setContPosY(y)
     SetTop(hnd, 0)
     PushStrVal(hnd, "Set")
     PushStrVal(hnd, "ContPosY")
@@ -1086,9 +1086,11 @@ OpenEUOReadVariables["ContSizeY"] = ContSizeY
 
 UO.ContPosX = 0
 OpenEUOReadVariables["ContPosX"] = ContPosX
+OpenEUOWriteVariables["ContPosX"] = setContPosX
 
 UO.ContPosY = 0
 OpenEUOReadVariables["ContPosY"] = ContPosY
+OpenEUOWriteVariables["ContPosY"] = setContPosY
 
 UO.ContKind = 0
 OpenEUOReadVariables["ContKind"] = ContKind
