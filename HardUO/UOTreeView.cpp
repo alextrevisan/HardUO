@@ -52,7 +52,7 @@ UOTreeView::UOTreeView()
         return;
     }
 
-    QString configure("hnd = Open() SetCliNr(1)");
+    QString configure("hnd = Open()");
     error = luaL_dostring(L, configure.toStdString().data());
     if ( error!=0 )
     {
@@ -537,7 +537,7 @@ UOTreeView::UOTreeView()
 void UOTreeView::UpdateView()
 {
     QMutexLocker lock(&mMutex);
-    luaL_dostring(L,"SetCliNr(1)");
+    //luaL_dostring(L,"SetCliNr(1)");
     int error = luaL_dofile(L, "macros/internal/treeview.lua");
     if(error!=0)
     {
@@ -739,6 +739,16 @@ void UOTreeView::SetView(QTreeView* view)
     mTreeView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(mTreeView, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onCustomContextMenu(const QPoint &)));
 
+}
+
+void UOTreeView::SetCliNr(int cliNr)
+{
+    QMutexLocker lock(&mMutex);
+    QString number("SetCliNr("+QString::number(cliNr)+")");
+    int error = luaL_dostring(L,number.toStdString().data());
+    if(error!=0)
+    {
+    }
 }
 
 void UOTreeView::onCustomContextMenu(const QPoint &point)

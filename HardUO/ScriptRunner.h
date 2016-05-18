@@ -15,7 +15,8 @@ public:
     void configure();
     void setScript(const QString& script);
     void stop();
-    void swapClient();
+    int swapClient();
+    int getCliNr(){return mCliNr;}
 signals:
     void finished();
     void updateButtonsFinished(int tabIndex);

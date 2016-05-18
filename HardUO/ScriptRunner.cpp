@@ -314,7 +314,7 @@ void ScriptRunner::stop()
     configure();
 }
 
-void ScriptRunner::swapClient()
+int ScriptRunner::swapClient()
 {
     int error = luaL_dofile(L, "macros/internal/swapclient.lua");
 
@@ -326,8 +326,11 @@ void ScriptRunner::swapClient()
         stop();
         emit finished();
         emit updateButtonsFinished(mTabIndex);
-        return;
+        return -1;
     }
+    lua_getglobal(L, "__CurrentCliNr__");
+    mCliNr = lua_tonumber(L, -1);
+    return mCliNr;
 }
 
 void ScriptRunner::run()

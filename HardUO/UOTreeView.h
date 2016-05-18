@@ -160,7 +160,7 @@ public:
     float TasteIdentification;
 
     QMap<QString, QStandardItem*> mViewMap;
-
+    void SetCliNr(int cliNr);
 public slots:
     void UpdateView();
 protected slots:

@@ -90,7 +90,6 @@ void MainWindow::CreateTab(const QString &text,const QString &name)
     /** SCRIPT **/
     //mThreads.push_back(new QThread());
     mScripts.push_back(new ScriptRunner(1,codeID,newCodeArea->document()->toPlainText()));
-
     //QThread* thread = mThreads.at(codeID);
     ScriptRunner* script = mScripts.at(codeID);
     //connect(thread, &QThread::started, script, &ScriptRunner::run);
@@ -104,7 +103,8 @@ void MainWindow::CreateTab(const QString &text,const QString &name)
         tabName = name;
     ui->tabMacros->addTab(newWidget, tabName);
     ui->tabMacros->setCurrentIndex(ui->tabMacros->count()-1);
-
+    int cliNr = mScripts.at(codeID)->getCliNr();
+    UOTreeView::GetInstance().SetCliNr(cliNr);
     codeID++;
 
 }
@@ -164,6 +164,8 @@ void MainWindow::updateButtons(int tabIndex)
     Q_UNUSED(tabIndex);
     const int codeID = ((Block*)ui->tabMacros->currentWidget())->codeID;
     ChangeStatus(codeID,mScripts.at(codeID)->isRunning()?1:2);
+    int cliNr = mScripts.at(codeID)->getCliNr();
+    UOTreeView::GetInstance().SetCliNr(cliNr);
 }
 
 void MainWindow::showMap(int tabIndex)
@@ -242,7 +244,8 @@ void MainWindow::on_actionStop_triggered()
 void MainWindow::on_actionSwap_triggered()
 {
     const int codeID = ((Block*)ui->tabMacros->currentWidget())->codeID;
-    mScripts.at(codeID)->swapClient();
+    int cliNr = mScripts.at(codeID)->swapClient();
+    UOTreeView::GetInstance().SetCliNr(cliNr);
     UOTreeView::GetInstance().UpdateView();
 }
 
