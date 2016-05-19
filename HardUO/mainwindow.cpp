@@ -7,7 +7,7 @@
 #include <QTextStream>
 #include <QTimer>
 #include <QSettings>
-
+#include <QTextDocumentWriter>
 #include "about.h"
 
 #define MAX_RECENT_FILES 5
@@ -34,7 +34,6 @@ MainWindow::MainWindow(QWidget *parent) :
     UOTreeView* treeView = &UOTreeView::GetInstance();
     connect(treeViewTimer,SIGNAL(timeout()),treeView,SLOT(UpdateView()));
     treeViewTimer->start();
-
 
     connect(&Map::getInstance(),SIGNAL(showMap(int)),this, SLOT(showMap(int)));
     connect(&Map::getInstance(),SIGNAL(hideMap(int)),this, SLOT(hideMap(int)));
@@ -74,7 +73,7 @@ void MainWindow::CreateTab(const QString &text,const QString &name)
     }
 
     /** LOG **/
-    QTextEdit* newLogText = new QTextEdit();
+    QTextEdit* newLogText = new QTextEdit(this);
     newLogText->setMaximumSize(16777215,150);
     mLogTexts.push_back(newLogText);
 
@@ -89,7 +88,7 @@ void MainWindow::CreateTab(const QString &text,const QString &name)
 
     /** SCRIPT **/
     //mThreads.push_back(new QThread());
-    mScripts.push_back(new ScriptRunner(1,codeID,newCodeArea->document()->toPlainText()));
+    mScripts.push_back(new ScriptRunner(1,codeID,newCodeArea->document()->toPlainText(), this));
     //QThread* thread = mThreads.at(codeID);
     ScriptRunner* script = mScripts.at(codeID);
     //connect(thread, &QThread::started, script, &ScriptRunner::run);
@@ -282,12 +281,15 @@ void MainWindow::on_actionSave_triggered()
         if(file.isEmpty())
             return;
     }
-    QFile f( file );
-    f.open( QIODevice::WriteOnly );
-    f.write(mCodeAreas.at(codeID)->document()->toPlainText().toStdString().data(),mCodeAreas.at(codeID)->document()->toPlainText().size());
+
+    QTextDocumentWriter writer;
+    //writer.setDevice();
+    writer.setFileName(file);
+    writer.setFormat("plaintext");
+    writer.write(mCodeAreas.at(codeID)->document());
+
     mCodeAreas.at(codeID)->document()->setModified(false);
-    f.close();
-    mFileList[((Block*)ui->tabMacros->currentWidget())->codeID] = file;
+    mFileList[codeID] = file;
     SetCurrentFile(file);
 }
 void MainWindow::UpdateRecentFileActions()
@@ -364,4 +366,32 @@ void MainWindow::on_actionAbout_triggered()
     about *a = new about(this);
     a->setAttribute(Qt::WA_DeleteOnClose);
     a->show();
+}
+
+void MainWindow::closeEvent (QCloseEvent *event)
+{
+    QMessageBox::StandardButton resBtn = QMessageBox::question( this, "HardUO",
+                                                                tr("Are you sure?\n"),
+                                                                QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes,
+                                                                QMessageBox::Yes);
+    if (resBtn != QMessageBox::Yes)
+    {
+        event->ignore();
+    }
+    else
+    {
+        event->accept();
+        for(int i = ui->tabMacros->count()-1; i >= 0;--i)
+        {
+            const int codeID = ((Block*)ui->tabMacros->widget(i))->codeID;
+            ChangeStatus(codeID,2);
+            mScripts.at(codeID)->terminate();
+            mScripts.at(codeID)->stop();
+            //ui->tabMacros->removeTab(i);
+            ScriptRunner *r = mScripts.at(codeID);
+            delete r;
+        }
+
+        QApplication::quit();
+    }
 }

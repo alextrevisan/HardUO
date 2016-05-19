@@ -24,6 +24,8 @@ public:
     ~MainWindow();
     void ChangeStatus(int tabIndex, int status);
     
+protected:
+    void closeEvent(QCloseEvent *event);
 private slots:
     void on_actionNew_triggered();
     void CloseTab(int index);

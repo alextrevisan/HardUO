@@ -11,7 +11,7 @@ class ScriptRunner : public QThread
 {
     Q_OBJECT
 public:
-    ScriptRunner(int cliNr, int tabIndex, const QString &script);
+    ScriptRunner(int cliNr, int tabIndex, const QString &script, QWidget *parent = nullptr);
     void configure();
     void setScript(const QString& script);
     void stop();

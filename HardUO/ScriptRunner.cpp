@@ -189,8 +189,9 @@ int objloop(lua_State* L)
     return 0;
 }
 
-ScriptRunner::ScriptRunner(int cliNr, int tabIndex, const QString& script)
-    :mCliNr(cliNr)
+ScriptRunner::ScriptRunner(int cliNr, int tabIndex, const QString& script,QWidget* parent)
+    :QThread(parent)
+    ,mCliNr(cliNr)
     ,mTabIndex(tabIndex)
     ,mScript(script)
 {
@@ -288,7 +289,7 @@ void ScriptRunner::configure()
         return;
     }
 
-    QString configure("hnd = Open() SetCliNr(1)");
+    QString configure = QString("hnd = Open() SetCliNr(%1)").arg(mCliNr);
     error = luaL_dostring(L, configure.toStdString().data());
     if ( error!=0 )
     {
