@@ -289,7 +289,7 @@ local function getCursorY()
     Execute(hnd)
     return GetInteger(hnd, 1)
 end
-local function NextCPosX(x)
+local function setNextCPosX(x)
     SetTop(hnd, 0)
     PushStrVal(hnd, "Set")
     PushStrVal(hnd, "NextCPosX")
@@ -303,7 +303,7 @@ local function NextCPosX()
     Execute(hnd)
     return GetInteger(hnd, 1)
 end
-local function NextCPosY(y)
+local function setNextCPosY(y)
     SetTop(hnd, 0)
     PushStrVal(hnd, "Set")
     PushStrVal(hnd, "NextCPosY")
@@ -386,34 +386,6 @@ local function ContName()
     PushStrVal(hnd, "ContName")
     Execute(hnd)
     return GetString(hnd, 1)
-end
-local function getNextCPosX()
-    SetTop(hnd, 0)
-    PushStrVal(hnd, "Get")
-    PushStrVal(hnd, "NextCPosX")
-    Execute(hnd)
-    return GetString(hnd, 1)
-end
-local function setNextCPosX(id)
-    SetTop(hnd, 0)
-    PushStrVal(hnd, "Set")
-    PushStrVal(hnd, "NextCPosX")
-	PushInteger(hnd,id)
-    Execute(hnd)
-end
-local function getNextCPosY()
-    SetTop(hnd, 0)
-    PushStrVal(hnd, "Get")
-    PushStrVal(hnd, "NextCPosY")
-    Execute(hnd)
-    return GetString(hnd, 1)
-end
-local function setNextCPosY(id)
-    SetTop(hnd, 0)
-    PushStrVal(hnd, "Set")
-    PushStrVal(hnd, "NextCPosY")
-	PushInteger(hnd,id)
-    Execute(hnd)
 end
 local function CliNr()
     SetTop(hnd, 0)
@@ -880,7 +852,7 @@ local function DropC(contID, x, y)
     PushStrVal(hnd, "Call")
     PushStrVal(hnd, "DropC")
     PushInteger(hnd, contID)
-	if b~=nil and c~=nil then 
+	if x~=nil and y~=nil then 
 		PushInteger(hnd, x)
 		PushInteger(hnd, y)
 	end
@@ -1070,14 +1042,6 @@ OpenEUOReadVariables["CursorY"] = getCursorY
 --Container 
 --Container system variables represent information available about the top most (or most reacent) gump that was opened, moved, or clicked in the Ultima Online Client. 
 
-UO.NextCPosX = 0
-OpenEUOReadVariables["NextCPosX"] = getNextCPosX
-OpenEUOWriteVariables["NextCPosX"] = setNextCPosX
-
-UO.NextCPosY = 0
-OpenEUOReadVariables["NextCPosY"] = getNextCPosY
-OpenEUOWriteVariables["NextCPosY"] = setNextCPosY
-
 UO.ContSizeX = 0
 OpenEUOReadVariables["ContSizeX"] = ContSizeX
 
@@ -1105,11 +1069,11 @@ UO.ContName = 0
 OpenEUOReadVariables["ContName"] = ContName
 
 UO.NextCPosX = 0
-OpenEUOReadVariables["NextCPosX"] = getNextCPosX
+OpenEUOReadVariables["NextCPosX"] = NextCPosX
 OpenEUOWriteVariables["NextCPosX"] = setNextCPosX
 
 UO.NextCPosY = 0
-OpenEUOReadVariables["NextCPosY"] = getNextCPosY
+OpenEUOReadVariables["NextCPosY"] = NextCPosY
 OpenEUOWriteVariables["NextCPosY"] = setNextCPosY
 
 UO.CliCnt = 0
