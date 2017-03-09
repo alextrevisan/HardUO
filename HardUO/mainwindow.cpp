@@ -254,7 +254,7 @@ void MainWindow::on_actionOpen_triggered()
     if (fileName.isEmpty())
         return;
     QFile file(fileName);
-    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+    if (!file.open(QFile::ReadOnly)) {
         QMessageBox::warning(this, tr("Recent Files"),
                              tr("Cannot read file %1:\n%2.")
                              .arg(fileName)

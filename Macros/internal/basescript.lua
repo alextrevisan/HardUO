@@ -1,4 +1,5 @@
 --Configurations
+dofile("Macros/internal/keymap.lua")
 local __lag_offset__ = 0 --used for slow connections on functions (WaitTarget, ...)
 function setLagOffset(value) __lag_offset__ = value end
 
@@ -7,8 +8,16 @@ UO = {}
 local OpenEUOReadVariables={}
 local OpenEUOWriteVariables={}
 local OpenEUOFunctions = {}
-
-function SetCliNr(cliNr)
+function getkey(key)
+    if type(key) == "string" then
+        return __getkey__(KEYMAP[string.upper(key)])
+    end    
+    if type(key) == "number" then
+        return __getkey__(key)
+    end
+    return false
+end
+function SetCliNr(cliNr) 
     SetTop(hnd, 0)
     PushStrVal(hnd, "Set")
     PushStrVal(hnd, "CliNr")

@@ -1,13 +1,13 @@
---===========================================================================--
+﻿--===========================================================================--
 -- Macro: Mining Minoc.
 -- Programa de Script: HardUO - http://www.hogpog.com.br/harduo
 -- Escrito por Alex (Axul)
 -- Versao: 1.2
 -- Shard: Dimension - http://www.dmsshard.com.br
--- DescriÃƒÂ§ao: Mining Minoc (Minera e guarda)
+-- Descrição: Mining Minoc (Minera e guarda)
 --===========================================================================--
 
---ConfiguraÃƒÂ§ao de peso mÃƒÂ¡ximo ate ir no banco guardar
+--Configuração de peso máximo ate ir no banco guardar
 PesoMaximo = UO.MaxWeight - 50
 
 mMiningDirections = { {-1,-1},{0,-1},{1,-1},{-1,0},{0,0},{1,0},{-1,1},{0,1},{1,1}}
@@ -173,4 +173,4 @@ wait(400)
 
 NewSpot()
 TargetMining()
-Star
+StartMining()

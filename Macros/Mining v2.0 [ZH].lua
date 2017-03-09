@@ -1,13 +1,13 @@
---===========================================================================--
+Ôªø--===========================================================================--
 -- Macro: Mining Minoc.
 -- Programa de Script: HardUO - http://www.hogpog.com.br/harduo
 -- Escrito por Alex (Blue)
 -- Versao: 1.2
 -- Shard: Zulu Hotel - http://www.zuluhotel.com.br
--- DescriÁao: Mining Minoc (Minera, vai ao banco, guarda e volta pra mina)
+-- Descri√ßao: Mining Minoc (Minera, vai ao banco, guarda e volta pra mina)
 --===========================================================================--
 
---ConfiguraÁao de peso m·ximo ate ir no banco guardar
+--Configura√ßao de peso m√°ximo ate ir no banco guardar
 PesoMaximo = UO.MaxWeight - 50
 
 mMiningDirections = { {-1,-1},{0,-1},{1,-1},{-1,0},{0,0},{1,0},{-1,1},{0,1},{1,1} }

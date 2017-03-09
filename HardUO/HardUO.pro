@@ -45,7 +45,7 @@ RESOURCES += \
 
 INCLUDEPATH += ../Dependencies/Lua_5_2/include
 
-LIBS += ../Dependencies/Lua_5_2/lib/liblua.a
+LIBS += -L$$PWD/../Dependencies/Lua_5_2/lib/ -llua
 
 OTHER_FILES += \
     icone.rc
@@ -53,3 +53,5 @@ OTHER_FILES += \
 RC_FILE = icone.rc
 
 CONFIG+=c++11
+
+

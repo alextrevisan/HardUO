@@ -37,6 +37,8 @@ protected:
         eventOnClose = true;
     }
     lua_State* mL;
+signals:
+
 };
 
 #endif // LUAWIDGET_H

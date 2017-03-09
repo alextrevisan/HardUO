@@ -44,7 +44,8 @@ int getkey(lua_State* L)
         lua_pushboolean(L, GetAsyncKeyState(value));
         return 1;
     }
-    return 0;
+    lua_pushboolean(L, false);
+    return 1;
 }
 
 int showMap(lua_State* L)
@@ -128,6 +129,8 @@ int printFromLua(lua_State* L)
 
     if(lua_isnoneornil(L,2))
         text = "nil";
+    else if(lua_isboolean(L,2))
+        text = lua_toboolean(L,2)?"true":"false";
     else
         text = lua_tostring(L,2);
     Log::getInstance()->append(value, text.data());
@@ -225,8 +228,8 @@ void ScriptRunner::configure()
     lua_register(L, "fill_autocomplete", fill_autocomplete);
     lua_register(L, "fill_autocompleteUO", fill_autocompleteUO);
 
-    QString script = QString("function getkey(key) return __getkey__(key) end");
-    luaL_dostring(L,script.toStdString().data());
+    QString script;/* = QString("function getkey(key) return __getkey__(key) end");
+    luaL_dostring(L,script.toStdString().data());*/
 
     script = QString("function showMap() __showMap__(%1) end").arg(mTabIndex);
     luaL_dostring(L,script.toStdString().data());
