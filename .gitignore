@@ -17,3 +17,4 @@
 *.Release
 ui_*.h
 Makefile
+Build/

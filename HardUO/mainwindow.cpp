@@ -9,6 +9,7 @@
 #include <QSettings>
 #include <QTextDocumentWriter>
 #include "about.h"
+#include "findreplace.h"
 
 #define MAX_RECENT_FILES 5
 
@@ -28,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     CreateTab();
     connect(ui->tabMacros,SIGNAL(tabCloseRequested(int)),this, SLOT(CloseTab(int)));
     connect(ui->tabMacros,SIGNAL(currentChanged(int)),this, SLOT(updateButtons(int)));
+    connect(ui->tabMacros,SIGNAL(currentChanged(int)),this, SLOT(updateFindWidget(int)));
     connect(Log::getInstance(),SIGNAL(textChanged(int,QString)),this,SLOT(printFromScript(int,QString)));
     QTimer* treeViewTimer = new QTimer(this);
     treeViewTimer->setInterval(500);
@@ -53,6 +55,9 @@ MainWindow::MainWindow(QWidget *parent) :
     }
     ChangeStatus(0,2);
     UpdateRecentFileActions();
+    mFindReplaceWindow = new FindReplace(this);
+    connect(mFindReplaceWindow, &FindReplace::Find,mCodeAreas.at(0), &CodeArea::Find);
+    connect(mFindReplaceWindow, &FindReplace::ReplaceFind,mCodeAreas.at(0), &CodeArea::ReplaceFind);
 }
 
 MainWindow::~MainWindow()
@@ -63,7 +68,7 @@ MainWindow::~MainWindow()
 void MainWindow::CreateTab(const QString &text,const QString &name)
 {
     static int codeID = 0;
-
+    mCurrentTabID = 0;
     /** CODE AREA **/
     CodeArea* newCodeArea = new CodeArea(this);
     mCodeAreas.push_back(newCodeArea);
@@ -165,6 +170,17 @@ void MainWindow::updateButtons(int tabIndex)
     ChangeStatus(codeID,mScripts.at(codeID)->isRunning()?1:2);
     int cliNr = mScripts.at(codeID)->getCliNr();
     UOTreeView::GetInstance().SetCliNr(cliNr);
+}
+
+void MainWindow::updateFindWidget(int tabIndex)
+{
+    Q_UNUSED(tabIndex);
+    const int codeID = ((Block*)ui->tabMacros->currentWidget())->codeID;
+    disconnect(mFindReplaceWindow, &FindReplace::Find,mCodeAreas.at(mCurrentTabID), &CodeArea::Find);
+    disconnect(mFindReplaceWindow, &FindReplace::ReplaceFind,mCodeAreas.at(mCurrentTabID), &CodeArea::ReplaceFind);
+
+    connect(mFindReplaceWindow, &FindReplace::Find,mCodeAreas.at(codeID), &CodeArea::Find);
+    connect(mFindReplaceWindow, &FindReplace::ReplaceFind,mCodeAreas.at(codeID), &CodeArea::ReplaceFind);
 }
 
 void MainWindow::showMap(int tabIndex)
@@ -394,4 +410,10 @@ void MainWindow::closeEvent (QCloseEvent *event)
 
         QApplication::quit();
     }
+}
+
+void MainWindow::on_actionFind_Replace_triggered()
+{
+    mFindReplaceWindow->show();
+    mFindReplaceWindow->activateWindow();
 }

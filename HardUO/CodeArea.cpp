@@ -52,6 +52,58 @@ int CodeArea::lineNumberAreaWidth()
 
     return space;
 }
+
+void CodeArea::Find(const QString &findText)
+{
+
+    QTextCursor highlightCursor(this->document());
+    QTextCursor cursor(this->document());
+
+    cursor.beginEditBlock();
+
+    QTextCharFormat plainFormat(highlightCursor.charFormat());
+    QTextCharFormat colorFormat = plainFormat;
+    colorFormat.setForeground(Qt::white);
+    colorFormat.setBackground(Qt::blue);
+
+    while (!highlightCursor.isNull() && !highlightCursor.atEnd())
+    {
+        highlightCursor = this->document()->find(findText, highlightCursor);
+
+        if (!highlightCursor.isNull())
+        {
+
+            highlightCursor.mergeCharFormat(colorFormat);
+        }
+    }
+
+    cursor.endEditBlock();
+}
+void CodeArea::ReplaceFind(const QString& findText, const QString& replaceText)
+{
+    bool found = false;
+    QTextCursor highlightCursor(this->document());
+    QTextCursor cursor(this->document());
+
+    cursor.beginEditBlock();
+
+    QTextCharFormat plainFormat(highlightCursor.charFormat());
+    QTextCharFormat colorFormat = plainFormat;
+    colorFormat.setForeground(Qt::red);
+
+    while (!highlightCursor.isNull() && !highlightCursor.atEnd()) {
+     highlightCursor = this->document()->find(findText, highlightCursor, QTextDocument::FindWholeWords);
+
+     if (!highlightCursor.isNull()) {
+         found = true;
+         highlightCursor.movePosition(QTextCursor::WordRight,
+                                QTextCursor::KeepAnchor);
+         highlightCursor.mergeCharFormat(colorFormat);
+     }
+    }
+
+    cursor.endEditBlock();
+}
 void CodeArea::updateLineNumberAreaWidth(int /* newBlockCount */)
 {
     setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);

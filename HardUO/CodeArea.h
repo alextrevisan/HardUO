@@ -29,6 +29,9 @@ private slots:
     void updateLineNumberArea(const QRect &, int);
     void insertCompletion(const QString &completion);
     void onTextChange();
+public slots:
+    void Find(const QString& findText);
+    void ReplaceFind(const QString& findText, const QString& replaceText);
 };
 
 

@@ -8,6 +8,7 @@
 #include <QThread>
 #include "scriptrunner.h"
 #include "codearea.h"
+#include "findreplace.h"
 
 #define MAX_RECENT_FILES 5
 
@@ -33,6 +34,7 @@ private slots:
     void MacroFinished(int tabIndex);
     void printFromScript(int tabIndex,const QString& text);
     void updateButtons(int tabIndex);
+    void updateFindWidget(int tabIndex);
     /** map **/
     void showMap(int tabIndex);
     void hideMap(int tabIndex);
@@ -58,6 +60,8 @@ private slots:
 
     void on_actionAbout_triggered();
 
+    void on_actionFind_Replace_triggered();
+
 private:
     void CreateTab(const QString& text = "", const QString &name = "");
     void UpdateRecentFileActions();
@@ -71,7 +75,8 @@ private:
     QList<ScriptRunner*> mScripts;
     QMap<int, MapWindow*> mMapList;
     QMap<int, QString> mFileList;
-
+    int mCurrentTabID;
+    FindReplace* mFindReplaceWindow;
 };
 class Block: public QWidget
 {

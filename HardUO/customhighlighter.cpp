@@ -9,7 +9,7 @@ MyCustomHighlighter::MyCustomHighlighter(QTextDocument *parent) :
     keywordFormat.setFontWeight(QFont::Bold);
     QStringList keywordPatterns;
     keywordPatterns << "\\bfor\\b"<<"\\bthen\\b"<<"\\bif\\b"<<"\\belse\\b"<<"\\bend\\b"<<"\\bdo\\b"
-                    <<"\\bwhile\\b"<<"\\btrue\\b"<<"\\bfunction\\b"<<"\\blocal\\b"<<"\\band\\b";
+                    <<"\\bwhile\\b"<<"\\btrue\\b"<<"\\bfalse\\b"<<"\\bfunction\\b"<<"\\blocal\\b"<<"\\band\\b";
     foreach (const QString &pattern, keywordPatterns)
     {
         rule.pattern = QRegExp(pattern);

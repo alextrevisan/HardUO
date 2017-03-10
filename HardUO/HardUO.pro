@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     UOTreeView.cpp \
     mapwindow.cpp \
     about.cpp \
-    luawidget.cpp
+    luawidget.cpp \
+    findreplace.cpp
 
 HEADERS  += mainwindow.h \
     codearea.h \
@@ -32,11 +33,13 @@ HEADERS  += mainwindow.h \
     UOTreeView.h \
     mapwindow.h \
     about.h \
-    luawidget.h
+    luawidget.h \
+    findreplace.h
 
 FORMS    += mainwindow.ui \
     mapwindow.ui \
-    about.ui
+    about.ui \
+    findreplace.ui
 
 
 RESOURCES += \
