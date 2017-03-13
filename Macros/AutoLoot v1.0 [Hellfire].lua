@@ -3,8 +3,9 @@ local gold = 3821
 local bolt = 7163
 local arrow = 3903
 local potion = 3849
-local userLoot = {gold, bolt, arrow, potion, 6884, 8031,4030}
-local waitdragdrop = 300
+local diamond = 3878
+local userLoot = {gold, bolt, arrow, potion,diamond, 6884, 8031,4030}
+local waitdragdrop = 400
 Ignore = {}
 local function IgnoreItems(itemid)
     Ignore[#Ignore+1] = itemid
@@ -40,7 +41,7 @@ function LookForCorpse()
                UO.NextCPosX= 656
                UO.NextCPosY= 388
                UO.Macro(17,0)
-               wait(waitdragdrop+500)
+               wait(waitdragdrop+600)
                lootFrom(bagloot[i].ID)
                UO.Click(730, 440 ,false,true,true,false)
            end

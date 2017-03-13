@@ -761,6 +761,17 @@ local function Move(x, y, tileError, timeOut)
     end
     Execute(hnd)
 end
+local function Pathfind(x, y, z)
+    SetTop(hnd, 0)
+    PushStrVal(hnd, "Call")
+    PushStrVal(hnd, "Pathfind")
+    PushInteger(hnd, x)
+    PushInteger(hnd, y)
+	if z~=nil then
+		PushInteger(hnd, z)
+	end
+    Execute(hnd)
+end
 local function getLTargetID()
     SetTop(hnd, 0)
     PushStrVal(hnd, "Get")
@@ -947,7 +958,7 @@ end
 
 local function GetJournal(index)
     SetTop(hnd, 0)
-    PushStrRef(hnd, "Call")
+    PushStrVal(hnd, "Call")
     PushStrVal(hnd, "GetJournal")
     PushInteger(hnd, index)
     Execute(hnd)
@@ -956,6 +967,7 @@ local function GetJournal(index)
     return line, color
 end
 local function ScanJournal(oldRef)
+	oldRef = oldRef or 0
     SetTop(hnd, 0)
     PushStrVal(hnd, "Call")
     PushStrVal(hnd, "ScanJournal")
@@ -1183,6 +1195,9 @@ OpenEUOFunctions["GetItem"] = GetItem
 
 UO.Move = Move
 OpenEUOFunctions["Move"] = Move
+
+UO.Pathfind =Pathfind
+OpenEUOFunctions["Pathfind"] =Pathfind
 
 --Extended 
 --Extended system variables show information about various systems in the Ultima Online client that can be gained by using certain commands. 

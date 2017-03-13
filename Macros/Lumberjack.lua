@@ -1,11 +1,10 @@
---'createMode = true' irÃ¡ gravar as arvores que vai cortar
+--'createMode = true' irá gravar as arvores que vai cortar
 -- use createMode true somente na primeira vez, depois ele
--- irÃ¡ so carregar o arquivo q gerou.
---'createMode = false' irÃ¡ carregar arvores ja gravadas
+-- irá so carregar o arquivo q gerou.
+--'createMode = false' irá carregar arvores ja gravadas
 local createMode = false
 local maxTry = 5
 local mTreeFile = "arvores.lua"
-
 mPositionX = {}
 mPositionY = {}
 mMesssages ={"not enough","too far","Nao ha", "no ore left", "uma linha", "muito distante", "so close", 
@@ -17,15 +16,15 @@ mLogTypes = {7133}
 UO.SysMessage("Va ate o banco e pressione ENTER")
 print("Va ate o banco e pressione ENTER")
 
-while getkey("ENTER") ~=true do
+while getkey(KEY_ENTER) ~=true do
     wait(10)
 end
 local mBankX = UO.CharPosX
 local mBankY = UO.CharPosY
 
 UO.Msg("bank\n")
-UO.SysMessage("Clique na bag que irÃ¡ guardar os Logs")
-print("Clique na bag que irÃ¡ guardar os Logs")
+UO.SysMessage("Clique na bag que irá guardar os Logs")
+print("Clique na bag que irá guardar os Logs")
 
 UO.TargCurs = true
 while UO.TargCurs do
@@ -53,8 +52,8 @@ if createMode then
 
     UO.SysMessage("Pressione ENTER para marcar a arvore ou F4 para finalizar")
     print("Pressione ENTER para marcar a arvore ou F4 para finalizar")
-    while getkey("F4") ~= true do
-        if getkey("ENTER") == true then
+    while getkey(KEY_F4) ~= true do
+        if getkey(KEY_ENTER) == true then
             UO.LObjectID = mAxe
             EventMacro(17,0)
             wait(100)
@@ -160,6 +159,7 @@ function depositLogs()
 end
 
 dofile("arvores.lua")
+local nNewRef = 0
 function getMsg()
     nNewRef, nCnt= UO.ScanJournal(nNewRef) 
     local sLine = UO.GetJournal(0)
@@ -180,7 +180,8 @@ function findMsg(mstr, find)
     end
 end
 local index = 1
-
+local count = 0
+journal = getMsg()
 while true do
     UO.Move(mPositionX[index],mPositionY[index],0,6000)
     UO.LObjectID = mAxe
@@ -196,15 +197,18 @@ while true do
     UO.Macro(22,0)
     wait(250)
     journal = getMsg()
-
-    if findMsg(journal,mMesssages)==true then
+    local waitvalue = 8500
+    if findMsg(journal,mMesssages)==true or count > maxTry then
         index = index + 1
         if index > #mPositionX then
             index = 1
         end
+        count = 0
+        waitvalue = 500
     end
+    count = count+1
 
-    wait(8500)
+    wait(waitvalue)
     if UO.Weight > UO.MaxWeight - 50 then
         depositLogs()
         UO.Move(mPositionX[index],mPositionY[iindex],0,12000)
