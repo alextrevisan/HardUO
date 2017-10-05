@@ -17,6 +17,10 @@ function getkey(key)
     end
     return false
 end
+local function Key(key)
+	__sendkey__(UO.CliTitle, key)
+end
+
 function SetCliNr(cliNr) 
     SetTop(hnd, 0)
     PushStrVal(hnd, "Set")
@@ -1185,6 +1189,8 @@ UO.LSpell = 0
 OpenEUOReadVariables["LSpell"] = getLSpell
 OpenEUOWriteVariables["LSpell"] = setLSpell
 
+UO.Key = Key
+OpenEUOFunctions["Key"] = Key
 --FindItem 
 --The euox system variables are set when the FindItem command is used, however in oeuo the command UO.GetItem populates most of these fields. 
 UO.ScanItems = ScanItems

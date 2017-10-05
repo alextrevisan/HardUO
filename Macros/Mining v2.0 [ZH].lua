@@ -1,14 +1,19 @@
-﻿--===========================================================================--
+--===========================================================================--
 -- Macro: Mining Minoc.
 -- Programa de Script: HardUO - http://www.hogpog.com.br/harduo
--- Escrito por Alex (Blue)
--- Versao: 1.2
--- Shard: Zulu Hotel - http://www.zuluhotel.com.br
--- Descriçao: Mining Minoc (Minera, vai ao banco, guarda e volta pra mina)
+-- Escrito por Alex (Masmorra)
+-- Versao: 1.3
+-- Descricao: Mining Minoc (Minera, vai ao banco, guarda e volta pra mina)
 --===========================================================================--
-
---Configuraçao de peso máximo ate ir no banco guardar
-PesoMaximo = UO.MaxWeight - 50
+dofile("Macros/Relogin 1.0 [TFG].lua")
+-- Defina sua senha para relogin
+mSenha = "sua_senha_para_relogin"
+--Config de peso maximo ate ir no banco guardar
+PesoMaximo = 50
+--Config da bag do banco, se for 0, inicia do banco
+mBankBag = 1074888939
+--Config de tempo de espera
+TempoEsperaComMinerio = 8000
 
 mMiningDirections = { {-1,-1},{0,-1},{1,-1},{-1,0},{0,0},{1,0},{-1,1},{0,1},{1,1} }
 mCurrentDirections = 1
@@ -16,31 +21,32 @@ mCurrentDirections = 1
 --mOreTypes = {6585,6584,6586,6583}--dwj_ewj_gwj_tvj
 mOreTypes = typeConverter("DWJ_EWJ_GWJ_TVJ")
 mJewelTypes={3864, 3857, 3859, 3878, 3855, 3861, 3862} --pe,tu,bd,fr,ba,ec,ds
-mMesssages ={"too far","Nao ha nada", "no ore left", "uma linha", "muito distante", "Tente minerar em", "perto", "so close", 
+mMesssages ={"too far","Nao ha nada","nothing here", "elsewhere", "no ore left", "uma linha", "muito distante", "Tente minerar em", "perto", "so close", 
              "can't see", "You can't" , "completa"}
+             
 function GoToBank()
-    UO.Move(2560,494,0,15000)
+    UO.Move(2558,494,0,15000)
     UO.Move(2558,501,0,15000)
     UO.Move(2540,502,0,15000)
     UO.Move(2526,502,0,15000)
     UO.Move(2526,513,0,15000)
     UO.Move(2510,513,0,15000)
-    UO.Move(2510,542,0,15000)
+    UO.Move(2509,542,0,15000)
 end
 
 function GoToMine()
-    UO.Move(2510,542,0,15000)
+    UO.Move(2509,542,0,15000)
     UO.Move(2510,513,0,15000)
     UO.Move(2526,513,0,15000)
     UO.Move(2526,502,0,15000)
     UO.Move(2540,502,0,15000)
     UO.Move(2558,501,0,15000)
-    UO.Move(2560,494,0,15000)
+    UO.Move(2558,494,0,15000)
 end
 
 function GetPicaxeFromBank()
     GoToBank()
-    Speak("bank")
+    Speak("banker bank")
     wait(500)
     for i=1,5 do
     pickaxe = ScanItems(true,{Type={3717,3718}})
@@ -59,7 +65,7 @@ function GetPicaxeFromBank()
 end
 
 function DepositOres()
-  Speak("bank")
+  Speak("banker bank")
   wait(500)
   ores = ScanItems(true, {Type=mOreTypes})
   if #ores>0 then
@@ -128,6 +134,7 @@ end
 
 function StartMining()
     while true do
+        Relogin(mSenha);
         pickaxe = ScanItems(true,{Type={3717,3718}})
         if #pickaxe <= 0 then
             GetPicaxeFromBank()
@@ -148,15 +155,13 @@ function StartMining()
         
         mTime = 0
         --[enquanto o tempo for menor que 8k e nao tiver mensagem de erro da lista
-        while mContinue and mTime < 8000 do
-            if(UO.Hits < UO.MaxHits) then
-                Speak(".guards")
-            end
+        while mTime < TempoEsperaComMinerio do
             journal = getMsg()
             if(findMsg(journal,mMesssages)) then
                 TargetMining()
-                mContinue = false
-                break
+                --mContinue = false
+                mTime = TempoEsperaComMinerio
+                --break
             end
             mTime = mTime + 100
             wait(100)
@@ -164,13 +169,13 @@ function StartMining()
     end
 end
 
-
+if mBankBag == 0 then
 UO.ScanJournal(1)
 UO.SysMessage("Va ate o banco e aperte a tecla Enter")
-while(getkey(KEY_ENTER) ~= true) do
+while(getkey("ENTER") ~= true) do
     wait(10)
 end
-Speak("bank")
+Speak("banker bank")
 UO.SysMessage("Selecione a bag de minerios")
 UO.TargCurs = true
 while UO.TargCurs == true do
@@ -190,6 +195,7 @@ UO.DropC(UO.BackpackID)
 wait(400)
 
 GoToMine()
+end
 NewSpot()
 TargetMining()
 StartMining()

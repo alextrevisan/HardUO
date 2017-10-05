@@ -69,6 +69,13 @@ updateValue("LLiftedKind", UO.LLiftedKind)
 updateValue("LLiftedType", UO.LLiftedType)
 updateValue("LSkill", UO.LSkill)
 updateValue("LSpell", UO.LSpell)
+updateValue("CursorX", UO.CursorX)
+updateValue("CursorY", UO.CursorY)
+updateValue("LHandID", UO.LHandID)
+updateValue("RHandID", UO.RHandID)
+updateValue("CursKind", UO.CursKind)
+updateValue("TargCurs", UO.TargCurs)
+
 --Miscellaneous Skills
 --[[
 temp, Alchemy = UO.GetSkill("Alch");

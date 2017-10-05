@@ -48,6 +48,20 @@ int getkey(lua_State* L)
     return 1;
 }
 
+int sendkey(lua_State* L)
+{
+    if(lua_isstring(L,1) && lua_isnumber(L,2))
+    {
+        const char* window = lua_tostring(L,1);
+        WPARAM key = lua_tonumber(L,2);
+
+        // Simulate a key press
+        HWND GameWindow = FindWindowA(0, window);
+        PostMessage(GameWindow, WM_CHAR, key, 0);
+    }
+    return 0;
+}
+
 int showMap(lua_State* L)
 {
     int value = 0;
@@ -224,6 +238,7 @@ void ScriptRunner::configure()
     lua_register(L, "__show__", show);
     lua_register(L, "__objloop__", objloop);
     lua_register(L, "__caption__", caption);
+    lua_register(L, "__sendkey__", sendkey);
 
     lua_register(L, "fill_autocomplete", fill_autocomplete);
     lua_register(L, "fill_autocompleteUO", fill_autocompleteUO);

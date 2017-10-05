@@ -366,7 +366,7 @@ UOTreeView::UOTreeView()
 
 
     /** Skills **/
-    item = new QStandardItem( QString("Skills") );
+    /*item = new QStandardItem( QString("Skills") );
     item->setEditable(false);
 
         mViewMap["Alchemy"] = new QStandardItem( QString("Alchemy: %0").arg(0) );
@@ -530,9 +530,37 @@ UOTreeView::UOTreeView()
         item->appendRow( mViewMap["TasteIdentification"] );
 
 
-    mModel->setItem(5, 0, item);
+    mModel->setItem(5, 0, item);*/
 
-    //mModel->setItem(1, 0, item);
+    /** Client Info **/
+    item = new QStandardItem( QString("Miscellaneous") );
+    item->setEditable(false);
+
+    mViewMap["CursorX"] = new QStandardItem( QString("CursorX: %0").arg(0) );
+    mViewMap["CursorX"]->setEditable( false );
+    item->appendRow( mViewMap["CursorX"] );
+
+    mViewMap["CursorY"] = new QStandardItem( QString("CursorY: %0").arg(0) );
+    mViewMap["CursorY"]->setEditable( false );
+    item->appendRow( mViewMap["CursorY"] );
+
+    mViewMap["LHandID"] = new QStandardItem( QString("LHandID: %0").arg(0) );
+    mViewMap["LHandID"]->setEditable( false );
+    item->appendRow( mViewMap["LHandID"] );
+
+    mViewMap["RHandID"] = new QStandardItem( QString("RHandID: %0").arg(0) );
+    mViewMap["RHandID"]->setEditable( false );
+    item->appendRow( mViewMap["RHandID"] );
+
+    mViewMap["CursKind"] = new QStandardItem( QString("CursKind: %0").arg(0) );
+    mViewMap["CursKind"]->setEditable( false );
+    item->appendRow( mViewMap["CursKind"] );
+
+    mViewMap["TargCurs"] = new QStandardItem( QString("TargCurs: %0").arg(0) );
+    mViewMap["TargCurs"]->setEditable( false );
+    item->appendRow( mViewMap["TargCurs"] );
+
+    mModel->setItem(5, 0, item);
 }
 void UOTreeView::UpdateView()
 {
