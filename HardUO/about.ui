@@ -112,7 +112,7 @@
    <item>
     <widget class="QLabel" name="label_4">
      <property name="text">
-      <string>HardUO Version: 1.06.1</string>
+      <string>HardUO Version: 1.07.0</string>
      </property>
     </widget>
    </item>
@@ -126,7 +126,7 @@
    <item>
     <widget class="QLabel" name="label_6">
      <property name="text">
-      <string>uo.dll Version: 7.0.57.1</string>
+      <string>uo.dll Version: 7.0.59.5</string>
      </property>
     </widget>
    </item>
