@@ -2,16 +2,16 @@
 -- Macro: Mining Minoc.
 -- Programa de Script: HardUO - http://www.hogpog.com.br/harduo
 -- Escrito por Alex (Masmorra)
--- Versao: 1.3
+-- Versao: 1.3.1
 -- Descricao: Mining Minoc (Minera, vai ao banco, guarda e volta pra mina)
 --===========================================================================--
 dofile("Macros/Relogin 1.0 [TFG].lua")
 -- Defina sua senha para relogin
-mSenha = "sua_senha_para_relogin"
---Config de peso maximo ate ir no banco guardar
+mSenha = "sua_senha_aqui"
+--Configur de peso maximo ate ir no banco guardar
 PesoMaximo = 50
 --Config da bag do banco, se for 0, inicia do banco
-mBankBag = 1074888939
+mBankBag = 0--1074888939
 --Config de tempo de espera
 TempoEsperaComMinerio = 8000
 
@@ -21,7 +21,7 @@ mCurrentDirections = 1
 --mOreTypes = {6585,6584,6586,6583}--dwj_ewj_gwj_tvj
 mOreTypes = typeConverter("DWJ_EWJ_GWJ_TVJ")
 mJewelTypes={3864, 3857, 3859, 3878, 3855, 3861, 3862} --pe,tu,bd,fr,ba,ec,ds
-mMesssages ={"too far","Nao ha nada","nothing here", "elsewhere", "no ore left", "uma linha", "muito distante", "Tente minerar em", "perto", "so close", 
+mMesssages ={"line of sight","too far","Nao ha nada","nothing here", "elsewhere", "no ore left", "uma linha", "muito distante", "Tente minerar em", "perto", "so close", 
              "can't see", "You can't" , "completa"}
              
 function GoToBank()
@@ -42,6 +42,7 @@ function GoToMine()
     UO.Move(2540,502,0,15000)
     UO.Move(2558,501,0,15000)
     UO.Move(2558,494,0,15000)
+    UO.Move(2571,430,0,15000)
 end
 
 function GetPicaxeFromBank()
@@ -52,7 +53,7 @@ function GetPicaxeFromBank()
     pickaxe = ScanItems(true,{Type={3717,3718}})
         if #pickaxe <=0 then
             UO.SysMessage("Sem pickaxe manolo!!")
-            print("Sem pickaxe manolo!! == parando macro == linha 48 ==")
+            print("Sem pickaxe manolo!!")
         end
         wait(250)
     end
@@ -111,16 +112,20 @@ function findMsg(mstr, find)
 end
 function NewSpot()
     --[lateral da mina
-    x = math.random(2568,2578)
+    x = math.random(2571,2598)
     --[frente e fundo (nao ta muito pra frente pra evitar PK)
-    y = math.random(474,485)      
-    UO.Move(x,y,1,5000)
+    y = math.random(430,442)      
+    UO.Move(x,y,2,8000)
     TargetMining()         
 end
 
-function TargetMining()
+function TargetMining(changeDirection)
+  local addDir = 0
+  if changeDirection then
+      addDir = 1
+  end
   tmp = mMiningDirections[mCurrentDirections]
-  mCurrentDirections = mCurrentDirections+1
+  mCurrentDirections = mCurrentDirections+addDir
   --[se ele ja procurou tudo em volta do char, manda andar
   if mCurrentDirections > 10 then
      mCurrentDirections = 1
@@ -154,11 +159,12 @@ function StartMining()
         mContinue = true
         
         mTime = 0
+        TargetMining(false)
         --[enquanto o tempo for menor que 8k e nao tiver mensagem de erro da lista
         while mTime < TempoEsperaComMinerio do
             journal = getMsg()
             if(findMsg(journal,mMesssages)) then
-                TargetMining()
+                TargetMining(true)
                 --mContinue = false
                 mTime = TempoEsperaComMinerio
                 --break
@@ -193,7 +199,7 @@ UO.Drag(pickaxe[1].ID)
 wait(400)
 UO.DropC(UO.BackpackID)
 wait(400)
-
+DepositOres()
 GoToMine()
 end
 NewSpot()
