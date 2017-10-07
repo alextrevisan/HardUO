@@ -2,7 +2,7 @@
 -- Macro: Mining Minoc.
 -- Programa de Script: HardUO - http://www.hogpog.com.br/harduo
 -- Escrito por Alex (Masmorra)
--- Versao: 1.3.1
+-- Versao: 1.3
 -- Descricao: Mining Minoc (Minera, vai ao banco, guarda e volta pra mina)
 --===========================================================================--
 dofile("Macros/Relogin 1.0 [TFG].lua")
@@ -120,14 +120,13 @@ function NewSpot()
 end
 
 function TargetMining(changeDirection)
-  local addDir = 0
+  
+  local tmp = mMiningDirections[mCurrentDirections]
   if changeDirection then
-      addDir = 1
+      mCurrentDirections = mCurrentDirections+1
   end
-  tmp = mMiningDirections[mCurrentDirections]
-  mCurrentDirections = mCurrentDirections+addDir
   --[se ele ja procurou tudo em volta do char, manda andar
-  if mCurrentDirections > 10 then
+  if mCurrentDirections > 9 then
      mCurrentDirections = 1
      NewSpot()
   end     
