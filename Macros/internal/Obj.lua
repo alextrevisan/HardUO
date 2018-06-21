@@ -4,12 +4,14 @@ ObjList = {}
 ObjProperties = {}
 function Obj.OnClose(id)
     ObjList[id].OnClose()
+    print("fechei id="..id)
 end
 function Obj.create(name)
     local id = __create__(name)
+    print(id)
     local Form = {}
     function Form.Show()
-        __show__(id)
+        __show__(Form.id)
     end
     function Form.OnClose()
     end
@@ -22,12 +24,13 @@ function Obj.create(name)
     __newindex = function (t,k,v)
         _G[k] = v
         if k=="Caption" then
-            __caption__(id,v)
+            __caption__(Form.id,v)
         end
     end,
     }
     setmetatable(Form, Form.mt)
     ObjList[id] = Form
+    ObjList[id].OnClose = function() end
     return Form
 end
 function Obj.Loop()

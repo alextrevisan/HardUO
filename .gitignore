@@ -18,3 +18,5 @@
 ui_*.h
 Makefile
 Build/
+build-*/
+*.pro.user*
