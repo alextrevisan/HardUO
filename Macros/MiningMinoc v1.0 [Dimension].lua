@@ -1,24 +1,26 @@
-﻿--===========================================================================--
+--===========================================================================--
 -- Macro: Mining Minoc.
--- Programa de Script: HardUO - http://www.hogpog.com.br/harduo
--- Escrito por Alex (Axul)
--- Versao: 1.2
--- Shard: Dimension - http://www.dmsshard.com.br
+-- Programa de Script: HardUO - https://github.com/alextrevisan/HardUO
+-- Escrito por Alex (Blue)
+-- Versao: 1.3
+-- Shard: Dimension - http://hfshard.com.br/
 -- Descrição: Mining Minoc (Minera e guarda)
 --===========================================================================--
 
 --Configuração de peso máximo ate ir no banco guardar
 PesoMaximo = UO.MaxWeight - 50
 
-mMiningDirections = { {-1,-1},{0,-1},{1,-1},{-1,0},{0,0},{1,0},{-1,1},{0,1},{1,1}}
+--Nao mexer daqui pra baixo
+mMiningDirections = { {-1,-1},{0,-1},{1,-1},{-1,0},{1,0},{-1,1},{0,1},{1,1}}
 
 mCurrentDirections = 1
-
+local mPositionX
+local mPositionY
 --mOreTypes = {6585,6584,6586,6583}--dwj_ewj_gwj_tvj
 mOreTypes = typeConverter("DWJ_EWJ_GWJ_TVJ")
 mJewelTypes={3864, 3857, 3859, 3878, 3855, 3861, 3862} --pe,tu,bd,fr,ba,ec,ds
 mMesssages ={"too far","Nao ha nada", "no ore left", "uma linha", "muito distante", "Tente minerar em", "perto", "so close", 
-             "can't see", "You can't" , "completa"}
+             "can't see", "You can't" , "completa", "proximo de si", "nao tem visao"}
 
 
 function GetPicaxeFromBank()
@@ -85,10 +87,10 @@ function findMsg(mstr, find)
     end
 end
 function NewSpot()
-    --[lateral da mina
-    x = math.random(2568,2578)
+    --[lateral da mina 5288-5262/1897-1876
+    x = math.random(mPositionX-13,mPositionX+13)
     --[frente e fundo (nao ta muito pra frente pra evitar PK)
-    y = math.random(474,485)      
+    y = math.random(mPositionY-11,mPositionY+11)      
     UO.Move(x,y,1,5000)
     TargetMining()         
 end
@@ -97,7 +99,7 @@ function TargetMining()
   tmp = mMiningDirections[mCurrentDirections]
   mCurrentDirections = mCurrentDirections+1
   --[se ele ja procurou tudo em volta do char, manda andar
-  if mCurrentDirections > 10 then
+  if mCurrentDirections > #mMiningDirections then
      mCurrentDirections = 1
      NewSpot()
   end     
@@ -148,8 +150,8 @@ wait(250)
 UO.Macro(8,2)
 wait(250)
 UO.ScanJournal(1)
-UO.SysMessage("Va ate a mina e aperte a tecla Enter")
-while(getkey(KEY_ENTER) ~= true) do
+UO.SysMessage("Va para o centro da mina e aperte a tecla Enter")
+while(getkey("ENTER") ~= true) do
     wait(10)
 end
 Speak("bank")
@@ -159,6 +161,8 @@ while UO.TargCurs == true do
     wait(10)
 end
 mBankBag = UO.LTargetID
+mPositionX = UO.CharPosX
+mPositionY = UO.CharPosY
 
 pickaxe = ScanItems(true,{Type={3717,3718}})
 if #pickaxe <=0 then

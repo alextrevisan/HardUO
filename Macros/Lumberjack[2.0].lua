@@ -8,7 +8,7 @@ local mTreeFile = "arvores.lua"
 
 mPositionX = {}
 mPositionY = {}
-mMesssages ={"not enough","too far","Nao ha", "no ore left", "uma linha", "muito distante", "so close", 
+mMesssages ={"imune", "not enough","too far","Nao ha", "no ore left", "uma linha", "muito distante", "so close", 
              "can't see", "You can't" , "be seen"}
 
 mLogTypes = {7133}
@@ -182,6 +182,10 @@ end
 local index = 1
 
 while true do
+    while UO.CliLogged == false do
+        wait(5000)
+    end
+    
     UO.Move(mPositionX[index],mPositionY[index],0,6000)
     UO.LObjectID = mAxe
     UO.LTargetKind = 1
