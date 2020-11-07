@@ -4,22 +4,22 @@
 -- Escrito por Alex (Blue)
 -- Versao: 1.3
 -- Shard: Dimension - http://hfshard.com.br/
--- Descrição: Mining Minoc (Minera e guarda)
+-- Descriçao: Mining Minoc (Minera e guarda)
 --===========================================================================--
 
 --Configuração de peso máximo ate ir no banco guardar
-PesoMaximo = UO.MaxWeight - 50
-
+local PesoMaximo = 180
+local tempoMineracao = 9000
 --Nao mexer daqui pra baixo
-mMiningDirections = { {-1,-1},{0,-1},{1,-1},{-1,0},{1,0},{-1,1},{0,1},{1,1}}
+local mMiningDirections = { {-1,-1},{0,-1},{1,-1},{-1,0},{1,0},{-1,1},{0,1},{1,1}}
 
-mCurrentDirections = 1
+local mCurrentDirections = 1
 local mPositionX
 local mPositionY
 --mOreTypes = {6585,6584,6586,6583}--dwj_ewj_gwj_tvj
 mOreTypes = typeConverter("DWJ_EWJ_GWJ_TVJ")
 mJewelTypes={3864, 3857, 3859, 3878, 3855, 3861, 3862} --pe,tu,bd,fr,ba,ec,ds
-mMesssages ={"too far","Nao ha nada", "no ore left", "uma linha", "muito distante", "Tente minerar em", "perto", "so close", 
+mMesssages ={"Muito longe", "too far","Nao ha nada", "no ore left", "uma linha", "muito distante", "Tente minerar em", "perto", "so close", 
              "can't see", "You can't" , "completa", "proximo de si", "nao tem visao"}
 
 
@@ -42,6 +42,7 @@ function GetPicaxeFromBank()
 end
 
 function DepositOres()
+  UO.Move(mPositionX,mPositionY,5,15000)
   Speak("bank")
   wait(500)
   ores = ScanItems(true, {Type=mOreTypes})
@@ -128,14 +129,14 @@ function StartMining()
         mContinue = true
         mTime = 0
         --[enquanto o tempo for menor que 8k e nao tiver mensagem de erro da lista
-        while mContinue and mTime < 8000 do
+        while mContinue and mTime < tempoMineracao do
             if(UO.Hits < UO.MaxHits-21) then
                 Speak("guards")
                 wait(5000)
             end
             journal = getMsg()
             if(findMsg(journal,mMesssages)) then
-                wait(500)
+                wait(1000)
                 TargetMining()
                 mContinue = false
                 break
