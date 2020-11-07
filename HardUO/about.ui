@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>222</width>
+    <width>370</width>
     <height>219</height>
    </rect>
   </property>
@@ -36,7 +36,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Developed by:</string>
+        <string>Source code:</string>
        </property>
       </widget>
      </item>
@@ -80,7 +80,7 @@
         </font>
        </property>
        <property name="text">
-        <string>&lt;a href=http://www.hogpog.com.br/harduo&gt;HogPog&lt;/a&gt;</string>
+        <string>&lt;a href=https://github.com/alextrevisan/HardUO&gt;Github&lt;/a&gt;</string>
        </property>
        <property name="openExternalLinks">
         <bool>true</bool>
@@ -112,21 +112,21 @@
    <item>
     <widget class="QLabel" name="label_4">
      <property name="text">
-      <string>HardUO Version: 1.07.0</string>
+      <string>HardUO Version: 1.08.0</string>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QLabel" name="label_5">
      <property name="text">
-      <string>LUA Version: 5.2</string>
+      <string>LUA Version: 5.4.1</string>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QLabel" name="label_6">
      <property name="text">
-      <string>uo.dll Version: 7.0.59.5</string>
+      <string>uo.dll Version: 7.0.87.11</string>
      </property>
     </widget>
    </item>
@@ -162,7 +162,7 @@
         </font>
        </property>
        <property name="text">
-        <string>&lt;a href=https://github.com/H3xaCod3/HardUO/tree/master/Macros&gt;Macros&lt;/a&gt;</string>
+        <string>&lt;a href=https://www.patreon.com/harduo&gt;Patreon&lt;/a&gt;</string>
        </property>
        <property name="openExternalLinks">
         <bool>true</bool>

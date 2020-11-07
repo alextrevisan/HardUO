@@ -12,9 +12,9 @@
 
 #define MAX_RECENT_FILES 5
 
-namespace Ui {
-class MainWindow;
-}
+QT_BEGIN_NAMESPACE
+namespace Ui { class MainWindow; }
+QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {

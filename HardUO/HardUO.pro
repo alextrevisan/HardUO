@@ -46,15 +46,20 @@ RESOURCES += \
     icons.qrc \
     resource.qrc
 
-INCLUDEPATH += ../Dependencies/Lua_5_2/include
+INCLUDEPATH += ../Dependencies/Lua_5_4_1/include
 
-LIBS += -L$$PWD/../Dependencies/Lua_5_2/lib/ -llua
+LIBS += -L$$PWD/../Dependencies/Lua_5_4_1/lib/ -llua
 
 OTHER_FILES += \
-    icone.rc
+    icone.rc \
+     harduo.rc
 
-RC_FILE = icone.rc
+RC_FILE = harduo.rc
 
 CONFIG+=c++11
+
+DISTFILES += \
+    HardUO.exe.manifest
+
 
 

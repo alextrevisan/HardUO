@@ -154,7 +154,7 @@ int printFromLua(lua_State* L)
 
 int widgetID = 0;
 
-int create(lua_State* L)
+int TForm_create(lua_State* L)
 {
     if(lua_isstring(L,1))
     {
@@ -170,7 +170,7 @@ int create(lua_State* L)
     }
     return 0;
 }
-int caption(lua_State* L)
+int TForm_caption(lua_State* L)
 {
     if(lua_isnumber(L,1) && lua_isstring(L,2))
     {
@@ -184,7 +184,7 @@ int caption(lua_State* L)
     return 0;
 }
 
-int show(lua_State* L)
+int TForm_show(lua_State* L)
 {
     if(lua_isnumber(L,1))
     {
@@ -195,7 +195,7 @@ int show(lua_State* L)
     }
     return 0;
 }
-int objloop(lua_State* L)
+int TForm_objloop(lua_State* L)
 {
     QApplication::processEvents();
     for(auto widget:mWidgetList)
@@ -234,10 +234,10 @@ void ScriptRunner::configure()
     lua_register(L, "__removeLine__", removeLine);
     lua_register(L, "__removeAllLines__", removeAllLines);
 
-    lua_register(L, "__create__", create);
-    lua_register(L, "__show__", show);
-    lua_register(L, "__objloop__", objloop);
-    lua_register(L, "__caption__", caption);
+    lua_register(L, "__create__", TForm_create);
+    lua_register(L, "__show__", TForm_show);
+    lua_register(L, "__objloop__", TForm_objloop);
+    lua_register(L, "__caption__", TForm_caption);
     lua_register(L, "__sendkey__", sendkey);
 
     lua_register(L, "fill_autocomplete", fill_autocomplete);
