@@ -686,6 +686,22 @@ local function Msg(msg)
     PushStrVal(hnd,msg)
     Execute(hnd)
 end
+local function ExMsg(nid, nfont, ncolor, str)
+    SetTop(hnd, 0)
+    PushStrVal(hnd, "Call")
+    PushStrVal(hnd, "ExMsg")
+    PushInteger(hnd,nid)
+	if ncolor == nil and str == nil then
+		PushInteger(hnd,0)
+		PushInteger(hnd,0)
+		PushStrVal(hnd, nfont)
+	else 
+		PushInteger(hnd,nfont)
+		PushInteger(hnd,ncolor)
+		PushStrVal(hnd,str)
+	end
+    Execute(hnd)
+end
 local function WarPeace()
     SetTop(hnd, 0)
     PushStrVal(hnd, "Call")
@@ -1212,6 +1228,9 @@ OpenEUOFunctions["SysMessage"] = SysMessage
 
 UO.Msg = Msg
 OpenEUOFunctions["Msg"] = Msg
+
+UO.ExMsg = ExMsg
+OpenEUOFunctions["ExMsg"] = ExMsg
 
 UO.CursKind = 0
 OpenEUOReadVariables["CursKind"] = CursKind
