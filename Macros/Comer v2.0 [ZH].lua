@@ -1,10 +1,10 @@
---===========================================================================--
+﻿--===========================================================================--
 -- Macro: Comer.
 -- Programa de Script: HardUO - http://www.hogpog.com.br/harduo
 -- Escrito por Alex (Blue)
 -- Versao: 1.0
 -- Shard: Zulu Hotel - http://www.zuluhotel.com.br
--- Descri�ao: Deixe a comida na bag, ele ira comer a cada 10 segundos 
+-- Descrição: Deixe a comida na bag, ele ira comer a cada 10 segundos 
 --            se estiver com fome
 --===========================================================================--
 mFoodTypes = typeConverter("RUD_FUD_BDF_GQE_IQE_ZPE_SQD_OQE_KPE_VQE_TQE_YSD_JQE_YWI_AXI_PQD_QQD_MQE_SPE_RQE_END_RGG_AQD_FUD_ZBG_WLI_QRD_YLI_NRD_PRD_XLI_ACG_IGI_GUD_HND_QSD")
@@ -31,11 +31,13 @@ function findMsg(mstr, find)
 end
 
 while true do
+    while UO.CliLogged == false do
+        wait(5000)
+    end
     UO.Msg(".hungry"..string.char(13))
     wait(1000)
     journal = getMsg()
-    if(findMsg(journal,{"stuffed"})~=true) then
-        print("Comendo...")
+    if(findMsg(journal,{"stuffed", "satisfeito", "Satisfeito"})~=true) then
         food = ScanItems(true,{Type=mFoodTypes,ContID=UO.Backpack})
         if #food > 0 then
             UO.LObjectID = food[1].ID
