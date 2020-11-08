@@ -18,7 +18,7 @@ local mPositionX
 local mPositionY
 --mOreTypes = {6585,6584,6586,6583}--dwj_ewj_gwj_tvj
 mOreTypes = typeConverter("DWJ_EWJ_GWJ_TVJ")
-mJewelTypes={3864, 3857, 3859, 3878, 3855, 3861, 3862, 4963, 3856} --pe,tu,bd,fr,ba,ec,ds, ROCK
+mJewelTypes={3864, 3857, 3859, 3878, 3855, 3861, 3862, 3856, 4963} --pe,tu,bd,fr,ba,ec,ds, fe, rock
 mMessages ={"Muito longe", "too far","Nao ha nada", "no ore left", "uma linha", "muito distante", "Tente minerar em", "perto", "so close", 
              "can't see", "You can't" , "completa", "proximo de si", "nao tem visao", "colocou o minerios"}
 

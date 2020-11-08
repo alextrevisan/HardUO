@@ -3,6 +3,7 @@ local lootBag = 1074733081
 local loot     = {3821, 7163, 3903, 3849}
 local jewels   = {3864, 3857, 3859, 3878, 3855, 3861, 3862, 3856, 3877} --pe,tu,bd,fr,ba,ec,ds, fe
 local food     = typeConverter("RUD_FUD_BDF_GQE_IQE_ZPE_SQD_OQE_KPE_VQE_TQE_YSD_JQE_YWI_AXI_PQD_QQD_MQE_SPE_RQE_END_RGG_AQD_FUD_ZBG_WLI_QRD_YLI_NRD_PRD_XLI_ACG_IGI_GUD_HND_QSD")
+local scrools  = {8012}
 Ignore = {}
 
 local userLoot = {}
@@ -10,6 +11,7 @@ local userLoot = {}
 for k,v in pairs(loot) do userLoot[#userLoot+1] = v end
 for k,v in pairs(jewels) do userLoot[#userLoot+1] = v end
 for k,v in pairs(food) do userLoot[#userLoot+1] = v end
+for k,v in pairs(scrools) do userLoot[#userLoot+1] = v end
 
 local waitdragdrop = 500
 local function IgnoreItems(itemid)
@@ -20,7 +22,7 @@ function lootFrom(bagid)
     local loot = ScanItems(true,{ContID=bagid, Type=userLoot,Kind=0})
     for i=1, #loot do
         UO.Drag(loot[i].ID, loot[i].Stack)
-        wait(50)
+        wait(waitdragdrop)
         UO.DropC(lootBag)
         wait(50)
     end
