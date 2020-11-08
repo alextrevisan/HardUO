@@ -4,12 +4,12 @@
 -- Escrito por Alex (Blue)
 -- Versao: 1.3
 -- Shard: Dimension - http://hfshard.com.br/
--- Descriçao: Mining Minoc (Minera e guarda)
+-- DescriÃƒÂ§ao: Mining Minoc (Minera e guarda)
 --===========================================================================--
 
 --Configuração de peso máximo ate ir no banco guardar
 local PesoMaximo = 180
-local tempoMineracao = 9000
+local tempoMineracao = 12000
 --Nao mexer daqui pra baixo
 local mMiningDirections = { {-1,-1},{0,-1},{1,-1},{-1,0},{1,0},{-1,1},{0,1},{1,1}}
 
@@ -19,8 +19,8 @@ local mPositionY
 --mOreTypes = {6585,6584,6586,6583}--dwj_ewj_gwj_tvj
 mOreTypes = typeConverter("DWJ_EWJ_GWJ_TVJ")
 mJewelTypes={3864, 3857, 3859, 3878, 3855, 3861, 3862, 4963} --pe,tu,bd,fr,ba,ec,ds, ROCK
-mMesssages ={"Muito longe", "too far","Nao ha nada", "no ore left", "uma linha", "muito distante", "Tente minerar em", "perto", "so close", 
-             "can't see", "You can't" , "completa", "proximo de si", "nao tem visao"}
+mMessages ={"Muito longe", "too far","Nao ha nada", "no ore left", "uma linha", "muito distante", "Tente minerar em", "perto", "so close", 
+             "can't see", "You can't" , "completa", "proximo de si", "nao tem visao", "colocou o minerios"}
 
 
 function GetPicaxeFromBank()
@@ -67,25 +67,24 @@ function DepositOres()
   end
 end
 
-local nNewRef = 0
-function getMsg()
-    nNewRef, nCnt= UO.ScanJournal(nNewRef) 
-    local sLine = UO.GetJournal(0)
-    local a = {}
-    while nCnt > 0 do
-        a[nCnt] = UO.GetJournal(nCnt)
-        nCnt = nCnt -1
-    end
-    return a
-end
 function findMsg(mstr, find)
-    for i=1, #mstr do
-        for n=1,#find do
-            if(string.find(mstr[i],find[n])) then
-                return true
-            end
+    for n=1,#find do
+        if(string.find(mstr, find[n])) then
+            return true
         end
     end
+    return false
+end
+j = journal:new()
+function BuscarMensagens()
+    local next = j:next()
+    while next ~= nil do
+        if findMsg(next, mMessages) then
+            return true
+        end
+        next = j:next()
+    end
+    return false
 end
 function NewSpot()
     --[lateral da mina 5288-5262/1897-1876
@@ -134,12 +133,10 @@ function StartMining()
                 Speak("guards")
                 wait(5000)
             end
-            journal = getMsg()
-            if(findMsg(journal,mMesssages)) then
-                wait(1000)
+            if BuscarMensagens() then
                 TargetMining()
+                wait(1000)
                 mContinue = false
-                break
             end
             mTime = mTime + 100
             wait(100)
@@ -150,7 +147,6 @@ UO.Macro(8,1)
 wait(250)
 UO.Macro(8,2)
 wait(250)
-UO.ScanJournal(1)
 UO.SysMessage("Va para o centro da mina e aperte a tecla Enter")
 while(getkey("ENTER") ~= true) do
     wait(10)
